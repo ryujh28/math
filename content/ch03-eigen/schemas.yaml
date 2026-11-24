@@ -1,11 +1,11 @@
 # 3장 고유값 문제 · 풀이 뼈대
 - id: la.diag
-  title: 2×2 대각화
+  title: '$2\times 2$ 대각화'
   generator: la3:diagonalize
   steps: [특성방정식, 고유값, 고유벡터, P와 D]
-  hint: "특성방정식 → 고유값 → 각 고유값의 고유벡터를 P의 열로, 같은 순서로 D의 대각에."
+  hint: '특성방정식 → 고유값 → 각 고유값의 고유벡터를 $P$의 열로, 같은 순서로 $D$의 대각에.'
 - id: la.apow
   title: 대각화로 거듭제곱
   generator: la3:matrix_power
   steps: [A = PDP⁻¹, Dⁿ, Aⁿ = PDⁿP⁻¹, 결과]
-  hint: "Aⁿ = PDⁿP⁻¹. 대각행렬의 거듭제곱은 성분별 거듭제곱."
+  hint: '$A^n = PD^nP^{-1}$. 대각행렬의 거듭제곱은 성분별 거듭제곱.'

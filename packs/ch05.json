@@ -5,17 +5,17 @@
   "id": 5,
   "slug": "matfunc",
   "title": "행렬함수와 이차형식",
-  "summary": "대각화로 e^{At} 같은 행렬함수를 계산하고, 이차형식을 고유값으로 주축 변환해 정부호를 판정한다.",
+  "summary": "대각화로 $e^{At}$ 같은 행렬함수를 계산하고, 이차형식을 고유값으로 주축 변환해 정부호를 판정한다.",
   "part": "선형대수",
   "level": "학부",
   "prereqs": [
    3
   ],
   "connections": [
-   "연립 ODE x′ = Ax의 해는 x(t) = e^{At}x(0)입니다. 8장에서 이 계산을 그대로 씁니다.",
+   "연립 ODE $\\mathbf{x}^{\\prime} = A\\mathbf{x}$의 해는 $\\mathbf{x}(t) = e^{At}\\mathbf{x}(0)$입니다. 8장에서 이 계산을 그대로 씁니다.",
    "이차형식의 정부호 판정은 다변수 함수의 극값 판정(Hessian)과 같은 문제입니다.",
-   "e^{A+B} = e^A e^B는 AB = BA일 때만 성립합니다. 양자역학의 교환자가 여기서 나옵니다.",
-   "Jordan 블록의 e^{At}에 t가 붙는 것은 중근 ODE의 해에 t e^{rt}가 나오는 것과 같은 현상입니다."
+   "$e^{A+B} = e^Ae^B$는 $AB = BA$일 때만 보장됩니다. 양자역학의 교환자가 여기서 나옵니다.",
+   "Jordan 블록의 $e^{At}$에 $t$가 붙는 것은 중근 ODE의 해에 $te^{rt}$가 나오는 것과 같은 현상입니다."
   ]
  },
  "units": [
@@ -23,79 +23,113 @@
    "id": "la.qmat",
    "kind": "atom",
    "title": "이차형식의 행렬",
-   "hint": "ax² + bxy + cy² → [[a, b/2], [b/2, c]]. xy 계수는 반씩 나눠 대칭으로.",
+   "hint": "$ax^2 + bxy + cy^2 \\to \\begin{pmatrix}a & b/2\\\\ b/2 & c\\end{pmatrix}$. $xy$ 계수는 반씩 나눠 대칭으로.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "$\\mathbf{x}^TA\\mathbf{x} = a_{11}x^2 + (a_{12} + a_{21})xy + a_{22}y^2$.",
+    "$xy$ 계수 $b$는 합 $a_{12} + a_{21}$만 정하므로, 대칭이 되도록 $a_{12} = a_{21} = b/2$로 나눈다. 대칭이어야 고유값이 실수이고 주축이 직교한다."
    ]
   },
   {
    "id": "la.definite",
    "kind": "atom",
    "title": "정부호 판정",
-   "hint": "대칭행렬의 고유값이 모두 양수 → 양의 정부호, 모두 음수 → 음의 정부호, 섞이면 부정부호. 2×2에선 a > 0, det > 0이면 양의 정부호.",
+   "hint": "대칭행렬의 고유값이 모두 양수면 양의 정부호, 모두 음수면 음의 정부호, 섞이면 부정부호. $2\\times 2$에서는 $a > 0$, $\\det A > 0$이면 양의 정부호.",
    "tiers": [
     2
+   ],
+   "derivation": [
+    "스펙트럼 정리로 $A = Q\\Lambda Q^T$, 새 좌표 $\\mathbf{y} = Q^T\\mathbf{x}$로 두면",
+    "$$q = \\mathbf{x}^TA\\mathbf{x} = \\mathbf{y}^T\\Lambda\\mathbf{y} = \\lambda_1y_1^2 + \\lambda_2y_2^2$$",
+    "모든 $\\mathbf{y} \\ne \\mathbf{0}$에서 $q > 0 \\iff$ 모든 $\\lambda_i > 0$. 부호가 섞이면 $q$가 양수와 음수를 모두 가진다."
    ]
   },
   {
    "id": "la.expdiag",
    "kind": "atom",
    "title": "대각행렬의 지수",
-   "hint": "e^{Dt} = diag(e^{λ₁t}, e^{λ₂t}). 대각성분마다 따로 지수.",
+   "hint": "$e^{Dt} = \\operatorname{diag}(e^{\\lambda_1 t}, e^{\\lambda_2 t})$. 대각성분마다 따로 지수.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "$$e^{Dt} = \\sum_{k=0}^\\infty \\frac{(Dt)^k}{k!},\\qquad (Dt)^k = \\operatorname{diag}(\\lambda_1^kt^k,\\ \\lambda_2^kt^k)$$",
+    "대각성분마다 $\\sum_k \\lambda_i^kt^k/k! = e^{\\lambda_i t}$로 따로 합쳐진다."
    ]
   },
   {
    "id": "la.expjordan",
    "kind": "atom",
    "title": "Jordan 블록의 지수",
-   "hint": "A = aI + N (N² = 0)이면 e^{At} = e^{at}(I + Nt). 대각 위에 t e^{at}가 붙는다.",
+   "hint": "$A = aI + N$ ($N^2 = 0$)이면 $e^{At} = e^{at}(I + Nt)$. 대각 위에 $te^{at}$가 붙는다.",
    "tiers": [
     2
+   ],
+   "derivation": [
+    "$A = aI + N$, $N = \\begin{pmatrix}0 & 1\\\\ 0 & 0\\end{pmatrix}$이면 $N^2 = 0$이고 $aI$와 $N$은 교환한다.",
+    "$$e^{At} = e^{at}\\,e^{Nt} = e^{at}(I + Nt) = e^{at}\\begin{pmatrix}1 & t\\\\ 0 & 1\\end{pmatrix}$$"
    ]
   },
   {
    "id": "la.expdiagform",
    "kind": "atom",
    "title": "대각화로 행렬지수",
-   "hint": "Aᵏ = PDᵏP⁻¹이므로 급수 전체가 e^{At} = Pe^{Dt}P⁻¹.",
+   "hint": "$A^k = PD^kP^{-1}$이므로 급수 전체가 $e^{At} = Pe^{Dt}P^{-1}$.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "$A^k = PD^kP^{-1}$을 급수에 넣는다.",
+    "$$e^{At} = \\sum_k \\frac{t^k}{k!}PD^kP^{-1} = P\\Big(\\sum_k \\frac{(Dt)^k}{k!}\\Big)P^{-1} = Pe^{Dt}P^{-1}$$"
    ]
   },
   {
    "id": "la.expderiv",
    "kind": "atom",
    "title": "행렬지수의 미분",
-   "hint": "d/dt e^{At} = Ae^{At} = e^{At}A. 그래서 x(t) = e^{At}x₀가 x′ = Ax의 해.",
+   "hint": "$\\dfrac{d}{dt}e^{At} = Ae^{At} = e^{At}A$. 그래서 $\\mathbf{x}(t) = e^{At}\\mathbf{x}_0$가 $\\mathbf{x}^{\\prime} = A\\mathbf{x}$의 해.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "$$\\frac{d}{dt}\\sum_{k=0}^\\infty \\frac{A^kt^k}{k!} = \\sum_{k=1}^\\infty \\frac{A^kt^{k-1}}{(k-1)!} = A\\sum_{j=0}^\\infty \\frac{A^jt^j}{j!} = Ae^{At}$$"
    ]
   },
   {
    "id": "la.expcommute",
    "kind": "atom",
    "title": "지수의 곱",
-   "hint": "교환하면 이항전개가 스칼라처럼 되어 성립. 교환하지 않으면 일반적으로 다르다.",
+   "hint": "교환하면 이항전개가 스칼라처럼 되어 성립한다. 교환하지 않으면 일반적으로 $e^{A+B} \\ne e^Ae^B$.",
    "tiers": [
     2
+   ],
+   "derivation": [
+    "$AB = BA$이면 $(A + B)^n$을 스칼라처럼 이항전개할 수 있다.",
+    "$$e^{A+B} = \\sum_n \\frac{(A+B)^n}{n!} = \\sum_n\\sum_k \\frac{A^kB^{n-k}}{k!\\,(n-k)!} = e^Ae^B$$",
+    "교환하지 않으면 $(A + B)^2 = A^2 + AB + BA + B^2$부터 이항전개와 어긋난다."
    ]
   },
   {
    "id": "la.sylvester",
    "kind": "atom",
    "title": "Sylvester 판정법",
-   "hint": "a₁₁ > 0, 2×2 선행 소행렬식 > 0, …, det A > 0이 모두 성립해야 한다. det만으로는 부족.",
+   "hint": "$a_{11} > 0$, $2\\times 2$ 선행 소행렬식 $> 0$, …, $\\det A > 0$이 모두 성립해야 한다. $\\det A$만으로는 부족.",
    "tiers": [
     2
+   ],
+   "derivation": [
+    "$2\\times 2$에서 완전제곱으로 쓰면",
+    "$$ax^2 + bxy + cy^2 = a\\Big(x + \\frac{b}{2a}y\\Big)^2 + \\frac{4ac - b^2}{4a}y^2$$",
+    "두 계수가 모두 양수 $\\iff$ $a > 0$이고 $\\det A = ac - b^2/4 > 0$. 일반 $n$에서는 선행 소행렬식이 소거 피벗들의 곱이 된다."
    ]
   },
   {
    "id": "la.expat",
    "kind": "schema",
-   "title": "대각화로 e^At",
-   "hint": "고유값·고유벡터로 P와 D를 만들고 e^{At} = Pe^{Dt}P⁻¹.",
+   "title": "대각화로 $e^{At}$",
+   "hint": "고유값·고유벡터로 $P$와 $D$를 만들고 $e^{At} = Pe^{Dt}P^{-1}$.",
    "steps": [
     "고유값과 P",
     "e^Dt",
@@ -104,13 +138,18 @@
    ],
    "tiers": [
     2
+   ],
+   "derivation": [
+    "$A = PDP^{-1}$로 대각화하고 $e^{At} = Pe^{Dt}P^{-1}$을 쓴다.",
+    "$\\mathbf{x}(t) = e^{At}\\mathbf{x}_0$는 각 고유벡터 방향 성분이 $e^{\\lambda_it}$로 따로 변하는 것의 합이다.",
+    "검산: $X(t) = e^{At}$는 $X^{\\prime} = AX$, $X(0) = I$를 만족해야 한다."
    ]
   },
   {
    "id": "la.paxes",
    "kind": "schema",
    "title": "이차형식의 주축 변환",
-   "hint": "q = xᵀAx. A의 고유값 λ₁, λ₂로 q = λ₁X² + λ₂Y². 부호로 모양(타원/쌍곡선)과 정부호가 정해진다.",
+   "hint": "$q = \\mathbf{x}^TA\\mathbf{x}$. $A$의 고유값으로 $q = \\lambda_1X^2 + \\lambda_2Y^2$. 부호로 모양(타원·쌍곡선)과 정부호가 정해진다.",
    "steps": [
     "대칭행렬",
     "고유값",
@@ -119,6 +158,11 @@
    ],
    "tiers": [
     2
+   ],
+   "derivation": [
+    "$A = Q\\Lambda Q^T$이고 새 좌표 $(X, Y)^T = Q^T\\mathbf{x}$는 원래 좌표를 회전한 것이다.",
+    "$$q = \\mathbf{x}^TA\\mathbf{x} = \\lambda_1X^2 + \\lambda_2Y^2$$",
+    "$q = 1$은 $\\lambda$가 둘 다 양수면 타원, 부호가 다르면 쌍곡선이다."
    ]
   }
  ],
@@ -2815,19 +2859,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}\\left(2 e^{t} - 1\\right) e^{- 3 t} & \\left(e^{t} - 1\\right) e^{- 3 t} \\\\ 2 \\left(1 - e^{t}\\right) e^{- 3 t} & \\left(2 - e^{t}\\right) e^{- 3 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{2 t} & 0 \\\\ 0 & e^{3 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = -2,\\ -3,\\quad P = \\begin{pmatrix}1 & 2 \\\\ 1 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -2848,13 +2892,13 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{- t} & \\left(1 - e^{3 t}\\right) e^{- t} \\\\ 0 & e^{2 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{t} & 0 \\\\ 0 & e^{- 2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     }
    ]
@@ -2875,19 +2919,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}\\left(2 e^{4 t} - 1\\right) e^{- 2 t} & 2 \\sinh {2 t} \\\\ - 4 \\sinh {2 t} & \\left(2 - e^{4 t}\\right) e^{- 2 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{- 2 t} & 0 \\\\ 0 & e^{2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = 2,\\ -2,\\quad P = \\begin{pmatrix}1 & 2 \\\\ 1 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -2908,13 +2952,13 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}- e^{t} + 2 e^{- 2 t} & - 2 e^{t} + 2 e^{- 2 t} \\\\ e^{t} - e^{- 2 t} & 2 e^{t} - e^{- 2 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{2 t} & 0 \\\\ 0 & e^{- t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     }
    ]
@@ -2935,19 +2979,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{2 t} & 0 \\\\ \\left(e^{t} - 1\\right) e^{t} & e^{t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{- t} & 0 \\\\ 0 & e^{- 2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = 1,\\ 2,\\quad P = \\begin{pmatrix}-1 & 1 \\\\ 1 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -2968,13 +3012,13 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}\\left(2 - e^{t}\\right) e^{- 2 t} & 2 \\left(1 - e^{t}\\right) e^{- 2 t} \\\\ \\left(e^{t} - 1\\right) e^{- 2 t} & \\left(2 e^{t} - 1\\right) e^{- 2 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{2 t} & 0 \\\\ 0 & e^{t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     }
    ]
@@ -2995,13 +3039,13 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{- 3 t} & \\left(1 - e^{5 t}\\right) e^{- 3 t} \\\\ 0 & e^{2 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{3 t} & 0 \\\\ 0 & e^{- 2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     }
    ]
@@ -3022,19 +3066,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}- e^{t} + 2 e^{- 3 t} & - e^{t} + e^{- 3 t} \\\\ 2 e^{t} - 2 e^{- 3 t} & 2 e^{t} - e^{- 3 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{3 t} & 0 \\\\ 0 & e^{- t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = -3,\\ 1,\\quad P = \\begin{pmatrix}1 & 2 \\\\ 1 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3055,19 +3099,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{- t} & 0 \\\\ \\left(e^{2 t} - 1\\right) e^{- 3 t} & e^{- 3 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{3 t} & 0 \\\\ 0 & e^{t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = -3,\\ -1,\\quad P = \\begin{pmatrix}-1 & 1 \\\\ 1 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3088,13 +3132,13 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}\\left(2 - e^{4 t}\\right) e^{- 2 t} & - 4 \\sinh {2 t} \\\\ 2 \\sinh {2 t} & \\left(2 e^{4 t} - 1\\right) e^{- 2 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{2 t} & 0 \\\\ 0 & e^{- 2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     }
    ]
@@ -3115,19 +3159,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{- 2 t} & 0 \\\\ \\left(e^{t} - 1\\right) e^{- 2 t} & e^{- t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{2 t} & 0 \\\\ 0 & e^{t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = -2,\\ -1,\\quad P = \\begin{pmatrix}0 & 1 \\\\ 1 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3148,19 +3192,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{2 t} & 0 \\\\ \\left(e^{5 t} - 1\\right) e^{- 3 t} & e^{- 3 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{3 t} & 0 \\\\ 0 & e^{- 2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = -3,\\ 2,\\quad P = \\begin{pmatrix}-1 & 1 \\\\ 1 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3181,19 +3225,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}\\left(4 - 3 e^{t}\\right) e^{- 3 t} & 2 \\left(1 - e^{t}\\right) e^{- 3 t} \\\\ \\left(6 e^{t} - 6\\right) e^{- 3 t} & \\left(4 e^{t} - 3\\right) e^{- 3 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{3 t} & 0 \\\\ 0 & e^{2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = -3,\\ -2,\\quad P = \\begin{pmatrix}1 & 2 \\\\ 3 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3214,19 +3258,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{- 3 t} & 0 \\\\ \\left(e^{5 t} - 1\\right) e^{- 3 t} & e^{2 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{3 t} & 0 \\\\ 0 & e^{- 2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = -3,\\ 2,\\quad P = \\begin{pmatrix}0 & 1 \\\\ 1 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3247,19 +3291,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{- 3 t} & 0 \\\\ \\left(1 - e^{2 t}\\right) e^{- 3 t} & e^{- t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{t} & 0 \\\\ 0 & e^{3 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = -1,\\ -3,\\quad P = \\begin{pmatrix}-1 & 1 \\\\ 1 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3280,19 +3324,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}3 \\sinh {t} + \\cosh {t} & 2 \\sinh {t} \\\\ - 4 \\sinh {t} & - e^{t} + 2 e^{- t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{- t} & 0 \\\\ 0 & e^{t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = 1,\\ -1,\\quad P = \\begin{pmatrix}1 & 2 \\\\ 1 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3313,13 +3357,13 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{- t} & \\left(e^{t} - 1\\right) e^{- 2 t} \\\\ 0 & e^{- 2 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{t} & 0 \\\\ 0 & e^{2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     }
    ]
@@ -3340,19 +3384,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{- 2 t} & 0 \\\\ - e^{t} + e^{- 2 t} & e^{t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{- t} & 0 \\\\ 0 & e^{2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = 1,\\ -2,\\quad P = \\begin{pmatrix}-1 & 1 \\\\ 1 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3373,19 +3417,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}2 e^{t} - e^{- 3 t} & e^{t} - e^{- 3 t} \\\\ - 2 e^{t} + 2 e^{- 3 t} & - e^{t} + 2 e^{- 3 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{- t} & 0 \\\\ 0 & e^{3 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = 1,\\ -3,\\quad P = \\begin{pmatrix}1 & 2 \\\\ 1 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3406,13 +3450,13 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}\\left(2 - e^{t}\\right) e^{t} & 2 \\left(1 - e^{t}\\right) e^{t} \\\\ \\left(e^{t} - 1\\right) e^{t} & \\left(2 e^{t} - 1\\right) e^{t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{- t} & 0 \\\\ 0 & e^{- 2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     }
    ]
@@ -3433,19 +3477,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}\\left(3 e^{t} - 2\\right) e^{t} & 6 \\left(e^{t} - 1\\right) e^{t} \\\\ \\left(1 - e^{t}\\right) e^{t} & \\left(3 - 2 e^{t}\\right) e^{t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{- 2 t} & 0 \\\\ 0 & e^{- t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = 2,\\ 1,\\quad P = \\begin{pmatrix}2 & 1 \\\\ 1 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3466,13 +3510,13 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}\\left(2 - e^{t}\\right) e^{- 3 t} & 2 \\left(1 - e^{t}\\right) e^{- 3 t} \\\\ \\left(e^{t} - 1\\right) e^{- 3 t} & \\left(2 e^{t} - 1\\right) e^{- 3 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{3 t} & 0 \\\\ 0 & e^{2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     }
    ]
@@ -3493,19 +3537,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}\\left(3 - 2 e^{t}\\right) e^{t} & 6 \\left(1 - e^{t}\\right) e^{t} \\\\ \\left(e^{t} - 1\\right) e^{t} & \\left(3 e^{t} - 2\\right) e^{t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{- t} & 0 \\\\ 0 & e^{- 2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = 1,\\ 2,\\quad P = \\begin{pmatrix}2 & 1 \\\\ 1 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3526,19 +3570,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{t} & 0 \\\\ \\left(e^{t} - 1\\right) e^{t} & e^{2 t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{- t} & 0 \\\\ 0 & e^{- 2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = 1,\\ 2,\\quad P = \\begin{pmatrix}0 & 1 \\\\ 1 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3559,13 +3603,13 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{t} & 2 \\sinh {t} \\\\ 0 & e^{- t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{- t} & 0 \\\\ 0 & e^{t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     }
    ]
@@ -3586,13 +3630,13 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{- 3 t} & - e^{t} + e^{- 3 t} \\\\ 0 & e^{t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{3 t} & 0 \\\\ 0 & e^{- t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     }
    ]
@@ -3613,19 +3657,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}\\left(2 e^{t} - 1\\right) e^{t} & \\left(e^{t} - 1\\right) e^{t} \\\\ 2 \\left(1 - e^{t}\\right) e^{t} & \\left(2 - e^{t}\\right) e^{t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{- 2 t} & 0 \\\\ 0 & e^{- t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = 2,\\ 1,\\quad P = \\begin{pmatrix}1 & 2 \\\\ 1 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3646,19 +3690,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{- 3 t} & 0 \\\\ e^{t} - e^{- 3 t} & e^{t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{3 t} & 0 \\\\ 0 & e^{- t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = -3,\\ 1,\\quad P = \\begin{pmatrix}0 & 1 \\\\ 1 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3679,19 +3723,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}\\left(2 - e^{3 t}\\right) e^{- t} & \\left(1 - e^{3 t}\\right) e^{- t} \\\\ \\left(2 e^{3 t} - 2\\right) e^{- t} & \\left(2 e^{3 t} - 1\\right) e^{- t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{t} & 0 \\\\ 0 & e^{- 2 t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = -1,\\ 2,\\quad P = \\begin{pmatrix}1 & 2 \\\\ 1 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3712,19 +3756,19 @@
     {
      "tex": "e^{At} = \\begin{pmatrix}e^{- 3 t} & 0 \\\\ \\left(e^{2 t} - 1\\right) e^{- 3 t} & e^{- t}\\end{pmatrix}",
      "error": "algebra",
-     "why": "e^{At} = P e^{Dt} P⁻¹ 입니다. P⁻¹ e^{Dt} P는 다른 행렬입니다.",
+     "why": "$e^{At} = Pe^{Dt}P^{-1}$입니다. $P^{-1}e^{Dt}P$는 다른 행렬입니다.",
      "pos": 3
     },
     {
      "tex": "e^{Dt} = \\begin{pmatrix}e^{3 t} & 0 \\\\ 0 & e^{t}\\end{pmatrix}",
      "error": "sign",
-     "why": "e^{Dt}는 대각성분 λᵢ에 대해 e^{λᵢt}입니다. 부호가 틀렸습니다.",
+     "why": "$e^{Dt}$는 대각성분 $\\lambda_i$에 대해 $e^{\\lambda_i t}$입니다. 부호가 틀렸습니다.",
      "pos": 1
     },
     {
      "tex": "\\lambda = -3,\\ -1,\\quad P = \\begin{pmatrix}0 & 1 \\\\ 1 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "고유벡터가 아닙니다: (A − λI)v ≠ 0.",
+     "why": "고유벡터가 아닙니다: $(A - \\lambda I)\\mathbf{v} \\ne \\mathbf{0}$.",
      "pos": 0
     }
    ]
@@ -3745,7 +3789,7 @@
     {
      "tex": "A = \\begin{pmatrix}3 & -2 \\\\ -2 & 3\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -3778,7 +3822,7 @@
     {
      "tex": "A = \\begin{pmatrix}3 & 6 \\\\ 6 & 3\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -3811,7 +3855,7 @@
     {
      "tex": "A = \\begin{pmatrix}2 & 2 \\\\ 2 & 2\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -3844,7 +3888,7 @@
     {
      "tex": "A = \\begin{pmatrix}5 & 2 \\\\ 2 & 5\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -3877,7 +3921,7 @@
     {
      "tex": "A = \\begin{pmatrix}3 & -4 \\\\ -4 & 3\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -3910,7 +3954,7 @@
     {
      "tex": "A = \\begin{pmatrix}1 & 2 \\\\ 2 & 1\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -3943,7 +3987,7 @@
     {
      "tex": "A = \\begin{pmatrix}1 & 4 \\\\ 4 & 1\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -3976,7 +4020,7 @@
     {
      "tex": "A = \\begin{pmatrix}-3 & 6 \\\\ 6 & 5\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4009,7 +4053,7 @@
     {
      "tex": "A = \\begin{pmatrix}5 & 4 \\\\ 4 & 5\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4042,7 +4086,7 @@
     {
      "tex": "A = \\begin{pmatrix}3 & 2 \\\\ 2 & 3\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4075,7 +4119,7 @@
     {
      "tex": "A = \\begin{pmatrix}5 & -4 \\\\ -4 & 2\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4108,7 +4152,7 @@
     {
      "tex": "A = \\begin{pmatrix}5 & 6 \\\\ 6 & 5\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4141,7 +4185,7 @@
     {
      "tex": "A = \\begin{pmatrix}-1 & 4 \\\\ 4 & 2\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4174,7 +4218,7 @@
     {
      "tex": "A = \\begin{pmatrix}5 & -4 \\\\ -4 & 5\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4207,7 +4251,7 @@
     {
      "tex": "A = \\begin{pmatrix}5 & 4 \\\\ 4 & 2\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4240,7 +4284,7 @@
     {
      "tex": "A = \\begin{pmatrix}2 & -4 \\\\ -4 & 2\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4273,7 +4317,7 @@
     {
      "tex": "A = \\begin{pmatrix}2 & 6 \\\\ 6 & 2\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4306,7 +4350,7 @@
     {
      "tex": "A = \\begin{pmatrix}2 & -2 \\\\ -2 & 2\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4339,7 +4383,7 @@
     {
      "tex": "A = \\begin{pmatrix}1 & 4 \\\\ 4 & -2\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4372,7 +4416,7 @@
     {
      "tex": "A = \\begin{pmatrix}-1 & -4 \\\\ -4 & 2\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4405,7 +4449,7 @@
     {
      "tex": "A = \\begin{pmatrix}5 & -2 \\\\ -2 & 5\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4438,7 +4482,7 @@
     {
      "tex": "A = \\begin{pmatrix}2 & 4 \\\\ 4 & 5\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4471,7 +4515,7 @@
     {
      "tex": "A = \\begin{pmatrix}1 & -4 \\\\ -4 & 1\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4504,7 +4548,7 @@
     {
      "tex": "A = \\begin{pmatrix}2 & -4 \\\\ -4 & 5\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4537,7 +4581,7 @@
     {
      "tex": "A = \\begin{pmatrix}1 & -2 \\\\ -2 & 1\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4570,7 +4614,7 @@
     {
      "tex": "A = \\begin{pmatrix}1 & -4 \\\\ -4 & -2\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4603,7 +4647,7 @@
     {
      "tex": "A = \\begin{pmatrix}3 & 4 \\\\ 4 & 3\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4636,7 +4680,7 @@
     {
      "tex": "A = \\begin{pmatrix}2 & 4 \\\\ 4 & 2\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {
@@ -4669,7 +4713,7 @@
     {
      "tex": "A = \\begin{pmatrix}1 & 6 \\\\ 6 & 1\\end{pmatrix}",
      "error": "missing_factor",
-     "why": "xy 계수 b는 반으로 나눠 두 비대각 자리에 들어갑니다.",
+     "why": "$xy$ 계수 $b$는 반으로 나눠 두 비대각 자리에 들어갑니다.",
      "pos": 0
     },
     {

@@ -5,88 +5,122 @@
   "id": 4,
   "slug": "decomp",
   "title": "행렬 분해",
-  "summary": "LU·QR·SVD로 행렬을 쪼개고, 정규방정식 AᵀAx = Aᵀb로 최소제곱 문제를 푼다.",
+  "summary": "$LU$·$QR$·SVD로 행렬을 쪼개고, 정규방정식 $A^TA\\mathbf{x} = A^T\\mathbf{b}$로 최소제곱 문제를 푼다.",
   "part": "선형대수",
   "level": "학부",
   "prereqs": [
    3
   ],
   "connections": [
-   "SVD의 특이값을 큰 것부터 k개만 남기면 가장 좋은 rank-k 근사가 됩니다 (Eckart–Young). 이미지 압축과 PCA가 이 원리입니다.",
-   "최소제곱해는 b를 A의 열공간에 사영한 것입니다. 1장의 벡터 사영이 행렬로 커진 모습입니다.",
+   "SVD의 특이값을 큰 것부터 $k$개만 남기면 가장 좋은 rank-$k$ 근사가 됩니다 (Eckart–Young). 이미지 압축과 PCA가 이 원리입니다.",
+   "최소제곱해는 $\\mathbf{b}$를 $A$의 열공간에 사영한 것입니다. 1장의 벡터 사영이 행렬로 커진 모습입니다.",
    "OPC의 마스크 최적화도 큰 최소제곱 문제입니다. 목표 패턴과 예측 패턴의 차이 제곱합을 줄입니다.",
-   "QR 분해는 Gram–Schmidt를 행렬로 쓴 것이고, 정규방정식보다 수치적으로 안정적입니다."
+   "$QR$ 분해는 Gram–Schmidt를 행렬로 쓴 것이고, 정규방정식보다 수치적으로 안정적입니다."
   ]
  },
  "units": [
   {
    "id": "la.ata",
    "kind": "atom",
-   "title": "AᵀA 계산",
-   "hint": "(AᵀA)ᵢⱼ = A의 i열 · j열. 항상 대칭.",
+   "title": "$A^TA$ 계산",
+   "hint": "$(A^TA)_{ij}$는 $A$의 $i$열과 $j$열의 내적. 항상 대칭.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "$A$의 열을 $\\mathbf{a}_1, \\mathbf{a}_2$라 하면 $A^T$의 행이 $\\mathbf{a}_1^T, \\mathbf{a}_2^T$이므로",
+    "$$(A^TA)_{ij} = \\mathbf{a}_i^T\\mathbf{a}_j = \\mathbf{a}_i\\cdot\\mathbf{a}_j$$",
+    "내적은 대칭이므로 $A^TA$는 항상 대칭이다."
    ]
   },
   {
    "id": "la.sv",
    "kind": "atom",
    "title": "특이값",
-   "hint": "특이값 σᵢ = √(AᵀA의 고유값). A 자체의 고유값과는 다르다.",
+   "hint": "특이값 $\\sigma_i = \\sqrt{\\lambda_i(A^TA)}$. $A$ 자체의 고유값과는 다르다.",
    "tiers": [
     2
+   ],
+   "derivation": [
+    "$A = U\\Sigma V^T$이면 $A^TA = V\\Sigma^TU^TU\\Sigma V^T = V\\,\\Sigma^T\\Sigma\\,V^T$.",
+    "즉 $A^TA$의 고유값이 $\\sigma_i^2$이고 고유벡터가 $V$의 열이다. 따라서 $\\sigma_i = \\sqrt{\\lambda_i(A^TA)}$.",
+    "$A$가 대칭이 아니면 $A$ 자신의 고유값과 특이값은 일반적으로 다르다."
    ]
   },
   {
    "id": "la.svd",
    "kind": "atom",
    "title": "SVD",
-   "hint": "A = UΣVᵀ. U, V는 직교행렬(각각 AAᵀ, AᵀA의 고유벡터), Σ는 특이값.",
+   "hint": "$A = U\\Sigma V^T$. $U, V$는 직교행렬(각각 $AA^T$, $A^TA$의 고유벡터), $\\Sigma$는 특이값.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "$A^TA$는 대칭·양의 준정부호라 정규직교 고유벡터 $\\mathbf{v}_i$와 고유값 $\\sigma_i^2 \\ge 0$을 갖는다.",
+    "$\\mathbf{u}_i = A\\mathbf{v}_i/\\sigma_i$로 두면 $\\mathbf{u}_i\\cdot\\mathbf{u}_j = \\mathbf{v}_i^TA^TA\\mathbf{v}_j/(\\sigma_i\\sigma_j) = \\delta_{ij}$로 정규직교다.",
+    "$AV = U\\Sigma$이므로 $A = U\\Sigma V^T$."
    ]
   },
   {
    "id": "la.normaleq",
    "kind": "atom",
    "title": "정규방정식",
-   "hint": "잔차 b − Ax̂가 A의 열공간에 직교 ⇔ Aᵀ(b − Ax̂) = 0 ⇔ AᵀAx̂ = Aᵀb.",
+   "hint": "잔차 $\\mathbf{b} - A\\hat{\\mathbf{x}}$가 $A$의 열공간에 직교 $\\iff A^T(\\mathbf{b} - A\\hat{\\mathbf{x}}) = \\mathbf{0} \\iff A^TA\\hat{\\mathbf{x}} = A^T\\mathbf{b}$.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "$\\|A\\mathbf{x} - \\mathbf{b}\\|^2$을 최소로 하는 $\\hat{\\mathbf{x}}$에서 잔차 $\\mathbf{b} - A\\hat{\\mathbf{x}}$는 $A$의 열공간에 직교한다.",
+    "$$A^T(\\mathbf{b} - A\\hat{\\mathbf{x}}) = \\mathbf{0} \\;\\Rightarrow\\; A^TA\\,\\hat{\\mathbf{x}} = A^T\\mathbf{b}$$",
+    "같은 식이 $\\nabla_{\\mathbf{x}}\\|A\\mathbf{x} - \\mathbf{b}\\|^2 = 2A^T(A\\mathbf{x} - \\mathbf{b}) = \\mathbf{0}$에서도 나온다."
    ]
   },
   {
    "id": "la.projmat",
    "kind": "atom",
    "title": "사영행렬",
-   "hint": "P = A(AᵀA)⁻¹Aᵀ. P² = P, Pᵀ = P. (AᵀA)⁻¹Aᵀ만 쓰면 사영이 아니라 최소제곱해(유사역행렬).",
+   "hint": "$P = A(A^TA)^{-1}A^T$, $P^2 = P$, $P^T = P$. $(A^TA)^{-1}A^T$만 쓰면 사영이 아니라 최소제곱해(유사역행렬).",
    "tiers": [
     2
+   ],
+   "derivation": [
+    "열공간 위의 사영은 $A\\hat{\\mathbf{x}}$이고, $\\hat{\\mathbf{x}} = (A^TA)^{-1}A^T\\mathbf{b}$이다.",
+    "$$P\\mathbf{b} = A(A^TA)^{-1}A^T\\mathbf{b}$$",
+    "$P^2 = A(A^TA)^{-1}(A^TA)(A^TA)^{-1}A^T = P$: 두 번 사영해도 같다."
    ]
   },
   {
    "id": "la.qr",
    "kind": "atom",
    "title": "QR 분해",
-   "hint": "Q의 열은 정규직교 (Gram–Schmidt 결과), R은 위삼각 (계수들).",
+   "hint": "$Q$의 열은 정규직교(Gram–Schmidt 결과), $R$은 위삼각(계수들).",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "Gram–Schmidt로 $A$의 열 $\\mathbf{a}_j$에서 정규직교 벡터 $\\mathbf{q}_j$를 만든다.",
+    "$\\mathbf{a}_j$는 $\\mathbf{q}_1, \\ldots, \\mathbf{q}_j$만으로 표현된다: $\\mathbf{a}_j = \\sum_{i \\le j} r_{ij}\\mathbf{q}_i$, $r_{ij} = \\mathbf{q}_i\\cdot\\mathbf{a}_j$.",
+    "그래서 계수 행렬 $R$은 위삼각이고 $A = QR$, $Q^TQ = I$."
    ]
   },
   {
    "id": "la.orthmat",
    "kind": "atom",
    "title": "직교행렬",
-   "hint": "직교행렬의 역행렬은 전치. 길이와 각도를 보존한다 (det = ±1).",
+   "hint": "직교행렬의 역행렬은 전치. 길이와 각도를 보존한다 ($\\det Q = \\pm 1$).",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "$Q^TQ = I$는 $Q$의 열이 정규직교라는 뜻이다. 정사각행렬이면 $Q^T$가 곧 역행렬이다.",
+    "$\\|Q\\mathbf{x}\\|^2 = \\mathbf{x}^TQ^TQ\\mathbf{x} = \\|\\mathbf{x}\\|^2$이므로 길이가 보존되고, $(\\det Q)^2 = \\det(Q^TQ) = 1$."
    ]
   },
   {
    "id": "la.lsq",
    "kind": "schema",
    "title": "최소제곱 직선 맞춤",
-   "hint": "A = [1 xᵢ], b = [yᵢ]. AᵀA = [[n, Σx], [Σx, Σx²]], Aᵀb = [Σy, Σxy]를 풀면 (c₀, c₁).",
+   "hint": "$A$의 행은 $(1,\\ x_i)$, $\\mathbf{b}$는 $y_i$. $A^TA = \\begin{pmatrix}n & \\sum x\\\\ \\sum x & \\sum x^2\\end{pmatrix}$, $A^T\\mathbf{b} = \\begin{pmatrix}\\sum y\\\\ \\sum xy\\end{pmatrix}$를 풀면 $(c_0, c_1)$.",
    "steps": [
     "A와 b",
     "정규방정식",
@@ -96,13 +130,18 @@
    "tiers": [
     2,
     3
+   ],
+   "derivation": [
+    "직선이 모든 점을 지나라는 조건은 $A\\mathbf{c} = \\mathbf{b}$이다. $A$의 각 행은 $(1,\\ x_i)$, $\\mathbf{b}$의 성분은 $y_i$.",
+    "점이 셋 이상이면 보통 해가 없으므로 정규방정식 $A^TA\\mathbf{c} = A^T\\mathbf{b}$를 푼다:",
+    "$$\\begin{pmatrix}n & \\sum x_i\\\\ \\sum x_i & \\sum x_i^2\\end{pmatrix}\\begin{pmatrix}c_0\\\\ c_1\\end{pmatrix} = \\begin{pmatrix}\\sum y_i\\\\ \\sum x_iy_i\\end{pmatrix}$$"
    ]
   },
   {
    "id": "la.lu",
    "kind": "schema",
-   "title": "3×3 LU 분해",
-   "hint": "Gauss 소거의 승수 lᵢⱼ를 L의 (i, j) 자리에, 소거 결과를 U에.",
+   "title": "$3\\times 3$ LU 분해",
+   "hint": "Gauss 소거의 승수 $l_{ij}$를 $L$의 $(i, j)$ 자리에, 소거 결과를 $U$에.",
    "steps": [
     "1열 승수",
     "1열 소거",
@@ -111,6 +150,11 @@
    ],
    "tiers": [
     2
+   ],
+   "derivation": [
+    "행 연산 $R_i \\leftarrow R_i - l_{ij}R_j$는 왼쪽에 기본행렬을 곱하는 것과 같다: $E\\,A = U$.",
+    "$E^{-1}$은 승수를 부호 그대로 대각 아래에 모은 단위 하삼각행렬 $L$이다.",
+    "$$A = LU,\\quad L = \\begin{pmatrix}1 & 0 & 0\\\\ l_{21} & 1 & 0\\\\ l_{31} & l_{32} & 1\\end{pmatrix}$$"
    ]
   }
  ],
@@ -1280,13 +1324,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}10 & 4 \\\\ 4 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ 14\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 4 \\\\ 4 & 10\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ 14\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1313,13 +1357,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}20 & 2 \\\\ 2 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ -16\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 2 \\\\ 2 & 20\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ -16\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1352,13 +1396,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}9 & 1 \\\\ 1 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ -6\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 1 \\\\ 1 & 9\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ -6\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1391,13 +1435,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}11 & 3 \\\\ 3 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ 6\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}4 & 3 \\\\ 3 & 11\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 6\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1430,13 +1474,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}5 & -3 \\\\ -3 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ -10\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & -3 \\\\ -3 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ -10\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1469,13 +1513,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}5 & -3 \\\\ -3 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}0 \\\\ -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & -3 \\\\ -3 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}1 \\\\ -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1502,13 +1546,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}21 & 3 \\\\ 3 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}1 \\\\ -18\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}4 & 3 \\\\ 3 & 21\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}2 \\\\ -18\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1541,13 +1585,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}5 & -3 \\\\ -3 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ -9\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & -3 \\\\ -3 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ -9\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1580,13 +1624,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}17 & 3 \\\\ 3 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ -8\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}4 & 3 \\\\ 3 & 17\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ -8\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1619,13 +1663,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}14 & 6 \\\\ 6 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}3 \\\\ 8\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ 8\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1658,13 +1702,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}2 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1697,13 +1741,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}9 & 1 \\\\ 1 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}4 & 1 \\\\ 1 & 9\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1736,13 +1780,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}9 & 1 \\\\ 1 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}12 \\\\ 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}4 & 1 \\\\ 1 & 9\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}13 \\\\ 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1775,13 +1819,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}2 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1814,13 +1858,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}2 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1853,13 +1897,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}29 & 9 \\\\ 9 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 21\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 9 \\\\ 9 & 29\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 21\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1892,13 +1936,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}29 & 9 \\\\ 9 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ 26\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 9 \\\\ 9 & 29\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 26\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1931,13 +1975,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}2 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}11 \\\\ 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -1970,13 +2014,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}14 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}0 \\\\ -7\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}1 \\\\ -7\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2009,13 +2053,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}8 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2048,13 +2092,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}14 & 4 \\\\ 4 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 5\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}4 & 4 \\\\ 4 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}11 \\\\ 5\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2087,13 +2131,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}14 & 6 \\\\ 6 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ 8\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ 8\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2126,13 +2170,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}14 & 6 \\\\ 6 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ 8\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ 8\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2165,13 +2209,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}24 & 4 \\\\ 4 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}17 \\\\ 32\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}4 & 4 \\\\ 4 & 24\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}18 \\\\ 32\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2204,13 +2248,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}6 & -2 \\\\ -2 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & -2 \\\\ -2 & 6\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2243,13 +2287,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}18 & 4 \\\\ 4 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ -7\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 4 \\\\ 4 & 18\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ -7\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2282,13 +2326,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}21 & 3 \\\\ 3 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ -7\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 3 \\\\ 3 & 21\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ -7\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2321,13 +2365,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}8 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ 10\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ 10\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2360,13 +2404,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}24 & 4 \\\\ 4 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ -6\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 4 \\\\ 4 & 24\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ -6\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2399,13 +2443,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}14 & 0 \\\\ 0 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}3 \\\\ -7\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}4 & 0 \\\\ 0 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ -7\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2438,13 +2482,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}11 & 3 \\\\ 3 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ 20\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 3 \\\\ 3 & 11\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ 20\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2477,13 +2521,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}24 & 4 \\\\ 4 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}-1 \\\\ 4\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}4 & 4 \\\\ 4 & 24\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}0 \\\\ 4\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2516,13 +2560,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}5 & 1 \\\\ 1 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 1 \\\\ 1 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}11 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2555,13 +2599,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}21 & 3 \\\\ 3 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ -6\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 3 \\\\ 3 & 21\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ -6\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2594,13 +2638,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}5 & 3 \\\\ 3 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 3 \\\\ 3 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2633,13 +2677,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}26 & 8 \\\\ 8 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}4 & 8 \\\\ 8 & 26\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2672,13 +2716,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}8 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ -8\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ -8\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2711,13 +2755,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}8 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}1 \\\\ -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}2 \\\\ -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2750,13 +2794,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}14 & 6 \\\\ 6 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}-3 \\\\ -5\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}-2 \\\\ -5\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2789,13 +2833,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}8 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}2 \\\\ 12\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}3 \\\\ 12\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2828,13 +2872,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}14 & 6 \\\\ 6 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}13 \\\\ 17\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}4 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}14 \\\\ 17\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2867,13 +2911,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}5 & 1 \\\\ 1 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}12 \\\\ 11\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 1 \\\\ 1 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}13 \\\\ 11\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2906,13 +2950,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}6 & 2 \\\\ 2 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}19 \\\\ 7\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}4 & 2 \\\\ 2 & 6\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}20 \\\\ 7\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2945,13 +2989,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}14 & 6 \\\\ 6 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}13 \\\\ 22\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}14 \\\\ 22\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -2984,13 +3028,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}8 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ 4\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ 4\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -3023,13 +3067,13 @@
     {
      "tex": "A^{T}A = \\begin{pmatrix}25 & 5 \\\\ 5 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}1 \\\\ -5\\end{pmatrix}",
      "error": "algebra",
-     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "why": "$A^TA$의 $(1,1)$ 성분은 데이터 개수 $n$이고 $(2,2)$ 성분이 $\\sum x_i^2$입니다. 두 자리를 바꿨습니다.",
      "pos": 1
     },
     {
      "tex": "A^{T}A = \\begin{pmatrix}4 & 5 \\\\ 5 & 25\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}2 \\\\ -5\\end{pmatrix}",
      "error": "algebra",
-     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "why": "$A^T\\mathbf{b}$ 계산이 틀렸습니다: 첫 성분은 $\\sum y_i$, 둘째 성분은 $\\sum x_iy_i$.",
      "pos": 1
     },
     {
@@ -3062,25 +3106,25 @@
     {
      "tex": "l_{21} = 2,\\ l_{31} = 1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & -2 \\\\ 0 & 1 & 3 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -2 & -1 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & -2 \\\\ 0 & 1 & 3 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & -2 \\\\ 0 & 1 & 4 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3101,25 +3145,25 @@
     {
      "tex": "l_{21} = 1,\\ l_{31} = 0",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 0 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 0 & 0 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 0 & 0 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ 0 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 0 & 0 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3140,25 +3184,25 @@
     {
      "tex": "l_{21} = 1,\\ l_{31} = 0",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 0 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 3 & 3 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 3 & 3 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ 0 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 3 & 3 \\\\ 0 & -1 & 4 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3179,25 +3223,25 @@
     {
      "tex": "l_{21} = 2,\\ l_{31} = 0",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 0 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 3 & -2 \\\\ 0 & 2 & 0 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -2 & 0 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 3 & -2 \\\\ 0 & 2 & 0 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ 0 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 3 & -2 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3218,25 +3262,25 @@
     {
      "tex": "l_{21} = 1,\\ l_{31} = 1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & 3 & 3 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -1 & -1 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & 3 & 3 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & 3 & 3 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3257,25 +3301,25 @@
     {
      "tex": "l_{21} = 1,\\ l_{31} = 2",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 2 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & -1 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -1 & -2 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & -1 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & -1 \\\\ 0 & 2 & 4 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3296,25 +3340,25 @@
     {
      "tex": "l_{21} = 2,\\ l_{31} = 2",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & 2 & 0 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -2 & -2 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & 2 & 0 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -2 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & 2 & 0 \\\\ 0 & -1 & 0 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3335,25 +3379,25 @@
     {
      "tex": "l_{21} = -2,\\ l_{31} = -1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -1 & -1 \\\\ 0 & 2 & -2 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 2 & 1 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -1 & -1 \\\\ 0 & 2 & -2 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -1 & -1 \\\\ 0 & 2 & -1 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3374,25 +3418,25 @@
     {
      "tex": "l_{21} = 2,\\ l_{31} = 2",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & -2 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -2 & -2 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & -2 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -2 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & -2 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3413,25 +3457,25 @@
     {
      "tex": "l_{21} = 1,\\ l_{31} = -2",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ -2 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -1 & 2 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ 2 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3452,25 +3496,25 @@
     {
      "tex": "l_{21} = -2,\\ l_{31} = -2",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -2 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 1 & 2 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 1 & 2 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 1 & 2 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3491,25 +3535,25 @@
     {
      "tex": "l_{21} = -2,\\ l_{31} = -2",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -2 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & 3 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3530,25 +3574,25 @@
     {
      "tex": "l_{21} = 2,\\ l_{31} = 1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 0 & 3 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -2 & -1 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 0 & 3 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 0 & 3 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3569,25 +3613,25 @@
     {
      "tex": "l_{21} = 2,\\ l_{31} = 0",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 0 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 3 & 3 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -2 & 0 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 3 & 3 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ 0 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 3 & 3 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3608,25 +3652,25 @@
     {
      "tex": "l_{21} = 2,\\ l_{31} = -1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ -1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -2 & 1 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ 1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3647,25 +3691,25 @@
     {
      "tex": "l_{21} = -2,\\ l_{31} = -2",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -2 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 2 & 1 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 2 & 1 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 2 & 1 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3686,25 +3730,25 @@
     {
      "tex": "l_{21} = 1,\\ l_{31} = 2",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 2 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -1 & -2 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 4 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3725,25 +3769,25 @@
     {
      "tex": "l_{21} = -1,\\ l_{31} = -2",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -2 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 1 & 2 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 2 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3764,25 +3808,25 @@
     {
      "tex": "l_{21} = -2,\\ l_{31} = -1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 3 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 2 & 1 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 3 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 3 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3803,25 +3847,25 @@
     {
      "tex": "l_{21} = 2,\\ l_{31} = -1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ -1 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 2 \\\\ 0 & 1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -2 & 1 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 2 \\\\ 0 & 1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ 1 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 2 \\\\ 0 & 1 & 4 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3842,25 +3886,25 @@
     {
      "tex": "l_{21} = -1,\\ l_{31} = 1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ 1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 2 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 1 & -1 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 2 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 2 \\\\ 0 & 2 & 4 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3881,25 +3925,25 @@
     {
      "tex": "l_{21} = -2,\\ l_{31} = -2",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -2 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & -1 & 1 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & -1 & 1 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & -1 & 1 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3920,25 +3964,25 @@
     {
      "tex": "l_{21} = -1,\\ l_{31} = -2",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -1 & 1 \\\\ 0 & -1 & 1 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 1 & 2 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -1 & 1 \\\\ 0 & -1 & 1 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 2 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -1 & 1 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3959,25 +4003,25 @@
     {
      "tex": "l_{21} = -2,\\ l_{31} = -1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 2 & 1 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 1 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -3998,25 +4042,25 @@
     {
      "tex": "l_{21} = 1,\\ l_{31} = 1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 1 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -1 & -1 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 1 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 1 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -4037,25 +4081,25 @@
     {
      "tex": "l_{21} = -1,\\ l_{31} = -1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -1 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 3 & -2 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 1 & 1 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 3 & -2 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 1 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 3 & -2 \\\\ 0 & -1 & 0 \\\\ 0 & 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -4076,25 +4120,25 @@
     {
      "tex": "l_{21} = -2,\\ l_{31} = -1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 2 & 1 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -4115,25 +4159,25 @@
     {
      "tex": "l_{21} = 2,\\ l_{31} = 1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -2 & 3 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -2 & -1 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -2 & 3 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -2 & 3 \\\\ 0 & -1 & 0 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -4154,25 +4198,25 @@
     {
      "tex": "l_{21} = 1,\\ l_{31} = 1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 1 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 3 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & -1 & -1 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 3 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -1 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 3 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]
@@ -4193,25 +4237,25 @@
     {
      "tex": "l_{21} = -2,\\ l_{31} = 1",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 0
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ 1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 2 & -2 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "sign",
-     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "why": "$L$에 들어가는 승수는 $R_i - l_{ij}R_j$의 $l_{ij}$ 그대로입니다. 부호를 바꾸면 안 됩니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 2 & -1 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 2 & -2 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "why": "승수는 $L$의 대각 아래(하삼각)에 들어갑니다.",
      "pos": 3
     },
     {
      "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 2 & -2 \\\\ 0 & 2 & 4 \\\\ 0 & 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "why": "소거 계산이 틀렸습니다. $LU \\ne A$가 됩니다.",
      "pos": 3
     }
    ]

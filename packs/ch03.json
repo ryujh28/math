@@ -5,17 +5,17 @@
   "id": 3,
   "slug": "eigen",
   "title": "고유값 문제",
-  "summary": "det(A − λI) = 0으로 고유값을, (A − λI)v = 0으로 고유벡터를 구하고 A = PDP⁻¹로 대각화한다.",
+  "summary": "$\\det(A - \\lambda I) = 0$으로 고유값을, $(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$으로 고유벡터를 구하고 $A = PDP^{-1}$로 대각화한다.",
   "part": "선형대수",
   "level": "학부",
   "prereqs": [
    2
   ],
   "connections": [
-   "x′ = Ax의 해는 고유벡터 방향으로 e^{λt}만큼 늘거나 줄어듭니다. 7장의 특성방정식은 같은 이야기를 스칼라 하나로 한 것입니다.",
-   "Sturm–Liouville 문제의 고유함수는 '무한 차원 대칭행렬'의 고유벡터입니다. 그래서 서로 직교합니다.",
+   "$\\mathbf{x}^{\\prime} = A\\mathbf{x}$의 해는 고유벡터 방향으로 $e^{\\lambda t}$만큼 늘거나 줄어듭니다. 7장의 특성방정식은 같은 이야기를 스칼라 하나로 한 것입니다.",
+   "Sturm–Liouville 문제의 고유함수는 무한 차원 대칭행렬의 고유벡터입니다. 그래서 서로 직교합니다.",
    "양자역학의 에너지 준위는 해밀토니안 행렬의 고유값입니다.",
-   "PageRank는 웹 링크 행렬의 고유값 1에 대한 고유벡터입니다."
+   "PageRank는 웹 링크 행렬의 고유값 $1$에 대한 고유벡터입니다."
   ]
  },
  "units": [
@@ -23,27 +23,40 @@
    "id": "la.charpoly",
    "kind": "atom",
    "title": "특성다항식",
-   "hint": "2×2에서 det(A − λI) = λ² − (tr A)λ + det A.",
+   "hint": "$2\\times 2$에서 $\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "$A\\mathbf{v} = \\lambda\\mathbf{v}$, $\\mathbf{v} \\ne \\mathbf{0}$ $\\iff$ $(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$에 자명하지 않은 해가 있음 $\\iff$ $\\det(A - \\lambda I) = 0$.",
+    "$$\\det\\begin{pmatrix}a - \\lambda & b\\\\ c & d - \\lambda\\end{pmatrix} = \\lambda^2 - (a + d)\\lambda + (ad - bc)$$"
    ]
   },
   {
    "id": "la.eig2",
    "kind": "atom",
-   "title": "2×2 고유값",
-   "hint": "특성방정식 λ² − (tr A)λ + det A = 0의 두 근. 합 = tr A, 곱 = det A.",
+   "title": "$2\\times 2$ 고유값",
+   "hint": "특성방정식 $\\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A = 0$의 두 근. 합은 $\\operatorname{tr}A$, 곱은 $\\det A$.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "특성방정식 $\\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A = 0$을 인수분해하거나 근의 공식으로 푼다.",
+    "근과 계수의 관계 $\\lambda_1 + \\lambda_2 = \\operatorname{tr}A$, $\\lambda_1\\lambda_2 = \\det A$를 만족하는 쌍을 먼저 찾으면 빠르다."
    ]
   },
   {
    "id": "la.eigvec",
    "kind": "atom",
    "title": "고유벡터",
-   "hint": "(A − λI)v = 0의 0이 아닌 해. 2×2면 한 행만 보고 v를 정하면 된다.",
+   "hint": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$의 $\\mathbf{0}$이 아닌 해. $2\\times 2$면 한 행만 보고 $\\mathbf{v}$를 정하면 된다.",
    "tiers": [
     2
+   ],
+   "derivation": [
+    "$\\lambda$가 고유값이면 $A - \\lambda I$는 특이행렬이라 두 행이 서로 비례한다.",
+    "첫 행 $(a - \\lambda,\\ b)$에 직교하는 $\\mathbf{v} = (b,\\ \\lambda - a)$가 해다 (첫 행이 $\\mathbf{0}$이면 둘째 행을 쓴다).",
+    "고유벡터는 상수배를 무시하므로 가장 간단한 정수 벡터로 쓴다."
    ]
   },
   {
@@ -53,49 +66,70 @@
    "hint": "삼각행렬의 고유값은 대각성분 그대로.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "$A - \\lambda I$도 삼각행렬이고, 삼각행렬의 행렬식은 대각성분의 곱이다.",
+    "$$\\det(A - \\lambda I) = (a_{11} - \\lambda)(a_{22} - \\lambda)(a_{33} - \\lambda)$$"
    ]
   },
   {
    "id": "la.trdet",
    "kind": "atom",
    "title": "고유값과 trace·det",
-   "hint": "고유값의 합 = tr A, 곱 = det A.",
+   "hint": "고유값의 합은 $\\operatorname{tr}A$, 곱은 $\\det A$.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "특성다항식을 근으로 쓰면 $\\det(A - \\lambda I) = (\\lambda_1 - \\lambda)(\\lambda_2 - \\lambda)$.",
+    "$\\lambda = 0$을 넣으면 $\\det A = \\lambda_1\\lambda_2$. $\\lambda$의 일차항 계수를 비교하면 $\\operatorname{tr}A = \\lambda_1 + \\lambda_2$."
    ]
   },
   {
    "id": "la.symeig",
    "kind": "atom",
    "title": "대칭행렬의 고유값",
-   "hint": "실대칭행렬: 고유값 실수, 고유벡터 직교, 항상 직교대각화 가능 (스펙트럼 정리).",
+   "hint": "실대칭행렬: 고유값은 실수, 고유벡터는 직교, 항상 직교대각화 가능 (스펙트럼 정리).",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "$A\\mathbf{v} = \\lambda\\mathbf{v}$에 $\\bar{\\mathbf{v}}^T$를 곱하면 $\\bar{\\mathbf{v}}^TA\\mathbf{v} = \\lambda\\|\\mathbf{v}\\|^2$. 좌변은 $A$가 실대칭이라 자기 켤레와 같은 실수이므로 $\\lambda$도 실수.",
+    "$$\\lambda_1\\,\\mathbf{v}_1\\cdot\\mathbf{v}_2 = (A\\mathbf{v}_1)\\cdot\\mathbf{v}_2 = \\mathbf{v}_1\\cdot(A\\mathbf{v}_2) = \\lambda_2\\,\\mathbf{v}_1\\cdot\\mathbf{v}_2$$",
+    "$\\lambda_1 \\ne \\lambda_2$이면 $\\mathbf{v}_1\\cdot\\mathbf{v}_2 = 0$."
    ]
   },
   {
    "id": "la.similar",
    "kind": "atom",
    "title": "닮은 행렬",
-   "hint": "닮음 변환은 좌표계만 바꾼다. 고유값은 같고, 고유벡터는 P만큼 바뀐다 (v ↦ P⁻¹v).",
+   "hint": "닮음 변환은 좌표계만 바꾼다. 고유값은 같고, 고유벡터는 $\\mathbf{v} \\mapsto P^{-1}\\mathbf{v}$로 바뀐다.",
    "tiers": [
     2
+   ],
+   "derivation": [
+    "$$\\det(P^{-1}AP - \\lambda I) = \\det\\big(P^{-1}(A - \\lambda I)P\\big) = \\det(A - \\lambda I)$$",
+    "특성다항식이 같으므로 고유값, trace, det가 같다. $A\\mathbf{v} = \\lambda\\mathbf{v}$이면 $B(P^{-1}\\mathbf{v}) = \\lambda(P^{-1}\\mathbf{v})$."
    ]
   },
   {
    "id": "la.eigpow",
    "kind": "atom",
    "title": "거듭제곱과 역행렬의 고유값",
-   "hint": "Aᵏv = λᵏv, A⁻¹v = λ⁻¹v. 같은 고유벡터, 고유값만 거듭제곱.",
+   "hint": "$A^k\\mathbf{v} = \\lambda^k\\mathbf{v}$, $A^{-1}\\mathbf{v} = \\lambda^{-1}\\mathbf{v}$. 같은 고유벡터, 고유값만 거듭제곱.",
    "tiers": [
     2
+   ],
+   "derivation": [
+    "$A^2\\mathbf{v} = A(\\lambda\\mathbf{v}) = \\lambda^2\\mathbf{v}$이고, 귀납적으로 $A^k\\mathbf{v} = \\lambda^k\\mathbf{v}$.",
+    "$A\\mathbf{v} = \\lambda\\mathbf{v}$ 양변에 $A^{-1}$을 곱하면 $\\mathbf{v} = \\lambda A^{-1}\\mathbf{v}$, 곧 $A^{-1}\\mathbf{v} = \\lambda^{-1}\\mathbf{v}$."
    ]
   },
   {
    "id": "la.diag",
    "kind": "schema",
-   "title": "2×2 대각화",
-   "hint": "특성방정식 → 고유값 → 각 고유값의 고유벡터를 P의 열로, 같은 순서로 D의 대각에.",
+   "title": "$2\\times 2$ 대각화",
+   "hint": "특성방정식 → 고유값 → 각 고유값의 고유벡터를 $P$의 열로, 같은 순서로 $D$의 대각에.",
    "steps": [
     "특성방정식",
     "고유값",
@@ -105,13 +139,18 @@
    "tiers": [
     1,
     2
+   ],
+   "derivation": [
+    "고유벡터를 열로 모은 $P = [\\,\\mathbf{v}_1\\ \\mathbf{v}_2\\,]$에 대해 $AP = [\\,\\lambda_1\\mathbf{v}_1\\ \\ \\lambda_2\\mathbf{v}_2\\,] = PD$.",
+    "고유벡터가 독립이면 $P$가 가역이므로 $A = PDP^{-1}$.",
+    "$P$의 $j$열과 $D$의 $j$번째 대각성분은 같은 고유값끼리 짝지어야 한다."
    ]
   },
   {
    "id": "la.apow",
    "kind": "schema",
    "title": "대각화로 거듭제곱",
-   "hint": "Aⁿ = PDⁿP⁻¹. 대각행렬의 거듭제곱은 성분별 거듭제곱.",
+   "hint": "$A^n = PD^nP^{-1}$. 대각행렬의 거듭제곱은 성분별 거듭제곱.",
    "steps": [
     "A = PDP⁻¹",
     "Dⁿ",
@@ -120,6 +159,10 @@
    ],
    "tiers": [
     2
+   ],
+   "derivation": [
+    "$$A^n = (PDP^{-1})(PDP^{-1})\\cdots(PDP^{-1}) = PD^nP^{-1}$$",
+    "가운데의 $P^{-1}P$가 모두 $I$로 사라진다. $D^n$은 대각성분의 $n$제곱이다."
    ]
   }
  ],
@@ -2666,19 +2709,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda + 2 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -2705,13 +2748,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 5\\lambda + 6 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -2738,19 +2781,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -2777,13 +2820,13 @@
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     }
    ]
@@ -2804,19 +2847,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 2\\lambda - 3 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -2843,13 +2886,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 4\\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -2876,19 +2919,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -2915,13 +2958,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 3\\lambda + 2 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -2948,13 +2991,13 @@
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     }
    ]
@@ -2975,19 +3018,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 6\\lambda + 8 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 4\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3014,19 +3057,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 7\\lambda + 12 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 4\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3053,19 +3096,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda + 2 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3092,19 +3135,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 5\\lambda + 6 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3131,19 +3174,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3170,13 +3213,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 2\\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3203,13 +3246,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda + 2 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3236,13 +3279,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3269,19 +3312,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 6\\lambda + 8 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 4\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3308,13 +3351,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 5\\lambda + 6 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3341,13 +3384,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3374,13 +3417,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 5\\lambda + 6 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3407,19 +3450,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3446,19 +3489,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 2\\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3485,19 +3528,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 2\\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3524,19 +3567,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 5\\lambda + 6 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3563,13 +3606,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 3\\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3596,13 +3639,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 4\\lambda + 3 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3629,13 +3672,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 2 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3662,19 +3705,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 2\\lambda - 3 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3701,13 +3744,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3734,19 +3777,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 2 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3773,19 +3816,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}3 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 3 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3812,13 +3855,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 6 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & -3\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3845,19 +3888,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 4\\lambda + 3 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3884,19 +3927,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 5\\lambda + 6 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 3\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}3 & 2 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & -3\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3923,19 +3966,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 3\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}3 & 2 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -3962,19 +4005,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 12 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & -3\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4001,19 +4044,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 5\\lambda + 4 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 4\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4040,13 +4083,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 6 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4073,19 +4116,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}3 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 3 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4112,13 +4155,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 12 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & 4\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4145,19 +4188,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 6 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4184,13 +4227,13 @@
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     }
    ]
@@ -4211,13 +4254,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 2 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4244,19 +4287,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 3\\lambda + 2 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 3\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}3 & 2 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4283,19 +4326,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 6 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4322,19 +4365,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 2\\lambda - 8 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4361,13 +4404,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 5\\lambda + 6 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4394,13 +4437,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 6\\lambda + 8 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & 2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4427,13 +4470,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 2\\lambda - 8 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4460,13 +4503,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 2\\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4493,13 +4536,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 6 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & -3\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4526,13 +4569,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & 3\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4559,13 +4602,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 4\\lambda + 3 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4592,13 +4635,13 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "P = \\begin{pmatrix}1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4625,19 +4668,19 @@
     {
      "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda - 4 = 0",
      "error": "sign",
-     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "why": "$\\det(A - \\lambda I) = \\lambda^2 - (\\operatorname{tr}A)\\lambda + \\det A$. trace 항의 부호가 틀렸습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "why": "$(A - \\lambda I)\\mathbf{v} = \\mathbf{0}$을 만족하지 않습니다. 고유벡터가 아닙니다.",
      "pos": 2
     },
     {
      "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 4\\end{pmatrix}",
      "error": "algebra",
-     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "why": "$P$의 열 순서와 $D$의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
      "pos": 3
     },
     {
@@ -4664,13 +4707,13 @@
     {
      "tex": "D^{4} = \\begin{pmatrix}0 & 0 \\\\ 0 & -12\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{4} = \\begin{pmatrix}-81 & -81 \\\\ 162 & 162\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -4697,13 +4740,13 @@
     {
      "tex": "D^{5} = \\begin{pmatrix}0 & 0 \\\\ 0 & -10\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{5} = \\begin{pmatrix}0 & -32 \\\\ 0 & -32\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -4730,13 +4773,13 @@
     {
      "tex": "D^{4} = \\begin{pmatrix}0 & 0 \\\\ 0 & 12\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{4} = \\begin{pmatrix}0 & -81 \\\\ 0 & 81\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -4763,13 +4806,13 @@
     {
      "tex": "D^{4} = \\begin{pmatrix}-4 & 0 \\\\ 0 & -12\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{4} = \\begin{pmatrix}-79 & -160 \\\\ 80 & 161\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -4796,13 +4839,13 @@
     {
      "tex": "D^{5} = \\begin{pmatrix}10 & 0 \\\\ 0 & 15\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{5} = \\begin{pmatrix}32 & 0 \\\\ 211 & 243\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -4829,13 +4872,13 @@
     {
      "tex": "D^{4} = \\begin{pmatrix}-12 & 0 \\\\ 0 & 8\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{4} = \\begin{pmatrix}81 & -65 \\\\ 0 & 16\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -4862,13 +4905,13 @@
     {
      "tex": "D^{4} = \\begin{pmatrix}4 & 0 \\\\ 0 & 8\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{4} = \\begin{pmatrix}1 & -15 \\\\ 0 & 16\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -4895,13 +4938,13 @@
     {
      "tex": "D^{5} = \\begin{pmatrix}5 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{5} = \\begin{pmatrix}4 & 2 \\\\ -6 & -3\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -4928,13 +4971,13 @@
     {
      "tex": "D^{3} = \\begin{pmatrix}-3 & 0 \\\\ 0 & 9\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{3} = \\begin{pmatrix}27 & 0 \\\\ 28 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -4961,13 +5004,13 @@
     {
      "tex": "D^{3} = \\begin{pmatrix}-6 & 0 \\\\ 0 & -3\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{3} = \\begin{pmatrix}-8 & 7 \\\\ 0 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -4994,13 +5037,13 @@
     {
      "tex": "D^{5} = \\begin{pmatrix}15 & 0 \\\\ 0 & -5\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{5} = \\begin{pmatrix}487 & 244 \\\\ -488 & -245\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5027,13 +5070,13 @@
     {
      "tex": "D^{5} = \\begin{pmatrix}0 & 0 \\\\ 0 & -5\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{5} = \\begin{pmatrix}-1 & 0 \\\\ -1 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5060,13 +5103,13 @@
     {
      "tex": "D^{3} = \\begin{pmatrix}-3 & 0 \\\\ 0 & -6\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{3} = \\begin{pmatrix}20 & 14 \\\\ -42 & -29\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5093,13 +5136,13 @@
     {
      "tex": "D^{3} = \\begin{pmatrix}0 & 0 \\\\ 0 & -3\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{3} = \\begin{pmatrix}3 & 2 \\\\ -6 & -4\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5126,13 +5169,13 @@
     {
      "tex": "D^{4} = \\begin{pmatrix}4 & 0 \\\\ 0 & 12\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{4} = \\begin{pmatrix}81 & 0 \\\\ 80 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5159,13 +5202,13 @@
     {
      "tex": "D^{4} = \\begin{pmatrix}12 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{4} = \\begin{pmatrix}81 & -81 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5192,13 +5235,13 @@
     {
      "tex": "D^{4} = \\begin{pmatrix}8 & 0 \\\\ 0 & 12\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{4} = \\begin{pmatrix}-114 & -390 \\\\ 65 & 211\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5225,13 +5268,13 @@
     {
      "tex": "D^{3} = \\begin{pmatrix}9 & 0 \\\\ 0 & -3\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{3} = \\begin{pmatrix}27 & 0 \\\\ -28 & -1\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5258,13 +5301,13 @@
     {
      "tex": "D^{4} = \\begin{pmatrix}-4 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{4} = \\begin{pmatrix}4 & 2 \\\\ -6 & -3\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5291,13 +5334,13 @@
     {
      "tex": "D^{4} = \\begin{pmatrix}12 & 0 \\\\ 0 & 8\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{4} = \\begin{pmatrix}211 & 390 \\\\ -65 & -114\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5324,13 +5367,13 @@
     {
      "tex": "D^{3} = \\begin{pmatrix}6 & 0 \\\\ 0 & 9\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{3} = \\begin{pmatrix}8 & 19 \\\\ 0 & 27\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5357,13 +5400,13 @@
     {
      "tex": "D^{3} = \\begin{pmatrix}3 & 0 \\\\ 0 & -3\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{3} = \\begin{pmatrix}3 & 2 \\\\ -4 & -3\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5390,13 +5433,13 @@
     {
      "tex": "D^{4} = \\begin{pmatrix}-8 & 0 \\\\ 0 & -4\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{4} = \\begin{pmatrix}16 & 15 \\\\ 0 & 1\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5423,13 +5466,13 @@
     {
      "tex": "D^{5} = \\begin{pmatrix}-15 & 0 \\\\ 0 & 10\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{5} = \\begin{pmatrix}-243 & -275 \\\\ 0 & 32\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5456,13 +5499,13 @@
     {
      "tex": "D^{3} = \\begin{pmatrix}9 & 0 \\\\ 0 & 6\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{3} = \\begin{pmatrix}27 & -19 \\\\ 0 & 8\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5489,13 +5532,13 @@
     {
      "tex": "D^{5} = \\begin{pmatrix}5 & 0 \\\\ 0 & 0\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{5} = \\begin{pmatrix}3 & 2 \\\\ -3 & -2\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5522,13 +5565,13 @@
     {
      "tex": "D^{4} = \\begin{pmatrix}12 & 0 \\\\ 0 & 8\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{4} = \\begin{pmatrix}146 & 130 \\\\ -65 & -49\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5555,13 +5598,13 @@
     {
      "tex": "D^{5} = \\begin{pmatrix}-15 & 0 \\\\ 0 & 15\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{5} = \\begin{pmatrix}-243 & 0 \\\\ 486 & 243\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5588,13 +5631,13 @@
     {
      "tex": "D^{3} = \\begin{pmatrix}-3 & 0 \\\\ 0 & -6\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{3} = \\begin{pmatrix}6 & 7 \\\\ -14 & -15\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {
@@ -5621,13 +5664,13 @@
     {
      "tex": "D^{5} = \\begin{pmatrix}10 & 0 \\\\ 0 & -5\\end{pmatrix}",
      "error": "algebra",
-     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "why": "$D^n$은 대각성분을 각각 $n$제곱한 것입니다. $n$을 곱하면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "A^{5} = \\begin{pmatrix}65 & 33 \\\\ -66 & -34\\end{pmatrix}",
      "error": "algebra",
-     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "why": "$A = PDP^{-1}$입니다. $P^{-1}DP$는 다른 행렬입니다.",
      "pos": 3
     },
     {

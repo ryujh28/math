@@ -3,9 +3,9 @@
   title: 최소제곱 직선 맞춤
   generator: la4:lsq_line
   steps: [A와 b, 정규방정식, 해, 직선]
-  hint: "A = [1 xᵢ], b = [yᵢ]. AᵀA = [[n, Σx], [Σx, Σx²]], Aᵀb = [Σy, Σxy]를 풀면 (c₀, c₁)."
+  hint: '$A$의 행은 $(1,\ x_i)$, $\mathbf{b}$는 $y_i$. $A^TA = \begin{pmatrix}n & \sum x\\ \sum x & \sum x^2\end{pmatrix}$, $A^T\mathbf{b} = \begin{pmatrix}\sum y\\ \sum xy\end{pmatrix}$를 풀면 $(c_0, c_1)$.'
 - id: la.lu
-  title: 3×3 LU 분해
+  title: '$3\times 3$ LU 분해'
   generator: la4:lu3
   steps: [1열 승수, 1열 소거, 2열 승수, L과 U]
-  hint: "Gauss 소거의 승수 lᵢⱼ를 L의 (i, j) 자리에, 소거 결과를 U에."
+  hint: 'Gauss 소거의 승수 $l_{ij}$를 $L$의 $(i, j)$ 자리에, 소거 결과를 $U$에.'

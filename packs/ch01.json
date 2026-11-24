@@ -10,10 +10,10 @@
   "level": "학부",
   "prereqs": [],
   "connections": [
-   "사영 proj_v u = (u·v / v·v) v 는 최소제곱법의 1차원 버전입니다. 4장의 정규방정식 AᵀAx = Aᵀb가 이걸 여러 차원으로 늘린 것입니다.",
-   "Gram–Schmidt를 행렬로 쓰면 A = QR 분해가 됩니다. Q의 열이 e₁, e₂, …, R은 계수들입니다.",
-   "함수에도 내적 ⟨f, g⟩ = ∫ f g dx를 주면 Fourier 급수는 사인·코사인이라는 정규직교 기저로의 사영이 됩니다.",
-   "Cauchy–Schwarz 부등식은 상관계수가 −1과 1 사이에 있는 이유이기도 합니다."
+   "사영 $\\operatorname{proj}_{\\mathbf{v}}\\mathbf{u} = \\dfrac{\\mathbf{u}\\cdot\\mathbf{v}}{\\mathbf{v}\\cdot\\mathbf{v}}\\mathbf{v}$는 최소제곱법의 1차원 버전입니다. 4장의 정규방정식 $A^TA\\mathbf{x} = A^T\\mathbf{b}$가 이것을 여러 차원으로 늘린 것입니다.",
+   "Gram–Schmidt를 행렬로 쓰면 $A = QR$ 분해가 됩니다. $Q$의 열이 $\\mathbf{e}_1, \\mathbf{e}_2, \\ldots$이고 $R$은 계수들입니다.",
+   "함수에도 내적 $\\langle f, g\\rangle = \\int f g\\,dx$를 주면 Fourier 급수는 사인·코사인이라는 정규직교 기저로의 사영이 됩니다.",
+   "Cauchy–Schwarz 부등식은 상관계수가 $-1$과 $1$ 사이에 있는 이유이기도 합니다."
   ]
  },
  "units": [
@@ -21,79 +21,118 @@
    "id": "la.dot",
    "kind": "atom",
    "title": "내적 계산",
-   "hint": "u·v = u₁v₁ + u₂v₂ + u₃v₃. 성분끼리 곱해서 모두 더한다.",
+   "hint": "$\\mathbf{u}\\cdot\\mathbf{v} = u_1v_1 + u_2v_2 + u_3v_3$. 성분끼리 곱해서 모두 더한다.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "표준기저끼리의 내적은 $\\mathbf{e}_i\\cdot\\mathbf{e}_j = \\delta_{ij}$이고, 내적은 양쪽 변수에 대해 선형이다.",
+    "$$\\mathbf{u}\\cdot\\mathbf{v} = \\Big(\\sum_i u_i\\mathbf{e}_i\\Big)\\cdot\\Big(\\sum_j v_j\\mathbf{e}_j\\Big) = \\sum_{i,j}u_iv_j\\,\\delta_{ij} = \\sum_i u_iv_i$$"
    ]
   },
   {
    "id": "la.norm",
    "kind": "atom",
    "title": "벡터의 길이",
-   "hint": "‖v‖ = √(v·v). 제곱합의 제곱근.",
+   "hint": "$\\|\\mathbf{v}\\| = \\sqrt{\\mathbf{v}\\cdot\\mathbf{v}}$. 제곱합의 제곱근.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "피타고라스 정리를 두 번 쓰면 $\\|\\mathbf{v}\\|^2 = v_1^2 + v_2^2 + v_3^2$.",
+    "$$\\|\\mathbf{v}\\| = \\sqrt{v_1^2 + v_2^2 + v_3^2} = \\sqrt{\\mathbf{v}\\cdot\\mathbf{v}}$$"
    ]
   },
   {
    "id": "la.orth",
    "kind": "atom",
    "title": "직교 조건",
-   "hint": "u ⟂ v ⇔ u·v = 0. 내적을 k에 대한 일차식으로 놓고 푼다.",
+   "hint": "$\\mathbf{u} \\perp \\mathbf{v} \\iff \\mathbf{u}\\cdot\\mathbf{v} = 0$. 내적을 $k$에 대한 일차식으로 놓고 푼다.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "코사인 법칙과 전개식 $\\|\\mathbf{u} - \\mathbf{v}\\|^2 = \\|\\mathbf{u}\\|^2 + \\|\\mathbf{v}\\|^2 - 2\\,\\mathbf{u}\\cdot\\mathbf{v}$를 비교하면",
+    "$$\\mathbf{u}\\cdot\\mathbf{v} = \\|\\mathbf{u}\\|\\,\\|\\mathbf{v}\\|\\cos\\theta$$",
+    "$\\theta = 90^\\circ \\iff \\cos\\theta = 0 \\iff \\mathbf{u}\\cdot\\mathbf{v} = 0$."
    ]
   },
   {
    "id": "la.proj",
    "kind": "atom",
    "title": "벡터 사영",
-   "hint": "proj_v u = (u·v / v·v) v. 분모는 ‖v‖가 아니라 ‖v‖².",
+   "hint": "$\\operatorname{proj}_{\\mathbf{v}}\\mathbf{u} = \\dfrac{\\mathbf{u}\\cdot\\mathbf{v}}{\\mathbf{v}\\cdot\\mathbf{v}}\\,\\mathbf{v}$. 분모는 $\\|\\mathbf{v}\\|$가 아니라 $\\|\\mathbf{v}\\|^2$.",
    "tiers": [
     2
+   ],
+   "derivation": [
+    "사영을 $\\mathbf{p} = c\\,\\mathbf{v}$로 놓고, 나머지 $\\mathbf{u} - c\\mathbf{v}$가 $\\mathbf{v}$에 직교하도록 $c$를 정한다.",
+    "$$(\\mathbf{u} - c\\mathbf{v})\\cdot\\mathbf{v} = 0 \\;\\Rightarrow\\; c = \\frac{\\mathbf{u}\\cdot\\mathbf{v}}{\\mathbf{v}\\cdot\\mathbf{v}}$$",
+    "$$\\operatorname{proj}_{\\mathbf{v}}\\mathbf{u} = \\frac{\\mathbf{u}\\cdot\\mathbf{v}}{\\mathbf{v}\\cdot\\mathbf{v}}\\,\\mathbf{v}$$"
    ]
   },
   {
    "id": "la.cs",
    "kind": "atom",
    "title": "Cauchy–Schwarz 부등식",
-   "hint": "|u·v| ≤ ‖u‖‖v‖. 등호는 u와 v가 평행할 때만. 그래서 cos θ = u·v/(‖u‖‖v‖)가 −1과 1 사이에 있다.",
+   "hint": "$|\\mathbf{u}\\cdot\\mathbf{v}| \\le \\|\\mathbf{u}\\|\\,\\|\\mathbf{v}\\|$. 등호는 두 벡터가 평행할 때만. 그래서 $\\cos\\theta$가 $-1$과 $1$ 사이에 있다.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "$\\mathbf{v} \\ne \\mathbf{0}$일 때 모든 실수 $t$에 대해 $\\|\\mathbf{u} - t\\mathbf{v}\\|^2 \\ge 0$이다:",
+    "$$\\|\\mathbf{v}\\|^2t^2 - 2(\\mathbf{u}\\cdot\\mathbf{v})\\,t + \\|\\mathbf{u}\\|^2 \\ge 0$$",
+    "$t$에 대한 이차식이 음이 되지 않으려면 판별식이 $0$ 이하여야 한다:",
+    "$$(\\mathbf{u}\\cdot\\mathbf{v})^2 - \\|\\mathbf{u}\\|^2\\|\\mathbf{v}\\|^2 \\le 0 \\;\\Rightarrow\\; |\\mathbf{u}\\cdot\\mathbf{v}| \\le \\|\\mathbf{u}\\|\\,\\|\\mathbf{v}\\|$$"
    ]
   },
   {
    "id": "la.angle",
    "kind": "atom",
    "title": "두 벡터 사이의 각",
-   "hint": "u·v = ‖u‖‖v‖cos θ. 외적의 크기는 sin θ에 대응한다.",
+   "hint": "$\\mathbf{u}\\cdot\\mathbf{v} = \\|\\mathbf{u}\\|\\,\\|\\mathbf{v}\\|\\cos\\theta$. 외적의 크기는 $\\sin\\theta$에 대응한다.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "삼각형의 코사인 법칙: $\\|\\mathbf{u} - \\mathbf{v}\\|^2 = \\|\\mathbf{u}\\|^2 + \\|\\mathbf{v}\\|^2 - 2\\|\\mathbf{u}\\|\\|\\mathbf{v}\\|\\cos\\theta$.",
+    "내적으로 전개한 $\\|\\mathbf{u} - \\mathbf{v}\\|^2 = \\|\\mathbf{u}\\|^2 + \\|\\mathbf{v}\\|^2 - 2\\,\\mathbf{u}\\cdot\\mathbf{v}$와 비교하면",
+    "$$\\cos\\theta = \\frac{\\mathbf{u}\\cdot\\mathbf{v}}{\\|\\mathbf{u}\\|\\,\\|\\mathbf{v}\\|}$$"
    ]
   },
   {
    "id": "la.gsformula",
    "kind": "atom",
    "title": "Gram–Schmidt 공식",
-   "hint": "앞에서 만든 u₁ 방향 성분(사영)을 v₂에서 빼면 u₁에 직교하는 u₂가 남는다.",
+   "hint": "앞에서 만든 $\\mathbf{u}_1$ 방향 성분(사영)을 $\\mathbf{v}_2$에서 빼면 $\\mathbf{u}_1$에 직교하는 $\\mathbf{u}_2$가 남는다.",
    "tiers": [
     2
+   ],
+   "derivation": [
+    "$\\mathbf{u}_2 = \\mathbf{v}_2 - c\\,\\mathbf{u}_1$로 놓고 $\\mathbf{u}_2\\cdot\\mathbf{u}_1 = 0$을 요구한다.",
+    "$$\\mathbf{v}_2\\cdot\\mathbf{u}_1 - c\\,\\mathbf{u}_1\\cdot\\mathbf{u}_1 = 0 \\;\\Rightarrow\\; c = \\frac{\\mathbf{v}_2\\cdot\\mathbf{u}_1}{\\mathbf{u}_1\\cdot\\mathbf{u}_1}$$",
+    "즉 $c\\,\\mathbf{u}_1 = \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$이고, 사영 성분을 빼는 것이다."
    ]
   },
   {
    "id": "la.triangle",
    "kind": "atom",
    "title": "삼각부등식",
-   "hint": "‖u + v‖ ≤ ‖u‖ + ‖v‖. 같은 방향일 때만 등호.",
+   "hint": "$\\|\\mathbf{u}+\\mathbf{v}\\| \\le \\|\\mathbf{u}\\| + \\|\\mathbf{v}\\|$. 같은 방향일 때만 등호.",
    "tiers": [
     1
+   ],
+   "derivation": [
+    "$$\\|\\mathbf{u}+\\mathbf{v}\\|^2 = \\|\\mathbf{u}\\|^2 + 2\\,\\mathbf{u}\\cdot\\mathbf{v} + \\|\\mathbf{v}\\|^2$$",
+    "Cauchy–Schwarz로 $\\mathbf{u}\\cdot\\mathbf{v} \\le \\|\\mathbf{u}\\|\\,\\|\\mathbf{v}\\|$이므로",
+    "$$\\|\\mathbf{u}+\\mathbf{v}\\|^2 \\le \\big(\\|\\mathbf{u}\\| + \\|\\mathbf{v}\\|\\big)^2$$"
    ]
   },
   {
    "id": "la.gs",
    "kind": "schema",
    "title": "Gram–Schmidt 정규직교화",
-   "hint": "u₁ = v₁, u₂ = v₂ − (v₂·u₁/u₁·u₁)u₁, 마지막에 각자 길이로 나눈다.",
+   "hint": "$\\mathbf{u}_1 = \\mathbf{v}_1$, $\\mathbf{u}_2 = \\mathbf{v}_2 - \\dfrac{\\mathbf{v}_2\\cdot\\mathbf{u}_1}{\\mathbf{u}_1\\cdot\\mathbf{u}_1}\\mathbf{u}_1$, 마지막에 각자 길이로 나눈다.",
    "steps": [
     "내적 계산",
     "사영 빼기",
@@ -103,13 +142,19 @@
    "tiers": [
     1,
     2
+   ],
+   "derivation": [
+    "첫 벡터는 그대로 둔다: $\\mathbf{u}_1 = \\mathbf{v}_1$.",
+    "둘째 벡터에서 $\\mathbf{u}_1$ 방향 성분을 빼면 남은 것은 자동으로 $\\mathbf{u}_1$에 직교한다:",
+    "$$\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{\\mathbf{v}_2\\cdot\\mathbf{u}_1}{\\mathbf{u}_1\\cdot\\mathbf{u}_1}\\mathbf{u}_1$$",
+    "마지막에 $\\mathbf{e}_i = \\mathbf{u}_i/\\|\\mathbf{u}_i\\|$. 길이를 바꿔도 직교성은 유지된다."
    ]
   },
   {
    "id": "la.planeproj",
    "kind": "schema",
    "title": "평면 위로의 사영",
-   "hint": "평면 n·x = 0 위로의 사영 = v − (n·v/n·n) n. 법선 방향 성분을 빼면 남는 것이 평면 위 성분.",
+   "hint": "평면 $\\mathbf{n}\\cdot\\mathbf{x} = 0$ 위로의 사영은 $\\mathbf{v} - \\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}\\mathbf{n}$. 법선 방향 성분을 빼면 남는 것이 평면 위 성분.",
    "steps": [
     "법선과 내적",
     "법선 성분",
@@ -118,6 +163,11 @@
    "tiers": [
     2,
     3
+   ],
+   "derivation": [
+    "$\\mathbf{v}$를 법선 성분과 평면 위 성분으로 나눈다: $\\mathbf{v} = \\mathbf{v}_\\perp + \\mathbf{v}_\\parallel$, $\\mathbf{v}_\\perp \\parallel \\mathbf{n}$, $\\mathbf{v}_\\parallel\\cdot\\mathbf{n} = 0$.",
+    "법선 성분은 $\\mathbf{n}$ 위로의 사영이다: $\\mathbf{v}_\\perp = \\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}\\mathbf{n}$.",
+    "$$\\mathbf{v}_\\parallel = \\mathbf{v} - \\frac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}\\mathbf{n}$$"
    ]
   }
  ],
@@ -2150,19 +2200,19 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\mathbf{u}_1 = \\left(5,\\ 0,\\ 3\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\sqrt{5}\\mathbf{u}_1 = \\left(3 - 2 \\sqrt{5},\\ 1 + \\sqrt{5},\\ 3\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{\\sqrt{19}}{19},\\ \\frac{2 \\sqrt{19}}{19},\\ \\frac{3 \\sqrt{19}}{19}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2183,19 +2233,19 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\mathbf{u}_1 = \\left(-1,\\ 5,\\ 3\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\sqrt{6}\\mathbf{u}_1 = \\left(- \\sqrt{6} - 2,\\ 3 - 2 \\sqrt{6},\\ 2 - \\sqrt{6}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(- \\frac{3 \\sqrt{17}}{17},\\ \\frac{\\sqrt{17}}{17},\\ \\frac{\\sqrt{17}}{17}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2216,19 +2266,19 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\mathbf{u}_1 = \\left(4,\\ -2,\\ 2\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\sqrt{5}\\mathbf{u}_1 = \\left(2 - 2 \\sqrt{5},\\ -1 + \\sqrt{5},\\ 2\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(0,\\ 0,\\ \\frac{2}{3}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2249,25 +2299,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\mathbf{u}_1 = \\left(5,\\ 0,\\ 3\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\sqrt{5}\\mathbf{u}_1 = \\left(3 - 2 \\sqrt{5},\\ 1 + \\sqrt{5},\\ 3\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 5,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 5\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{\\sqrt{19}}{19},\\ \\frac{2 \\sqrt{19}}{19},\\ \\frac{3 \\sqrt{19}}{19}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2288,25 +2338,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\mathbf{u}_1 = \\left(4,\\ -2,\\ 2\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\sqrt{5}\\mathbf{u}_1 = \\left(2 - 2 \\sqrt{5},\\ -1 + \\sqrt{5},\\ 2\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 5,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 5\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(0,\\ 0,\\ \\frac{2}{3}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2327,25 +2377,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{1}{3}\\mathbf{u}_1 = \\left(- \\frac{4}{3},\\ \\frac{1}{3},\\ - \\frac{8}{3}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\mathbf{u}_1 = \\left(0,\\ 3,\\ 0\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 9,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 9\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(- \\frac{\\sqrt{6}}{9},\\ \\frac{5 \\sqrt{6}}{18},\\ - \\frac{2 \\sqrt{6}}{9}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2366,25 +2416,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{1}{6}\\mathbf{u}_1 = \\left(- \\frac{7}{6},\\ \\frac{2}{3},\\ - \\frac{13}{6}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{\\sqrt{6}}{6}\\mathbf{u}_1 = \\left(-1 + \\frac{\\sqrt{6}}{6},\\ \\frac{\\sqrt{6}}{3} + 1,\\ -2 + \\frac{\\sqrt{6}}{6}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 6,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 6\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(- \\frac{5 \\sqrt{6}}{36},\\ \\frac{2 \\sqrt{6}}{9},\\ - \\frac{11 \\sqrt{6}}{36}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2405,25 +2455,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{1}{3}\\mathbf{u}_1 = \\left(- \\frac{4}{3},\\ - \\frac{2}{3},\\ - \\frac{5}{3}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\mathbf{u}_1 = \\left(0,\\ 2,\\ 1\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 9,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 9\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(- \\frac{\\sqrt{2}}{3},\\ \\frac{\\sqrt{2}}{3},\\ - \\frac{\\sqrt{2}}{6}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2444,25 +2494,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{1}{2}\\mathbf{u}_1 = \\left(\\frac{3}{2},\\ - \\frac{3}{2},\\ 3\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{\\sqrt{6}}{2}\\mathbf{u}_1 = \\left(\\frac{\\sqrt{6}}{2} + 2,\\ -1 + \\frac{\\sqrt{6}}{2},\\ 2 - \\sqrt{6}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 6,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 6\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{5}{6},\\ - \\frac{1}{6},\\ \\frac{1}{3}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2483,25 +2533,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{2}{3}\\mathbf{u}_1 = \\left(- \\frac{7}{3},\\ \\frac{7}{3},\\ - \\frac{10}{3}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{4 \\sqrt{3}}{3}\\mathbf{u}_1 = \\left(-1 + \\frac{8 \\sqrt{3}}{3},\\ 1 - \\frac{8 \\sqrt{3}}{3},\\ -2 + \\frac{8 \\sqrt{3}}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 12,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 12\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{\\sqrt{6}}{18},\\ - \\frac{\\sqrt{6}}{18},\\ - \\frac{\\sqrt{6}}{9}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2522,25 +2572,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{6}{5}\\mathbf{u}_1 = \\left(- \\frac{22}{5},\\ \\frac{16}{5},\\ -1\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{6 \\sqrt{5}}{5}\\mathbf{u}_1 = \\left(-2 + \\frac{12 \\sqrt{5}}{5},\\ 2 - \\frac{6 \\sqrt{5}}{5},\\ -1\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 5,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 5\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{2}{15},\\ \\frac{4}{15},\\ - \\frac{1}{3}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2561,25 +2611,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{2}{5}\\mathbf{u}_1 = \\left(- \\frac{9}{5},\\ \\frac{2}{5},\\ -1\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{2 \\sqrt{5}}{5}\\mathbf{u}_1 = \\left(-1 + \\frac{4 \\sqrt{5}}{5},\\ - \\frac{2 \\sqrt{5}}{5},\\ -1\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 5,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 5\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(- \\frac{\\sqrt{2}}{10},\\ - \\frac{\\sqrt{2}}{5},\\ - \\frac{\\sqrt{2}}{2}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2600,25 +2650,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{4}{9}\\mathbf{u}_1 = \\left(\\frac{14}{9},\\ - \\frac{17}{9},\\ \\frac{26}{9}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{4}{3}\\mathbf{u}_1 = \\left(\\frac{10}{3},\\ \\frac{5}{3},\\ - \\frac{2}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 9,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 9\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{22}{27},\\ - \\frac{1}{27},\\ \\frac{10}{27}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2639,25 +2689,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{8}{9}\\mathbf{u}_1 = \\left(\\frac{26}{9},\\ \\frac{43}{9},\\ \\frac{16}{9}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{8}{3}\\mathbf{u}_1 = \\left(- \\frac{2}{3},\\ - \\frac{7}{3},\\ - \\frac{16}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 9,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 9\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{10 \\sqrt{13}}{117},\\ \\frac{11 \\sqrt{13}}{117},\\ - \\frac{16 \\sqrt{13}}{117}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2678,25 +2728,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{1}{2}\\mathbf{u}_1 = \\left(3,\\ 0,\\ 3\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\sqrt{3}\\mathbf{u}_1 = \\left(2 - 2 \\sqrt{3},\\ - 2 \\sqrt{3} - 1,\\ 2 - 2 \\sqrt{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 12,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 12\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{1}{3},\\ - \\frac{2}{3},\\ \\frac{1}{3}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2717,25 +2767,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{5}{9}\\mathbf{u}_1 = \\left(\\frac{4}{9},\\ - \\frac{10}{9},\\ \\frac{37}{9}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{5}{3}\\mathbf{u}_1 = \\left(\\frac{8}{3},\\ \\frac{10}{3},\\ - \\frac{1}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 9,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 9\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{7 \\sqrt{10}}{45},\\ \\frac{\\sqrt{10}}{9},\\ \\frac{17 \\sqrt{10}}{90}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2756,25 +2806,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{2}{9}\\mathbf{u}_1 = \\left(\\frac{2}{9},\\ \\frac{13}{9},\\ - \\frac{4}{9}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{2}{3}\\mathbf{u}_1 = \\left(- \\frac{2}{3},\\ - \\frac{1}{3},\\ \\frac{4}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 9,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 9\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(- \\frac{2}{9},\\ \\frac{5}{9},\\ \\frac{4}{9}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2795,25 +2845,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{5}{6}\\mathbf{u}_1 = \\left(\\frac{17}{6},\\ \\frac{23}{6},\\ - \\frac{5}{3}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{5 \\sqrt{6}}{6}\\mathbf{u}_1 = \\left(2 - \\frac{5 \\sqrt{6}}{6},\\ 3 - \\frac{5 \\sqrt{6}}{6},\\ \\frac{5 \\sqrt{6}}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 6,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 6\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{7 \\sqrt{13}}{78},\\ \\frac{\\sqrt{13}}{6},\\ \\frac{5 \\sqrt{13}}{39}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2834,25 +2884,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{2}{9}\\mathbf{u}_1 = \\left(\\frac{2}{9},\\ \\frac{13}{9},\\ \\frac{4}{9}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{2}{3}\\mathbf{u}_1 = \\left(- \\frac{2}{3},\\ - \\frac{1}{3},\\ - \\frac{4}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 9,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 9\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(- \\frac{2}{9},\\ \\frac{5}{9},\\ - \\frac{4}{9}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2873,25 +2923,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{1}{3}\\mathbf{u}_1 = \\left(\\frac{5}{3},\\ - \\frac{5}{3},\\ \\frac{7}{3}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{\\sqrt{6}}{3}\\mathbf{u}_1 = \\left(\\frac{\\sqrt{6}}{3} + 2,\\ -1 + \\frac{2 \\sqrt{6}}{3},\\ 2 - \\frac{\\sqrt{6}}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 6,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 6\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{7}{9},\\ - \\frac{1}{9},\\ \\frac{5}{9}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2912,25 +2962,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{4}{9}\\mathbf{u}_1 = \\left(\\frac{22}{9},\\ - \\frac{1}{9},\\ \\frac{26}{9}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{4}{3}\\mathbf{u}_1 = \\left(\\frac{2}{3},\\ - \\frac{11}{3},\\ - \\frac{2}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 9,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 9\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{14}{27},\\ - \\frac{17}{27},\\ \\frac{10}{27}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2951,25 +3001,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{7}{6}\\mathbf{u}_1 = \\left(\\frac{16}{3},\\ \\frac{10}{3},\\ \\frac{16}{3}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{7 \\sqrt{3}}{3}\\mathbf{u}_1 = \\left(3 - \\frac{14 \\sqrt{3}}{3},\\ 1 - \\frac{14 \\sqrt{3}}{3},\\ 3 - \\frac{14 \\sqrt{3}}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 12,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 12\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{2 \\sqrt{19}}{57},\\ - \\frac{4 \\sqrt{19}}{57},\\ \\frac{2 \\sqrt{19}}{57}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -2990,25 +3040,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{7}{9}\\mathbf{u}_1 = \\left(\\frac{16}{9},\\ \\frac{14}{9},\\ \\frac{41}{9}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{7}{3}\\mathbf{u}_1 = \\left(- \\frac{4}{3},\\ - \\frac{14}{3},\\ - \\frac{5}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 9,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 9\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{\\sqrt{10}}{45},\\ - \\frac{7 \\sqrt{10}}{45},\\ \\frac{13 \\sqrt{10}}{90}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -3029,25 +3079,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{1}{3}\\mathbf{u}_1 = \\left(\\frac{8}{3},\\ \\frac{2}{3},\\ \\frac{11}{3}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{\\sqrt{6}}{3}\\mathbf{u}_1 = \\left(\\frac{\\sqrt{6}}{3} + 3,\\ \\frac{\\sqrt{6}}{3} + 1,\\ 3 - \\frac{2 \\sqrt{6}}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 6,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 6\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{10 \\sqrt{19}}{57},\\ \\frac{4 \\sqrt{19}}{57},\\ \\frac{7 \\sqrt{19}}{57}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -3068,25 +3118,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{1}{5}\\mathbf{u}_1 = \\left(- \\frac{2}{5},\\ \\frac{6}{5},\\ 0\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{\\sqrt{5}}{5}\\mathbf{u}_1 = \\left(\\frac{2 \\sqrt{5}}{5},\\ 1 - \\frac{\\sqrt{5}}{5},\\ 0\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 5,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 5\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{2}{5},\\ \\frac{4}{5},\\ 0\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -3107,25 +3157,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{1}{3}\\mathbf{u}_1 = \\left(- \\frac{5}{3},\\ \\frac{7}{3},\\ - \\frac{5}{3}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{\\sqrt{6}}{3}\\mathbf{u}_1 = \\left(-2 - \\frac{\\sqrt{6}}{3},\\ 2 - \\frac{\\sqrt{6}}{3},\\ -1 + \\frac{2 \\sqrt{6}}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 6,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 6\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(- \\frac{7}{9},\\ \\frac{5}{9},\\ - \\frac{1}{9}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -3146,25 +3196,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{1}{9}\\mathbf{u}_1 = \\left(- \\frac{8}{9},\\ \\frac{11}{9},\\ - \\frac{2}{9}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{1}{3}\\mathbf{u}_1 = \\left(- \\frac{4}{3},\\ \\frac{1}{3},\\ \\frac{2}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 9,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 9\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(- \\frac{5 \\sqrt{2}}{9},\\ \\frac{7 \\sqrt{2}}{18},\\ \\frac{\\sqrt{2}}{9}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -3185,25 +3235,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{1}{3}\\mathbf{u}_1 = \\left(\\frac{2}{3},\\ - \\frac{2}{3},\\ \\frac{10}{3}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{\\sqrt{6}}{3}\\mathbf{u}_1 = \\left(\\frac{\\sqrt{6}}{3} + 1,\\ \\frac{2 \\sqrt{6}}{3},\\ 3 - \\frac{\\sqrt{6}}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 6,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 6\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{2 \\sqrt{10}}{15},\\ \\frac{\\sqrt{10}}{15},\\ \\frac{4 \\sqrt{10}}{15}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -3224,25 +3274,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{1}{2}\\mathbf{u}_1 = \\left(-1,\\ 4,\\ 3\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\sqrt{3}\\mathbf{u}_1 = \\left(- 2 \\sqrt{3} - 2,\\ 3 - 2 \\sqrt{3},\\ 2 - 2 \\sqrt{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 12,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 12\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(- \\frac{3 \\sqrt{17}}{17},\\ \\frac{2 \\sqrt{17}}{17},\\ \\frac{\\sqrt{17}}{17}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -3263,25 +3313,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{1}{6}\\mathbf{u}_1 = \\left(- \\frac{7}{3},\\ \\frac{5}{3},\\ - \\frac{4}{3}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{\\sqrt{3}}{3}\\mathbf{u}_1 = \\left(-2 + \\frac{2 \\sqrt{3}}{3},\\ \\frac{2 \\sqrt{3}}{3} + 2,\\ -1 + \\frac{2 \\sqrt{3}}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 12,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 12\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(- \\frac{5}{9},\\ \\frac{7}{9},\\ - \\frac{2}{9}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -3302,25 +3352,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{4}{3}\\mathbf{u}_1 = \\left(\\frac{10}{3},\\ \\frac{17}{3},\\ \\frac{4}{3}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{4 \\sqrt{6}}{3}\\mathbf{u}_1 = \\left(2 - \\frac{4 \\sqrt{6}}{3},\\ 3 - \\frac{8 \\sqrt{6}}{3},\\ - \\frac{4 \\sqrt{6}}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 6,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 6\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{2 \\sqrt{13}}{39},\\ \\frac{\\sqrt{13}}{39},\\ - \\frac{4 \\sqrt{13}}{39}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -3341,25 +3391,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{5}{6}\\mathbf{u}_1 = \\left(- \\frac{11}{3},\\ \\frac{11}{3},\\ - \\frac{8}{3}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{5 \\sqrt{3}}{3}\\mathbf{u}_1 = \\left(-2 + \\frac{10 \\sqrt{3}}{3},\\ 2 - \\frac{10 \\sqrt{3}}{3},\\ -1 + \\frac{10 \\sqrt{3}}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 12,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 12\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(- \\frac{1}{9},\\ \\frac{1}{9},\\ \\frac{2}{9}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -3380,25 +3430,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{1}{3}\\mathbf{u}_1 = \\left(- \\frac{4}{3},\\ - \\frac{2}{3},\\ - \\frac{4}{3}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{\\sqrt{6}}{3}\\mathbf{u}_1 = \\left(-1 + \\frac{\\sqrt{6}}{3},\\ \\frac{2 \\sqrt{6}}{3},\\ -1 + \\frac{\\sqrt{6}}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 6,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 6\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(- \\frac{\\sqrt{2}}{3},\\ \\frac{\\sqrt{2}}{3},\\ - \\frac{\\sqrt{2}}{3}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -3419,25 +3469,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{2}{5}\\mathbf{u}_1 = \\left(\\frac{9}{5},\\ - \\frac{2}{5},\\ 3\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{2 \\sqrt{5}}{5}\\mathbf{u}_1 = \\left(1 - \\frac{4 \\sqrt{5}}{5},\\ \\frac{2 \\sqrt{5}}{5},\\ 3\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 5,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 5\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{\\sqrt{10}}{50},\\ \\frac{\\sqrt{10}}{25},\\ \\frac{3 \\sqrt{10}}{10}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -3458,25 +3508,25 @@
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 + \\frac{5}{6}\\mathbf{u}_1 = \\left(\\frac{1}{6},\\ - \\frac{5}{6},\\ \\frac{14}{3}\\right)",
      "error": "sign",
-     "why": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
+     "why": "Gram–Schmidt는 사영 성분을 빼야 합니다: $\\mathbf{u}_2 = \\mathbf{v}_2 - \\operatorname{proj}_{\\mathbf{u}_1}\\mathbf{v}_2$.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{u}_2 = \\mathbf{v}_2 - \\frac{5 \\sqrt{6}}{6}\\mathbf{u}_1 = \\left(1 + \\frac{5 \\sqrt{6}}{6},\\ \\frac{5 \\sqrt{6}}{6},\\ 3 - \\frac{5 \\sqrt{6}}{3}\\right)",
      "error": "normalization",
-     "why": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
+     "why": "사영 계수의 분모는 $\\|\\mathbf{u}_1\\|$가 아니라 $\\|\\mathbf{u}_1\\|^2 = \\mathbf{u}_1\\cdot\\mathbf{u}_1$입니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{v}_2\\cdot\\mathbf{u}_1 = 6,\\quad \\mathbf{u}_1\\cdot\\mathbf{u}_1 = 6\\quad (\\mathbf{u}_1 = \\mathbf{v}_1)",
      "error": "algebra",
-     "why": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
+     "why": "분자는 $\\mathbf{v}_2\\cdot\\mathbf{u}_1$입니다. $\\mathbf{u}_1\\cdot\\mathbf{u}_1$과 섞였습니다.",
      "pos": 0
     },
     {
      "tex": "\\mathbf{e}_2 = \\left(\\frac{11 \\sqrt{10}}{60},\\ \\frac{\\sqrt{10}}{12},\\ \\frac{2 \\sqrt{10}}{15}\\right)",
      "error": "normalization",
-     "why": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
+     "why": "$\\mathbf{e}_2$는 $\\mathbf{u}_2$를 자기 길이 $\\|\\mathbf{u}_2\\|$로 나눈 것입니다. $\\|\\mathbf{v}_2\\|$로 나누면 단위벡터가 아닙니다.",
      "pos": 3
     }
    ]
@@ -3496,19 +3546,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-5,\\ -4,\\ 0\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -3\\mathbf{n} = \\left(-6,\\ -6,\\ 3\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(2,\\ 2,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -8,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 9",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3528,19 +3578,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(1,\\ -5,\\ 3\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\sqrt{6}\\mathbf{n} = \\left(- \\sqrt{6},\\ - 2 \\sqrt{6},\\ \\sqrt{6}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(1,\\ 2,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -5,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 6",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3560,19 +3610,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-3,\\ -2,\\ 2\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\sqrt{2}\\mathbf{n} = \\left(0,\\ - \\sqrt{2},\\ \\sqrt{2}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(0,\\ 1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -1,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 2",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3592,19 +3642,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(3,\\ -4,\\ 1\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\sqrt{3}\\mathbf{n} = \\left(\\sqrt{3},\\ - \\sqrt{3},\\ - \\sqrt{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-1,\\ 1,\\ 1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -2,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 3",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3624,19 +3674,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-4,\\ -4,\\ 0\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\sqrt{6}\\mathbf{n} = \\left(- \\sqrt{6},\\ - 2 \\sqrt{6},\\ \\sqrt{6}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(1,\\ 2,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -5,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 6",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3656,19 +3706,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-5,\\ -3,\\ 1\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = 2 \\sqrt{2}\\mathbf{n} = \\left(- 4 \\sqrt{2},\\ - 4 \\sqrt{2},\\ 0\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-2,\\ -2,\\ 0\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 9,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 8",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3688,19 +3738,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-4,\\ -3,\\ 2\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\sqrt{6}\\mathbf{n} = \\left(- \\sqrt{6},\\ - 2 \\sqrt{6},\\ \\sqrt{6}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(1,\\ 2,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -5,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 6",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3720,19 +3770,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(2,\\ -1,\\ -3\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\sqrt{3}\\mathbf{n} = \\left(\\sqrt{3},\\ - \\sqrt{3},\\ - \\sqrt{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-1,\\ 1,\\ 1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -2,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 3",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3752,19 +3802,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-3,\\ 3,\\ -5\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = 2 \\sqrt{2}\\mathbf{n} = \\left(0,\\ 2 \\sqrt{2},\\ - 2 \\sqrt{2}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(0,\\ 1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 5,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 2",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3784,19 +3834,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(2,\\ -2,\\ -2\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\sqrt{3}\\mathbf{n} = \\left(\\sqrt{3},\\ - \\sqrt{3},\\ - \\sqrt{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-1,\\ 1,\\ 1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -2,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 3",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3816,19 +3866,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-5,\\ -3,\\ 2\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -3\\mathbf{n} = \\left(-6,\\ -6,\\ 3\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(2,\\ 2,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -8,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 9",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3848,19 +3898,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(1,\\ 1,\\ -3\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\sqrt{2}\\mathbf{n} = \\left(0,\\ \\sqrt{2},\\ - \\sqrt{2}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(0,\\ 1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 3,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 2",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3880,19 +3930,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(2,\\ -3,\\ 5\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -2 \\sqrt{2}\\mathbf{n} = \\left(0,\\ - 2 \\sqrt{2},\\ 2 \\sqrt{2}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(0,\\ 1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -3,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 2",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3912,19 +3962,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-5,\\ -4,\\ -3\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = 2 \\sqrt{3}\\mathbf{n} = \\left(- 2 \\sqrt{3},\\ - 2 \\sqrt{3},\\ - 2 \\sqrt{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-1,\\ -1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 7,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 3",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3944,19 +3994,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-4,\\ -2,\\ 0\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\sqrt{3}\\mathbf{n} = \\left(- \\sqrt{3},\\ - \\sqrt{3},\\ - \\sqrt{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-1,\\ -1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 4,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 3",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -3976,19 +4026,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-4,\\ 0,\\ 2\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\sqrt{3}\\mathbf{n} = \\left(- \\sqrt{3},\\ \\sqrt{3},\\ \\sqrt{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-1,\\ 1,\\ 1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 4,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 3",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4008,19 +4058,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-5,\\ -2,\\ 3\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -3\\mathbf{n} = \\left(-6,\\ -3,\\ 6\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(2,\\ 1,\\ -2\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -8,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 9",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4040,19 +4090,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-1,\\ -3,\\ -4\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\sqrt{3}\\mathbf{n} = \\left(\\sqrt{3},\\ - \\sqrt{3},\\ - \\sqrt{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-1,\\ 1,\\ 1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -2,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 3",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4072,19 +4122,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(2,\\ -1,\\ 3\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\sqrt{2}\\mathbf{n} = \\left(0,\\ - \\sqrt{2},\\ \\sqrt{2}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(0,\\ 1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -1,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 2",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4104,19 +4154,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-4,\\ -4,\\ -3\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = 2 \\sqrt{2}\\mathbf{n} = \\left(- 4 \\sqrt{2},\\ - 4 \\sqrt{2},\\ 0\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-2,\\ -2,\\ 0\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 9,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 8",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4136,19 +4186,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-5,\\ 0,\\ 2\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\sqrt{6}\\mathbf{n} = \\left(- 2 \\sqrt{6},\\ \\sqrt{6},\\ \\sqrt{6}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-2,\\ 1,\\ 1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 7,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 6",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4168,19 +4218,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(2,\\ - \\frac{11}{2},\\ \\frac{9}{2}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{5 \\sqrt{2}}{2}\\mathbf{n} = \\left(0,\\ - \\frac{5 \\sqrt{2}}{2},\\ \\frac{5 \\sqrt{2}}{2}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(0,\\ 1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -4,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 2",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4200,19 +4250,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{7}{3},\\ - \\frac{5}{3},\\ - \\frac{5}{3}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{2 \\sqrt{6}}{3}\\mathbf{n} = \\left(\\frac{4 \\sqrt{6}}{3},\\ - \\frac{2 \\sqrt{6}}{3},\\ - \\frac{2 \\sqrt{6}}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-2,\\ 1,\\ 1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -3,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 6",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4232,19 +4282,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{3}{2},\\ 1,\\ - \\frac{5}{2}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\frac{\\sqrt{6}}{2}\\mathbf{n} = \\left(\\frac{\\sqrt{6}}{2},\\ \\sqrt{6},\\ - \\frac{\\sqrt{6}}{2}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(1,\\ 2,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 4,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 6",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4264,19 +4314,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{3}{2},\\ \\frac{1}{2},\\ -2\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{\\sqrt{2}}{2}\\mathbf{n} = \\left(\\sqrt{2},\\ \\sqrt{2},\\ 0\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-2,\\ -2,\\ 0\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -1,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 8",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4296,19 +4346,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(- \\frac{5}{2},\\ -3,\\ - \\frac{5}{2}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{\\sqrt{6}}{2}\\mathbf{n} = \\left(- \\frac{\\sqrt{6}}{2},\\ - \\sqrt{6},\\ \\frac{\\sqrt{6}}{2}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(1,\\ 2,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -2,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 6",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4328,19 +4378,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{3}{2},\\ -2,\\ \\frac{7}{2}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{\\sqrt{6}}{2}\\mathbf{n} = \\left(- \\frac{\\sqrt{6}}{2},\\ - \\sqrt{6},\\ \\frac{\\sqrt{6}}{2}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(1,\\ 2,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -2,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 6",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4360,19 +4410,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(- \\frac{14}{3},\\ - \\frac{2}{3},\\ - \\frac{14}{3}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\frac{5 \\sqrt{3}}{3}\\mathbf{n} = \\left(- \\frac{5 \\sqrt{3}}{3},\\ - \\frac{5 \\sqrt{3}}{3},\\ - \\frac{5 \\sqrt{3}}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-1,\\ -1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 6,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 3",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4392,19 +4442,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{11}{9},\\ - \\frac{7}{9},\\ - \\frac{10}{9}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\frac{1}{3}\\mathbf{n} = \\left(\\frac{2}{3},\\ \\frac{2}{3},\\ - \\frac{1}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(2,\\ 2,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 2,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 9",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4424,19 +4474,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(- \\frac{7}{3},\\ \\frac{1}{3},\\ \\frac{7}{3}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{\\sqrt{6}}{3}\\mathbf{n} = \\left(- \\frac{\\sqrt{6}}{3},\\ - \\frac{2 \\sqrt{6}}{3},\\ \\frac{\\sqrt{6}}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(1,\\ 2,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -1,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 6",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4456,19 +4506,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(- \\frac{25}{9},\\ \\frac{10}{9},\\ - \\frac{29}{9}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\frac{1}{3}\\mathbf{n} = \\left(\\frac{2}{3},\\ \\frac{1}{3},\\ - \\frac{2}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(2,\\ 1,\\ -2\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 2,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 9",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4488,19 +4538,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{5}{2},\\ - \\frac{1}{2},\\ 3\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{\\sqrt{2}}{2}\\mathbf{n} = \\left(\\sqrt{2},\\ \\sqrt{2},\\ 0\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-2,\\ -2,\\ 0\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -1,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 8",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4520,19 +4570,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{7}{3},\\ - \\frac{2}{3},\\ - \\frac{8}{3}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{2 \\sqrt{6}}{3}\\mathbf{n} = \\left(\\frac{4 \\sqrt{6}}{3},\\ - \\frac{2 \\sqrt{6}}{3},\\ - \\frac{2 \\sqrt{6}}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-2,\\ 1,\\ 1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -3,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 6",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4552,19 +4602,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(- \\frac{13}{3},\\ - \\frac{13}{3},\\ - \\frac{16}{3}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\frac{7 \\sqrt{3}}{3}\\mathbf{n} = \\left(- \\frac{7 \\sqrt{3}}{3},\\ - \\frac{7 \\sqrt{3}}{3},\\ - \\frac{7 \\sqrt{3}}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-1,\\ -1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 8,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 3",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4584,19 +4634,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{8}{3},\\ - \\frac{1}{3},\\ \\frac{5}{3}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{\\sqrt{6}}{3}\\mathbf{n} = \\left(\\frac{2 \\sqrt{6}}{3},\\ - \\frac{\\sqrt{6}}{3},\\ - \\frac{\\sqrt{6}}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-2,\\ 1,\\ 1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -1,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 6",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4616,19 +4666,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-2,\\ \\frac{1}{2},\\ \\frac{5}{2}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{\\sqrt{2}}{2}\\mathbf{n} = \\left(0,\\ - \\frac{\\sqrt{2}}{2},\\ \\frac{\\sqrt{2}}{2}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(0,\\ 1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 0,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 2",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4648,19 +4698,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{7}{3},\\ - \\frac{8}{3},\\ \\frac{7}{3}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{\\sqrt{3}}{3}\\mathbf{n} = \\left(\\frac{\\sqrt{3}}{3},\\ \\frac{\\sqrt{3}}{3},\\ \\frac{\\sqrt{3}}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-1,\\ -1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 0,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 3",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4680,19 +4730,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{5}{3},\\ - \\frac{2}{3},\\ - \\frac{5}{3}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\mathbf{n} = \\left(2,\\ 1,\\ -2\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(2,\\ 1,\\ -2\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 4,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 9",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4712,19 +4762,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(- \\frac{13}{3},\\ \\frac{5}{3},\\ - \\frac{7}{3}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\frac{2 \\sqrt{6}}{3}\\mathbf{n} = \\left(- \\frac{4 \\sqrt{6}}{3},\\ \\frac{2 \\sqrt{6}}{3},\\ \\frac{2 \\sqrt{6}}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-2,\\ 1,\\ 1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 5,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 6",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4744,19 +4794,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(- \\frac{5}{3},\\ - \\frac{13}{6},\\ - \\frac{19}{6}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{\\sqrt{6}}{6}\\mathbf{n} = \\left(\\frac{\\sqrt{6}}{3},\\ - \\frac{\\sqrt{6}}{6},\\ - \\frac{\\sqrt{6}}{6}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-2,\\ 1,\\ 1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 0,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 6",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4776,19 +4826,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(- \\frac{5}{3},\\ \\frac{4}{3},\\ \\frac{7}{3}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{\\sqrt{3}}{3}\\mathbf{n} = \\left(\\frac{\\sqrt{3}}{3},\\ \\frac{\\sqrt{3}}{3},\\ \\frac{\\sqrt{3}}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-1,\\ -1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 0,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 3",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4808,19 +4858,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(-2,\\ - \\frac{3}{2},\\ - \\frac{7}{2}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\frac{\\sqrt{2}}{2}\\mathbf{n} = \\left(0,\\ \\frac{\\sqrt{2}}{2},\\ - \\frac{\\sqrt{2}}{2}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(0,\\ 1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 2,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 2",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4840,19 +4890,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(- \\frac{10}{3},\\ \\frac{4}{3},\\ - \\frac{8}{3}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\frac{\\sqrt{3}}{3}\\mathbf{n} = \\left(- \\frac{\\sqrt{3}}{3},\\ \\frac{\\sqrt{3}}{3},\\ \\frac{\\sqrt{3}}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-1,\\ 1,\\ 1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 2,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 3",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4872,19 +4922,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{10}{9},\\ - \\frac{35}{9},\\ \\frac{22}{9}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{4}{3}\\mathbf{n} = \\left(- \\frac{8}{3},\\ - \\frac{8}{3},\\ \\frac{4}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(2,\\ 2,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -3,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 9",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4904,19 +4954,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(- \\frac{13}{3},\\ \\frac{13}{6},\\ \\frac{19}{6}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\frac{7 \\sqrt{6}}{6}\\mathbf{n} = \\left(- \\frac{7 \\sqrt{6}}{3},\\ \\frac{7 \\sqrt{6}}{6},\\ \\frac{7 \\sqrt{6}}{6}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-2,\\ 1,\\ 1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 8,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 6",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4936,19 +4986,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{4}{3},\\ - \\frac{10}{3},\\ \\frac{8}{3}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\mathbf{n} = \\left(-2,\\ -1,\\ 2\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(2,\\ 1,\\ -2\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -2,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 9",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -4968,19 +5018,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(- \\frac{32}{9},\\ \\frac{2}{9},\\ \\frac{32}{9}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{7}{3}\\mathbf{n} = \\left(- \\frac{14}{3},\\ - \\frac{7}{3},\\ \\frac{14}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(2,\\ 1,\\ -2\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = -6,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 9",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -5000,19 +5050,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{2}{3},\\ - \\frac{1}{3},\\ - \\frac{7}{3}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\frac{\\sqrt{3}}{3}\\mathbf{n} = \\left(- \\frac{\\sqrt{3}}{3},\\ - \\frac{\\sqrt{3}}{3},\\ - \\frac{\\sqrt{3}}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-1,\\ -1,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 2,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 3",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -5032,19 +5082,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(- \\frac{5}{2},\\ \\frac{1}{2},\\ 2\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\frac{\\sqrt{2}}{2}\\mathbf{n} = \\left(- \\sqrt{2},\\ - \\sqrt{2},\\ 0\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-2,\\ -2,\\ 0\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 3,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 8",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -5064,19 +5114,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{3}{2},\\ - \\frac{7}{2},\\ 2\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\frac{\\sqrt{2}}{2}\\mathbf{n} = \\left(- \\sqrt{2},\\ - \\sqrt{2},\\ 0\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(-2,\\ -2,\\ 0\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 3,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 8",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]
@@ -5096,19 +5146,19 @@
     {
      "tex": "\\mathbf{v} + \\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = \\left(\\frac{16}{9},\\ - \\frac{11}{9},\\ \\frac{28}{9}\\right)",
      "error": "sign",
-     "why": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
+     "why": "평면 위로의 사영은 $\\mathbf{v}$에서 법선 성분을 빼야 합니다.",
      "pos": 2
     },
     {
      "tex": "\\operatorname{proj}_{\\mathbf{n}}\\mathbf{v} = -\\frac{1}{3}\\mathbf{n} = \\left(- \\frac{2}{3},\\ - \\frac{2}{3},\\ \\frac{1}{3}\\right)",
      "error": "normalization",
-     "why": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
+     "why": "법선 방향 성분의 계수는 $\\dfrac{\\mathbf{n}\\cdot\\mathbf{v}}{\\mathbf{n}\\cdot\\mathbf{n}}$입니다. $\\|\\mathbf{n}\\|$로 나누면 안 됩니다.",
      "pos": 1
     },
     {
      "tex": "\\mathbf{n} = \\left(2,\\ 2,\\ -1\\right),\\quad \\mathbf{n}\\cdot\\mathbf{v} = 0,\\quad \\mathbf{n}\\cdot\\mathbf{n} = 9",
      "error": "algebra",
-     "why": "n·v 계산이 틀렸습니다.",
+     "why": "$\\mathbf{n}\\cdot\\mathbf{v}$ 계산이 틀렸습니다.",
      "pos": 0
     }
    ]

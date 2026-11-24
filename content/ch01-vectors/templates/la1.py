@@ -104,13 +104,13 @@ def orth_k():
 
 # ---------------------------------------------------------------- 풀이 뼈대
 WHY = {
-    "gs_sign": "Gram–Schmidt은 사영 성분을 빼야 합니다: u₂ = v₂ − proj_{u₁}v₂.",
-    "gs_norm": "사영 계수의 분모는 ‖u₁‖가 아니라 ‖u₁‖² = u₁·u₁ 입니다.",
-    "gs_dot": "분자는 v₂·u₁ 입니다. u₁·u₁과 섞였습니다.",
-    "gs_unit": "e₂는 u₂를 자기 길이 ‖u₂‖로 나눈 것입니다. ‖v₂‖로 나누면 단위벡터가 아닙니다.",
-    "pl_sign": "평면 위로의 사영은 v에서 법선 성분을 빼야 합니다.",
-    "pl_norm": "법선 방향 성분의 계수는 (n·v)/(n·n) 입니다. ‖n‖로 나누면 안 됩니다.",
-    "pl_dot": "n·v 계산이 틀렸습니다.",
+    "gs_sign": r"Gram–Schmidt는 사영 성분을 빼야 합니다: $\mathbf{u}_2 = \mathbf{v}_2 - \operatorname{proj}_{\mathbf{u}_1}\mathbf{v}_2$.",
+    "gs_norm": r"사영 계수의 분모는 $\|\mathbf{u}_1\|$가 아니라 $\|\mathbf{u}_1\|^2 = \mathbf{u}_1\cdot\mathbf{u}_1$입니다.",
+    "gs_dot": r"분자는 $\mathbf{v}_2\cdot\mathbf{u}_1$입니다. $\mathbf{u}_1\cdot\mathbf{u}_1$과 섞였습니다.",
+    "gs_unit": r"$\mathbf{e}_2$는 $\mathbf{u}_2$를 자기 길이 $\|\mathbf{u}_2\|$로 나눈 것입니다. $\|\mathbf{v}_2\|$로 나누면 단위벡터가 아닙니다.",
+    "pl_sign": r"평면 위로의 사영은 $\mathbf{v}$에서 법선 성분을 빼야 합니다.",
+    "pl_norm": r"법선 방향 성분의 계수는 $\dfrac{\mathbf{n}\cdot\mathbf{v}}{\mathbf{n}\cdot\mathbf{n}}$입니다. $\|\mathbf{n}\|$로 나누면 안 됩니다.",
+    "pl_dot": r"$\mathbf{n}\cdot\mathbf{v}$ 계산이 틀렸습니다.",
 }
 
 

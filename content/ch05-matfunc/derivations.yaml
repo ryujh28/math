@@ -1,0 +1,35 @@
+# 단위별 짧은 유도. 한 줄 = 문장($…$ 안은 TeX) 또는 수식 블록($$…$$).
+la.qmat:
+- $\mathbf{x}^TA\mathbf{x} = a_{11}x^2 + (a_{12} + a_{21})xy + a_{22}y^2$.
+- $xy$ 계수 $b$는 합 $a_{12} + a_{21}$만 정하므로, 대칭이 되도록 $a_{12} = a_{21} = b/2$로 나눈다. 대칭이어야 고유값이 실수이고 주축이 직교한다.
+la.definite:
+- 스펙트럼 정리로 $A = Q\Lambda Q^T$, 새 좌표 $\mathbf{y} = Q^T\mathbf{x}$로 두면
+- $$q = \mathbf{x}^TA\mathbf{x} = \mathbf{y}^T\Lambda\mathbf{y} = \lambda_1y_1^2 + \lambda_2y_2^2$$
+- 모든 $\mathbf{y} \ne \mathbf{0}$에서 $q > 0 \iff$ 모든 $\lambda_i > 0$. 부호가 섞이면 $q$가 양수와 음수를 모두 가진다.
+la.expdiag:
+- $$e^{Dt} = \sum_{k=0}^\infty \frac{(Dt)^k}{k!},\qquad (Dt)^k = \operatorname{diag}(\lambda_1^kt^k,\ \lambda_2^kt^k)$$
+- 대각성분마다 $\sum_k \lambda_i^kt^k/k! = e^{\lambda_i t}$로 따로 합쳐진다.
+la.expjordan:
+- $A = aI + N$, $N = \begin{pmatrix}0 & 1\\ 0 & 0\end{pmatrix}$이면 $N^2 = 0$이고 $aI$와 $N$은 교환한다.
+- $$e^{At} = e^{at}\,e^{Nt} = e^{at}(I + Nt) = e^{at}\begin{pmatrix}1 & t\\ 0 & 1\end{pmatrix}$$
+la.expdiagform:
+- $A^k = PD^kP^{-1}$을 급수에 넣는다.
+- $$e^{At} = \sum_k \frac{t^k}{k!}PD^kP^{-1} = P\Big(\sum_k \frac{(Dt)^k}{k!}\Big)P^{-1} = Pe^{Dt}P^{-1}$$
+la.expderiv:
+- $$\frac{d}{dt}\sum_{k=0}^\infty \frac{A^kt^k}{k!} = \sum_{k=1}^\infty \frac{A^kt^{k-1}}{(k-1)!} = A\sum_{j=0}^\infty \frac{A^jt^j}{j!} = Ae^{At}$$
+la.expcommute:
+- $AB = BA$이면 $(A + B)^n$을 스칼라처럼 이항전개할 수 있다.
+- $$e^{A+B} = \sum_n \frac{(A+B)^n}{n!} = \sum_n\sum_k \frac{A^kB^{n-k}}{k!\,(n-k)!} = e^Ae^B$$
+- 교환하지 않으면 $(A + B)^2 = A^2 + AB + BA + B^2$부터 이항전개와 어긋난다.
+la.sylvester:
+- $2\times 2$에서 완전제곱으로 쓰면
+- $$ax^2 + bxy + cy^2 = a\Big(x + \frac{b}{2a}y\Big)^2 + \frac{4ac - b^2}{4a}y^2$$
+- 두 계수가 모두 양수 $\iff$ $a > 0$이고 $\det A = ac - b^2/4 > 0$. 일반 $n$에서는 선행 소행렬식이 소거 피벗들의 곱이 된다.
+la.expat:
+- $A = PDP^{-1}$로 대각화하고 $e^{At} = Pe^{Dt}P^{-1}$을 쓴다.
+- $\mathbf{x}(t) = e^{At}\mathbf{x}_0$는 각 고유벡터 방향 성분이 $e^{\lambda_it}$로 따로 변하는 것의 합이다.
+- '검산: $X(t) = e^{At}$는 $X^{\prime} = AX$, $X(0) = I$를 만족해야 한다.'
+la.paxes:
+- $A = Q\Lambda Q^T$이고 새 좌표 $(X, Y)^T = Q^T\mathbf{x}$는 원래 좌표를 회전한 것이다.
+- $$q = \mathbf{x}^TA\mathbf{x} = \lambda_1X^2 + \lambda_2Y^2$$
+- $q = 1$은 $\lambda$가 둘 다 양수면 타원, 부호가 다르면 쌍곡선이다.

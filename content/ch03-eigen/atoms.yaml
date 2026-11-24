@@ -1,9 +1,9 @@
 # 3장 고유값 문제 · 사실 원자
-- {id: la.charpoly, kind: gen, title: 특성다항식, generator: "la3:charpoly2", hint: "2×2에서 det(A − λI) = λ² − (tr A)λ + det A."}
-- {id: la.eig2, kind: gen, title: 2×2 고유값, generator: "la3:eig2", hint: "특성방정식 λ² − (tr A)λ + det A = 0의 두 근. 합 = tr A, 곱 = det A."}
-- {id: la.eigvec, kind: gen, title: 고유벡터, generator: "la3:eigvec2", tier: 2, hint: "(A − λI)v = 0의 0이 아닌 해. 2×2면 한 행만 보고 v를 정하면 된다."}
-- {id: la.eigtri, kind: gen, title: 삼각행렬의 고유값, generator: "la3:eig_triangular", hint: "삼각행렬의 고유값은 대각성분 그대로."}
-- {id: la.trdet, kind: gen, title: 고유값과 trace·det, generator: "la3:trace_det", hint: "고유값의 합 = tr A, 곱 = det A."}
+- {id: la.charpoly, kind: gen, title: 특성다항식, generator: "la3:charpoly2", hint: '$2\times 2$에서 $\det(A - \lambda I) = \lambda^2 - (\operatorname{tr}A)\lambda + \det A$.'}
+- {id: la.eig2, kind: gen, title: '$2\times 2$ 고유값', generator: "la3:eig2", hint: '특성방정식 $\lambda^2 - (\operatorname{tr}A)\lambda + \det A = 0$의 두 근. 합은 $\operatorname{tr}A$, 곱은 $\det A$.'}
+- {id: la.eigvec, kind: gen, title: 고유벡터, generator: "la3:eigvec2", tier: 2, hint: '$(A - \lambda I)\mathbf{v} = \mathbf{0}$의 $\mathbf{0}$이 아닌 해. $2\times 2$면 한 행만 보고 $\mathbf{v}$를 정하면 된다.'}
+- {id: la.eigtri, kind: gen, title: 삼각행렬의 고유값, generator: "la3:eig_triangular", hint: '삼각행렬의 고유값은 대각성분 그대로.'}
+- {id: la.trdet, kind: gen, title: 고유값과 trace·det, generator: "la3:trace_det", hint: '고유값의 합은 $\operatorname{tr}A$, 곱은 $\det A$.'}
 - id: la.symeig
   kind: formula
   title: 대칭행렬의 고유값
@@ -14,7 +14,7 @@
     - {tex: '\text{고유값은 모두 양수}', error: theorem_condition}
     - {tex: '\text{고유값은 순허수}', error: wrong_pair}
     - {tex: '\text{고유벡터는 서로 평행}', error: theorem_condition}
-  hint: "실대칭행렬: 고유값 실수, 고유벡터 직교, 항상 직교대각화 가능 (스펙트럼 정리)."
+  hint: '실대칭행렬: 고유값은 실수, 고유벡터는 직교, 항상 직교대각화 가능 (스펙트럼 정리).'
 - id: la.similar
   kind: formula
   title: 닮은 행렬
@@ -25,7 +25,7 @@
     - {tex: '\text{고유벡터}', error: theorem_condition}
     - {tex: '\text{모든 성분}', error: algebra}
     - {tex: '\text{전치행렬}', error: wrong_pair}
-  hint: "닮음 변환은 좌표계만 바꾼다. 고유값은 같고, 고유벡터는 P만큼 바뀐다 (v ↦ P⁻¹v)."
+  hint: '닮음 변환은 좌표계만 바꾼다. 고유값은 같고, 고유벡터는 $\mathbf{v} \mapsto P^{-1}\mathbf{v}$로 바뀐다.'
 - id: la.eigpow
   kind: formula
   title: 거듭제곱과 역행렬의 고유값
@@ -36,4 +36,4 @@
     - {tex: '-\lambda\mathbf{v}', error: sign}
     - {tex: '\lambda\mathbf{v}', error: algebra}
     - {tex: '\lambda^{-1}A\mathbf{v}', error: algebra}
-  hint: "Aᵏv = λᵏv, A⁻¹v = λ⁻¹v. 같은 고유벡터, 고유값만 거듭제곱."
+  hint: '$A^k\mathbf{v} = \lambda^k\mathbf{v}$, $A^{-1}\mathbf{v} = \lambda^{-1}\mathbf{v}$. 같은 고유벡터, 고유값만 거듭제곱.'

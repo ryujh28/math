@@ -1,0 +1,73 @@
+# 단위별 짧은 유도. 한 줄 = 문장($…$ 안은 TeX) 또는 수식 블록($$…$$).
+lap.exp:
+- $$\int_0^\infty e^{at}e^{-st}\,dt = \Big[\frac{e^{-(s-a)t}}{-(s-a)}\Big]_0^\infty = \frac{1}{s - a}\qquad (s > a)$$
+lap.pow:
+- 부분적분하면 경계항이 사라져 $\mathcal{L}\{t^n\} = \dfrac{n}{s}\mathcal{L}\{t^{n-1}\}$.
+- $\mathcal{L}\{1\} = \dfrac{1}{s}$에서 시작해 반복하면 $\mathcal{L}\{t^n\} = \dfrac{n!}{s^{n+1}}$.
+lap.sin:
+- $\sin bt = \dfrac{e^{ibt} - e^{-ibt}}{2i}$와 $\mathcal{L}\{e^{at}\} = \dfrac{1}{s - a}$를 쓰면
+- $$\mathcal{L}\{\sin bt\} = \frac{1}{2i}\Big(\frac{1}{s - ib} - \frac{1}{s + ib}\Big) = \frac{b}{s^2 + b^2}$$
+lap.cos:
+- $\cos bt = \dfrac{e^{ibt} + e^{-ibt}}{2}$이므로
+- $$\mathcal{L}\{\cos bt\} = \frac{1}{2}\Big(\frac{1}{s - ib} + \frac{1}{s + ib}\Big) = \frac{s}{s^2 + b^2}$$
+lap.sinh:
+- $\sinh bt = \dfrac{e^{bt} - e^{-bt}}{2}$이므로
+- $$\mathcal{L}\{\sinh bt\} = \frac{1}{2}\Big(\frac{1}{s - b} - \frac{1}{s + b}\Big) = \frac{b}{s^2 - b^2}$$
+lap.cosh:
+- $\cosh bt = \dfrac{e^{bt} + e^{-bt}}{2}$이므로
+- $$\mathcal{L}\{\cosh bt\} = \frac{1}{2}\Big(\frac{1}{s - b} + \frac{1}{s + b}\Big) = \frac{s}{s^2 - b^2}$$
+lap.texp:
+- $\mathcal{L}\{t\} = \dfrac{1}{s^2}$에 $s$-이동 $\mathcal{L}\{e^{at}f(t)\} = F(s - a)$를 적용한다.
+- $$\mathcal{L}\{te^{at}\} = \frac{1}{(s - a)^2}$$
+lap.expsin:
+- $$\int_0^\infty e^{at}f(t)e^{-st}\,dt = \int_0^\infty f(t)e^{-(s-a)t}\,dt = F(s - a)$$
+- $F(s) = \dfrac{b}{s^2 + b^2}$에서 $s$를 $s - a$로 바꾸면 $\dfrac{b}{(s - a)^2 + b^2}$.
+lap.expcos:
+- $s$-이동 $\mathcal{L}\{e^{at}f(t)\} = F(s - a)$를 $F(s) = \dfrac{s}{s^2 + b^2}$에 적용한다.
+- $$\mathcal{L}\{e^{at}\cos bt\} = \frac{s - a}{(s - a)^2 + b^2}$$
+lap.tsin:
+- $F^{\prime}(s) = \dfrac{d}{ds}\displaystyle\int_0^\infty f(t)e^{-st}\,dt = -\int_0^\infty tf(t)e^{-st}\,dt$이므로 $\mathcal{L}\{tf\} = -F^{\prime}(s)$.
+- $$-\frac{d}{ds}\frac{b}{s^2 + b^2} = \frac{2bs}{(s^2 + b^2)^2}$$
+lap.step:
+- $$\int_0^\infty u(t - c)e^{-st}\,dt = \int_c^\infty e^{-st}\,dt = \frac{e^{-cs}}{s}$$
+lap.delta:
+- $c > 0$이면 $\displaystyle\int_0^\infty \delta(t - c)\,g(t)\,dt = g(c)$이다.
+- $g(t) = e^{-st}$로 두면 $\mathcal{L}\{\delta(t - c)\} = e^{-cs}$.
+lap.deriv1:
+- $$\int_0^\infty y^{\prime}e^{-st}\,dt = \big[ye^{-st}\big]_0^\infty + s\int_0^\infty ye^{-st}\,dt = sY - y(0)$$
+lap.deriv2:
+- 1계 공식을 $y^{\prime}$에 적용하면 $\mathcal{L}\{y^{\prime\prime}\} = s\,\mathcal{L}\{y^{\prime}\} - y^{\prime}(0)$.
+- $$\mathcal{L}\{y^{\prime\prime}\} = s\big(sY - y(0)\big) - y^{\prime}(0) = s^2Y - sy(0) - y^{\prime}(0)$$
+lap.sshift:
+- $$\mathcal{L}\{e^{at}f(t)\} = \int_0^\infty f(t)e^{-(s-a)t}\,dt = F(s - a)$$
+lap.tshift:
+- $t < c$에서는 $u(t - c) = 0$이고, $\tau = t - c$로 치환하면
+- $$\int_c^\infty f(t - c)e^{-st}\,dt = \int_0^\infty f(\tau)e^{-s(\tau + c)}\,d\tau = e^{-cs}F(s)$$
+lap.conv:
+- $$\mathcal{L}\{f*g\} = \int_0^\infty\!\!\int_0^t f(\tau)\,g(t - \tau)\,d\tau\;e^{-st}\,dt$$
+- 적분 순서를 바꾸고 $\sigma = t - \tau$로 두면 $\displaystyle\int_0^\infty f(\tau)e^{-s\tau}d\tau\int_0^\infty g(\sigma)e^{-s\sigma}d\sigma = F(s)G(s)$.
+lap.tmult:
+- 정의식을 $s$로 미분한다.
+- $$F^{\prime}(s) = \frac{d}{ds}\int_0^\infty f(t)e^{-st}\,dt = -\int_0^\infty tf(t)e^{-st}\,dt = -\mathcal{L}\{tf\}$$
+lap.integral:
+- $g(t) = \displaystyle\int_0^t f(\tau)\,d\tau$이면 $g^{\prime} = f$, $g(0) = 0$.
+- $\mathcal{L}\{g^{\prime}\} = sG - g(0)$에서 $F = sG$, 곧 $G = F/s$.
+lap.ivp1:
+- $y^{\prime} + ay = q$를 변환하면 $sY - y(0) + aY = Q(s)$.
+- $$Y = \frac{y(0) + Q(s)}{s + a}$$
+- 부분분수로 나눈 뒤 표의 변환쌍으로 되돌린다.
+lap.ivp2.real:
+- '$y^{\prime\prime} + py^{\prime} + qy = 0$을 변환: $s^2Y - sy(0) - y^{\prime}(0) + p\big(sY - y(0)\big) + qY = 0$.'
+- $$Y = \frac{y(0)\,s + y^{\prime}(0) + p\,y(0)}{(s - r_1)(s - r_2)} = \frac{A}{s - r_1} + \frac{B}{s - r_2}$$
+- $A$는 양변에 $(s - r_1)$을 곱하고 $s = r_1$을 넣어 구한다(덮개법). 결과는 $y = Ae^{r_1t} + Be^{r_2t}$.
+lap.ivp2.repeated:
+- 분모가 $(s - r)^2$이면 분자를 $y(0)(s - r) + K$ 꼴로 다시 쓴다.
+- $$Y = \frac{y(0)}{s - r} + \frac{K}{(s - r)^2} \;\Rightarrow\; y = y(0)e^{rt} + Kte^{rt}$$
+lap.ivp2.complex:
+- 분모를 완전제곱 $(s - \alpha)^2 + \beta^2$로 바꾸고 분자도 $(s - \alpha)$ 기준으로 쓴다.
+- $$Y = A\frac{s - \alpha}{(s - \alpha)^2 + \beta^2} + \frac{C}{\beta}\cdot\frac{\beta}{(s - \alpha)^2 + \beta^2}$$
+- $s$-이동으로 $y = e^{\alpha t}\Big(A\cos\beta t + \dfrac{C}{\beta}\sin\beta t\Big)$.
+lap.ivp2.impulse:
+- '$y^{\prime\prime} + \omega^2y = \delta(t - c)$를 변환: $s^2Y - sy(0) - y^{\prime}(0) + \omega^2Y = e^{-cs}$.'
+- $$Y = \frac{s\,y(0) + y^{\prime}(0)}{s^2 + \omega^2} + e^{-cs}\frac{1}{s^2 + \omega^2}$$
+- $\dfrac{1}{s^2 + \omega^2} \leftrightarrow \dfrac{\sin\omega t}{\omega}$이므로, $t$-이동으로 둘째 항은 $\dfrac{1}{\omega}u(t - c)\sin\omega(t - c)$.

@@ -1,0 +1,36 @@
+# 단위별 짧은 유도. 한 줄 = 문장($…$ 안은 TeX) 또는 수식 블록($$…$$).
+ode.mu:
+- $\mu(y^{\prime} + py) = (\mu y)^{\prime} = \mu y^{\prime} + \mu^{\prime}y$가 되려면 $\mu^{\prime} = p\mu$여야 한다.
+- $$\frac{\mu^{\prime}}{\mu} = p \;\Rightarrow\; \ln\mu = \int p\,dx \;\Rightarrow\; \mu = e^{\int p\,dx}$$
+ode.sepgen:
+- $$\frac{dy}{dx} = f(x)\,y \;\Rightarrow\; \int\frac{dy}{y} = \int f\,dx \;\Rightarrow\; \ln|y| = F(x) + c$$
+- $y = \pm e^{c}e^{F(x)}$. 상수 $\pm e^c$와 해 $y = 0$을 합쳐 $C$로 쓰면 $y = Ce^{\int f\,dx}$.
+ode.exactk:
+- $M\,dx + N\,dy = dF$가 되려면 $F_x = M$, $F_y = N$이어야 한다.
+- $F$가 매끄러우면 $F_{xy} = F_{yx}$이므로 $M_y = N_x$가 필요하다. 이 조건에 맞게 $k$를 정한다.
+ode.linformula:
+- $\mu = e^{\int p\,dx}$를 곱하면 좌변이 $(\mu y)^{\prime}$이 된다.
+- $$(\mu y)^{\prime} = \mu q \;\Rightarrow\; \mu y = \int\mu q\,dx + C \;\Rightarrow\; y = \frac{1}{\mu}\Big(\int\mu q\,dx + C\Big)$$
+ode.exactcond:
+- $M\,dx + N\,dy$가 어떤 $F$의 전미분이면 $F_x = M$, $F_y = N$.
+- 매끄러운 $F$에서는 $F_{xy} = F_{yx}$이므로 $M_y = N_x$가 필요하다. 단순연결 영역에서는 충분조건이기도 하다.
+ode.bernoulli:
+- $y^{\prime} + py = qy^n$을 $y^n$으로 나누면 $y^{-n}y^{\prime} + py^{1-n} = q$.
+- $v = y^{1-n}$이면 $v^{\prime} = (1-n)y^{-n}y^{\prime}$이므로
+- $$v^{\prime} + (1-n)p\,v = (1-n)q$$
+ode.existence:
+- Picard 반복 $y_{k+1}(x) = y_0 + \int_{x_0}^x f(s, y_k(s))\,ds$이 수렴하려면 $f$가 $y$에 대해 Lipschitz여야 한다.
+- $\partial f/\partial y$가 연속이면 근처에서 유계라 Lipschitz 조건이 성립하고, 해가 존재하며 유일하다.
+- $f = \sqrt{y}$는 $y = 0$에서 $\partial f/\partial y$가 발산해 $y = 0$과 $y = x^2/4$가 모두 해가 된다.
+ode.linear:
+- $y^{\prime} + ay = q(x)$에 $\mu = e^{ax}$를 곱하면 $(e^{ax}y)^{\prime} = e^{ax}q$.
+- $$e^{ax}y = \int e^{ax}q\,dx + C$$
+- $x = 0$, $y = y_0$로 $C$를 정하고, 마지막에 $e^{ax}$로 나눈다.
+ode.separable:
+- $$\frac{dy}{dx} = f(x)g(y) \;\Rightarrow\; \int\frac{dy}{g(y)} = \int f(x)\,dx + C$$
+- 좌변 적분을 $H(y)$, 우변 적분을 $F(x)$라 하면 $H(y) = F(x) + C$이고 $C = H(y_0) - F(x_0)$.
+- 마지막에 $y$에 대해 풀고, 초기조건의 부호에 맞는 가지를 고른다.
+ode.exact:
+- $F_x = M$이므로 $F = \int M\,dx + h(y)$ ($y$는 상수 취급).
+- $F_y = N$에 넣어 $h^{\prime}(y)$를 구하고 $y$로 적분한다.
+- 해곡선은 $F(x, y) = $ 상수이고, 초기점을 넣어 상수를 정한다.

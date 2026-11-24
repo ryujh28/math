@@ -1,6 +1,6 @@
 // 게임 모드: 미니멀 훈련(mcq), 순서 맞추기(order).
 // 각 모드는 화면을 그리고, 플레이어가 끝내면 결과를 resolve하는 Promise를 돌려준다.
-import { render, html, renderProblem } from './tex.js';
+import { render, html, renderProblem, rich } from './tex.js';
 
 const el = (tag, cls, text) => {
   const e = document.createElement(tag);
@@ -26,11 +26,15 @@ function onKey(fn) {
 export const clearKeys = () => onKey(null);
 
 /** 다음으로 넘어가는 버튼 (Enter로도). */
-function nextButton(box, label = '다음') {
+function nextButton(box, label = '다음', extra = null) {
   return new Promise((resolve) => {
     const b = el('button', 'btn', `${label} (Enter)`);
     b.addEventListener('click', () => { onKey(null); resolve(); });
-    box.appendChild(b);
+    if (extra) {
+      const row = el('div', 'row');
+      row.append(b, extra());
+      box.appendChild(row);
+    } else box.appendChild(b);
     b.focus({ preventScroll: true });
     onKey((e) => { if (e.key === 'Enter') { e.preventDefault(); onKey(null); resolve(); } });
   });
@@ -81,13 +85,13 @@ export function playMcq(root, item, ctx) {
       if (o && !o.ok) btns[i].classList.add('bad');
       const result = { correct, ms, error: o && !o.ok ? o.error : i < 0 ? 'timeout' : null };
       if (correct) {
-        fb.innerHTML = `<b class="ok">정답</b> · ${(ms / 1000).toFixed(1)}초`;
+        fb.innerHTML = `<div><b class="ok">정답</b> · ${(ms / 1000).toFixed(1)}초</div>`;
         ctx.onCorrect?.(fb);
         setTimeout(() => resolve(result), ctx.extraPause ? 1600 : 650);
       } else {
-        fb.innerHTML = `<b class="no">${i < 0 ? '시간 초과' : '오답'}</b>` +
-          (o ? ` · ${ctx.errName(o.error)}` : '') + (ctx.hint ? `<p class="hint">${ctx.hintHtml || escapeHtml(ctx.hint)}</p>` : '');
-        await nextButton(fb);
+        fb.innerHTML = `<div><b class="no">${i < 0 ? '시간 초과' : '오답'}</b>` +
+          (o ? ` · ${ctx.errName(o.error)}` : '') + '</div>' + (ctx.hint ? `<p class="hint">${ctx.hintHtml || escapeHtml(ctx.hint)}</p>` : '');
+        await nextButton(fb, '다음', ctx.derivButton);
         resolve(result);
       }
     }
@@ -162,7 +166,7 @@ export function playOrder(root, item, ctx) {
         sol.forEach((b) => marks.set(b, 'done'));
         draw();
         const res = finish(false);
-        fb.innerHTML = `<b class="ok">완성</b> · 검사 ${checks}회 · ${(res.ms / 1000).toFixed(0)}초`;
+        fb.innerHTML = `<div><b class="ok">완성</b> · 검사 ${checks}회 · ${(res.ms / 1000).toFixed(0)}초</div>`;
         ctx.onCorrect?.(fb);
         await nextButton(fb);
         resolve(res);
@@ -172,10 +176,11 @@ export function playOrder(root, item, ctx) {
       if (i < sol.length) {
         marks.set(sol[i], 'err');
         const d = sol[i].decoy;
-        msg = d ? `${i + 1}번째 줄: ${ctx.errName(d.error)} — ${escapeHtml(d.why)}` : `${i + 1}번째 줄의 순서가 맞지 않습니다.`;
+        msg = d ? `${i + 1}번째 줄: ${ctx.errName(d.error)} — ${rich(d.why)}` : `${i + 1}번째 줄의 순서가 맞지 않습니다.`;
       } else msg = `${i}번째 줄까지는 맞습니다. 단계가 더 필요합니다.`;
       draw();
-      fb.innerHTML = `<b class="no">아직</b> · ${msg}`;
+      fb.innerHTML = `<div><b class="no">아직</b> · ${msg}</div>`;
+      if (ctx.derivButton) fb.appendChild(ctx.derivButton());
     }
 
     async function giveUp() {
@@ -197,7 +202,7 @@ export function playOrder(root, item, ctx) {
         h.innerHTML = ctx.hintHtml || escapeHtml(ctx.hint);
         fb.appendChild(h);
       }
-      await nextButton(fb);
+      await nextButton(fb, '다음', ctx.derivButton);
       resolve(res);
     }
 

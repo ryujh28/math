@@ -83,17 +83,18 @@ def exact_k():
 
 # ---------------------------------------------------------------- 풀이 뼈대
 WHY = {
-    "mu_sign": "적분인자는 μ = e^{∫p dx} 입니다. 지수의 부호가 틀렸습니다.",
-    "int": "우변 적분 ∫μq dx를 잘못 계산했습니다.",
-    "ic": "초기조건을 넣을 때 우변 적분값 F(0)을 빼지 않았습니다.",
-    "final": "마지막에 μ로 나눌 때 지수 부호가 틀렸습니다.",
-    "sep": "변수를 분리할 때 g(y)를 분모로 보내야 합니다.",
-    "sep_int": "적분 결과가 틀렸습니다. 양변을 미분해서 확인해 보세요.",
-    "sep_half": "∫x dx = x²/2 입니다. 1/2이 빠졌습니다.",
-    "ex_int": "∫M dx는 x에 대해서만 적분합니다. 2cxy를 x로 적분하면 cx²y.",
-    "ex_h": "h′(y)를 구한 뒤 y로 적분해야 h(y)가 됩니다.",
-    "ex_c": "초기조건 (x₀, y₀)를 F에 대입해 상수를 정합니다.",
-    "ex_my": "M_y = ∂M/∂y, N_x = ∂N/∂x 계산이 틀렸습니다.",
+    "mu_sign": r"적분인자는 $\mu = e^{\int p\,dx}$입니다. 지수의 부호가 틀렸습니다.",
+    "int": r"우변 적분 $\int \mu q\,dx$를 잘못 계산했습니다.",
+    "ic": r"초기조건을 넣을 때 우변 적분값 $F(0)$을 빼지 않았습니다.",
+    "sep_ic": r"$x = 0$, $y = y_0$를 대입해 $C$를 정해야 합니다. $C$는 $y_0$ 자체가 아닙니다.",
+    "final": r"마지막에 $\mu$로 나눌 때 지수 부호가 틀렸습니다.",
+    "sep": r"변수를 분리할 때 $g(y)$를 분모로 보내야 합니다.",
+    "sep_int": r"적분 결과가 틀렸습니다. 양변을 미분해서 확인해 보세요.",
+    "sep_half": r"$\int x\,dx = \dfrac{x^2}{2}$입니다. $\dfrac{1}{2}$이 빠졌습니다.",
+    "ex_int": r"$\int M\,dx$는 $x$에 대해서만 적분합니다. $2cxy$를 $x$로 적분하면 $cx^2y$.",
+    "ex_h": r"$h^{\prime}(y)$를 구한 뒤 $y$로 적분해야 $h(y)$가 됩니다.",
+    "ex_c": r"초기조건 $(x_0, y_0)$를 $F$에 대입해 상수를 정합니다.",
+    "ex_my": r"$M_y = \partial M/\partial y$, $N_x = \partial N/\partial x$ 계산이 틀렸습니다.",
 }
 
 
@@ -171,7 +172,7 @@ def separable():
         ]
         decoys = [
             decoy(0, rf"{tex(g)}\,dy = {tex(fx)}\,dx", lambda h=g, g=g: same(sp.simplify(h * g), 1), "algebra", WHY["sep"]),
-            vdecoy(2, rf"C = {tex(y0)}", y0, sp.simplify(H.subs(y, ytrue) - F).subs(x, 0), "initial_condition", WHY["ic"]),
+            vdecoy(2, rf"C = {tex(y0)}", y0, sp.simplify(H.subs(y, ytrue) - F).subs(x, 0), "initial_condition", WHY["sep_ic"]),
         ]
         if "badH" in fm:
             Hb, er, w = fm["badH"]

@@ -45,3 +45,20 @@ export function renderProblem(el, tex) {
   }
   return el;
 }
+
+/** 일반 문장 안의 $…$ 구간만 KaTeX로 그린 HTML. 나머지는 이스케이프한다. */
+export function rich(text) {
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  return String(text ?? '').split(/(\$\$[^$]+\$\$|\$[^$]+\$)/g).map((part) => {
+    if (part.length > 4 && part.startsWith('$$') && part.endsWith('$$'))
+      return window.katex.renderToString(part.slice(2, -2), { throwOnError: false, displayMode: true, strict: 'ignore' });
+    if (part.length > 2 && part.startsWith('$') && part.endsWith('$'))
+      return window.katex.renderToString(part.slice(1, -1), { throwOnError: false, displayMode: false, strict: 'ignore' });
+    return esc(part);
+  }).join('');
+}
+
+export function setRich(el, text) {
+  el.innerHTML = rich(text);
+  return el;
+}

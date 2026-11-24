@@ -2,7 +2,7 @@
 import { loadIndex, loadBuiltPacks } from './packs.js';
 import * as store from './store.js';
 import * as E from './engine.js';
-import { render, html, validatePack, renderProblem } from './tex.js';
+import { render, html, validatePack, renderProblem, rich, setRich } from './tex.js';
 
 const $ = (s) => document.querySelector(s);
 const el = (tag, cls, text) => {
@@ -113,7 +113,7 @@ function drawChapter() {
   $('#chapter').hidden = false;
   $('#ch-title').textContent = `${p.chapter.id}장 ${p.chapter.title}`;
   $('#ch-meta').textContent = `${p.chapter.part} · ${p.chapter.level} · ${open ? '열림' : '잠김 (테스트 모드에서 열 수 있음)'} · 숙련 ${Math.round(E.chapterMastery(p, states) * 100)}%`;
-  $('#ch-summary').textContent = p.chapter.summary;
+  setRich($('#ch-summary'), p.chapter.summary);
   const counts = {};
   p.items.forEach((it) => (counts[it.unit] = (counts[it.unit] || 0) + 1));
   const tb = $('#unit-rows');
@@ -121,7 +121,7 @@ function drawChapter() {
   for (const u of p.units) {
     const st = states.get(u.id);
     const tr = el('tr', u.id === selUnit ? 'sel' : '');
-    tr.appendChild(el('td', null, u.title));
+    tr.appendChild(setRich(el('td'), u.title));
     tr.appendChild(el('td', null, u.kind === 'atom' ? '사실 원자' : '풀이 뼈대'));
     tr.appendChild(el('td', null, u.tiers.join('·')));
     tr.appendChild(el('td', 'num', String(counts[u.id] || 0)));
@@ -153,7 +153,7 @@ function showSample() {
   cur = { unit: u, item, t0: performance.now(), done: false };
   $('#sample').hidden = false;
   $('#sample-title').textContent = `${u.title} · 단계 ${item.tier}`;
-  $('#sample-msg').textContent = u.hint ? '힌트: ' + u.hint : '';
+  setRich($('#sample-msg'), u.hint ? '힌트: ' + u.hint : '');
   const body = $('#sample-body');
   body.textContent = '';
   if (item.type === 'mcq') {
@@ -188,7 +188,7 @@ function showSample() {
     const dl = el('div', 'steps');
     item.decoys.forEach((dc) => {
       const d = el('div', 'step dec');
-      d.appendChild(el('small', null, `${errName[dc.error] || dc.error} · ${dc.why}`));
+      d.appendChild(setRich(el('small'), `${errName[dc.error] || dc.error} · ${dc.why}`));
       const m = el('div');
       render(m, dc.tex);
       d.appendChild(m);

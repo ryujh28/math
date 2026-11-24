@@ -54,3 +54,13 @@ select { font: inherit; padding: 8px 10px; border-radius: 8px; border: 1.5px sol
 .conn { border: 1.5px dashed var(--blue); border-radius: 12px; padding: 12px 14px; background: color-mix(in srgb, var(--blue) 7%, var(--card)); max-width: 70ch; }
 .conn b { color: var(--blue); font-size: 14px; }
 .conn p { margin: 6px 0 0; }
+
+.modal { position: fixed; inset: 0; z-index: 20; background: rgba(10, 12, 16, .45); display: flex; align-items: flex-start; justify-content: center;
+  padding: max(5vh, 16px) 12px; overflow-y: auto; }
+.sheet { background: var(--card); border: 1.5px solid var(--line); border-radius: 16px; width: min(720px, 100%); padding: clamp(16px, 3vw, 26px);
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, .5); }
+.sheet h2 { margin: 2px 0 12px; }
+.deriv-body p { margin: 0 0 10px; line-height: 1.7; font-size: 17px; }
+.deriv-body .katex-display { margin: 6px 0 14px; overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+.fb .row, .intro-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.units .btn.small { min-height: 32px; }

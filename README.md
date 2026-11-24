@@ -12,7 +12,7 @@ app/js/             game.js(게임) · session.js(세션 구성) · modes.js(미
 app/css/            스타일
 app/vendor/         KaTeX 0.19.1, ts-fsrs 5.4.2 (빌드 단계 없이 그대로 사용)
 packs/              빌드 결과: index.json + 장별 chNN.json  ← 앱이 읽는 것은 이것뿐
-content/            콘텐츠 원본 (장별 폴더: chapter.yaml, atoms.yaml, schemas.yaml, templates/*.py)
+content/            콘텐츠 원본 (장별 폴더: chapter.yaml, atoms.yaml, schemas.yaml, derivations.yaml, templates/*.py)
 content/catalog.yaml  39개 장 목록과 선수 관계
 content/errors.yaml   전역 오류 분류
 tools/build.py      원본 → 검증 → packs/ 생성
@@ -27,6 +27,7 @@ tools/test_engine.mjs, test_session.mjs  엔진·세션 테스트
 pip install -r tools/requirements.txt     # 처음 한 번
 python3 tools/build.py                    # 모든 장 빌드 (특정 장만: python3 tools/build.py 10)
 node tools/test_engine.mjs && node tools/test_session.mjs   # 테스트
+node tools/check_tex.mjs                  # 팩의 모든 수식·문장을 KaTeX로 렌더링 검사
 python3 -m http.server 8000               # 로컬 실행 → http://localhost:8000
 ```
 
@@ -50,3 +51,5 @@ https://ryujh28.github.io/math/ 에서 열린다. 팩을 새로 빌드했으면 
 - 판정 함수는 생성기의 손 계산과 별도로 SymPy 고수준 연산(det, eigenvals, dsolve, 수치 Laplace 적분 등)으로 만든다.
 - 판정 함수가 반복문 변수를 늦게 묶으면(late binding) 빌드가 자동으로 거부한다. TeX에 소수 근삿값이 섞여도 거부한다.
 - 실패·제외된 사례는 `tools/reports/chNN.md`에 남는다.
+- 단위마다 짧은 유도(derivations.yaml)가 있고, 앱의 "유도 보기"에서 열린다. 한 줄은 문장 또는 `$$…$$` 수식 블록.
+- 힌트·오답 설명·장 요약·연결 카드·유도의 수식은 `$…$`로 감싼 TeX로 쓴다. 앱이 KaTeX로 그리고, `check_tex.mjs`가 `$` 밖에 남은 TeX 흔적이나 유니코드 위첨자를 잡는다.

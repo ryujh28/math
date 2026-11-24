@@ -1,0 +1,41 @@
+# 단위별 짧은 유도. 한 줄 = 문장($…$ 안은 TeX) 또는 수식 블록($$…$$).
+la.dot:
+- 표준기저끼리의 내적은 $\mathbf{e}_i\cdot\mathbf{e}_j = \delta_{ij}$이고, 내적은 양쪽 변수에 대해 선형이다.
+- $$\mathbf{u}\cdot\mathbf{v} = \Big(\sum_i u_i\mathbf{e}_i\Big)\cdot\Big(\sum_j v_j\mathbf{e}_j\Big) = \sum_{i,j}u_iv_j\,\delta_{ij} = \sum_i u_iv_i$$
+la.norm:
+- 피타고라스 정리를 두 번 쓰면 $\|\mathbf{v}\|^2 = v_1^2 + v_2^2 + v_3^2$.
+- $$\|\mathbf{v}\| = \sqrt{v_1^2 + v_2^2 + v_3^2} = \sqrt{\mathbf{v}\cdot\mathbf{v}}$$
+la.orth:
+- 코사인 법칙과 전개식 $\|\mathbf{u} - \mathbf{v}\|^2 = \|\mathbf{u}\|^2 + \|\mathbf{v}\|^2 - 2\,\mathbf{u}\cdot\mathbf{v}$를 비교하면
+- $$\mathbf{u}\cdot\mathbf{v} = \|\mathbf{u}\|\,\|\mathbf{v}\|\cos\theta$$
+- $\theta = 90^\circ \iff \cos\theta = 0 \iff \mathbf{u}\cdot\mathbf{v} = 0$.
+la.proj:
+- 사영을 $\mathbf{p} = c\,\mathbf{v}$로 놓고, 나머지 $\mathbf{u} - c\mathbf{v}$가 $\mathbf{v}$에 직교하도록 $c$를 정한다.
+- $$(\mathbf{u} - c\mathbf{v})\cdot\mathbf{v} = 0 \;\Rightarrow\; c = \frac{\mathbf{u}\cdot\mathbf{v}}{\mathbf{v}\cdot\mathbf{v}}$$
+- $$\operatorname{proj}_{\mathbf{v}}\mathbf{u} = \frac{\mathbf{u}\cdot\mathbf{v}}{\mathbf{v}\cdot\mathbf{v}}\,\mathbf{v}$$
+la.cs:
+- '$\mathbf{v} \ne \mathbf{0}$일 때 모든 실수 $t$에 대해 $\|\mathbf{u} - t\mathbf{v}\|^2 \ge 0$이다:'
+- $$\|\mathbf{v}\|^2t^2 - 2(\mathbf{u}\cdot\mathbf{v})\,t + \|\mathbf{u}\|^2 \ge 0$$
+- '$t$에 대한 이차식이 음이 되지 않으려면 판별식이 $0$ 이하여야 한다:'
+- $$(\mathbf{u}\cdot\mathbf{v})^2 - \|\mathbf{u}\|^2\|\mathbf{v}\|^2 \le 0 \;\Rightarrow\; |\mathbf{u}\cdot\mathbf{v}| \le \|\mathbf{u}\|\,\|\mathbf{v}\|$$
+la.angle:
+- '삼각형의 코사인 법칙: $\|\mathbf{u} - \mathbf{v}\|^2 = \|\mathbf{u}\|^2 + \|\mathbf{v}\|^2 - 2\|\mathbf{u}\|\|\mathbf{v}\|\cos\theta$.'
+- 내적으로 전개한 $\|\mathbf{u} - \mathbf{v}\|^2 = \|\mathbf{u}\|^2 + \|\mathbf{v}\|^2 - 2\,\mathbf{u}\cdot\mathbf{v}$와 비교하면
+- $$\cos\theta = \frac{\mathbf{u}\cdot\mathbf{v}}{\|\mathbf{u}\|\,\|\mathbf{v}\|}$$
+la.gsformula:
+- $\mathbf{u}_2 = \mathbf{v}_2 - c\,\mathbf{u}_1$로 놓고 $\mathbf{u}_2\cdot\mathbf{u}_1 = 0$을 요구한다.
+- $$\mathbf{v}_2\cdot\mathbf{u}_1 - c\,\mathbf{u}_1\cdot\mathbf{u}_1 = 0 \;\Rightarrow\; c = \frac{\mathbf{v}_2\cdot\mathbf{u}_1}{\mathbf{u}_1\cdot\mathbf{u}_1}$$
+- 즉 $c\,\mathbf{u}_1 = \operatorname{proj}_{\mathbf{u}_1}\mathbf{v}_2$이고, 사영 성분을 빼는 것이다.
+la.triangle:
+- $$\|\mathbf{u}+\mathbf{v}\|^2 = \|\mathbf{u}\|^2 + 2\,\mathbf{u}\cdot\mathbf{v} + \|\mathbf{v}\|^2$$
+- Cauchy–Schwarz로 $\mathbf{u}\cdot\mathbf{v} \le \|\mathbf{u}\|\,\|\mathbf{v}\|$이므로
+- $$\|\mathbf{u}+\mathbf{v}\|^2 \le \big(\|\mathbf{u}\| + \|\mathbf{v}\|\big)^2$$
+la.gs:
+- '첫 벡터는 그대로 둔다: $\mathbf{u}_1 = \mathbf{v}_1$.'
+- '둘째 벡터에서 $\mathbf{u}_1$ 방향 성분을 빼면 남은 것은 자동으로 $\mathbf{u}_1$에 직교한다:'
+- $$\mathbf{u}_2 = \mathbf{v}_2 - \frac{\mathbf{v}_2\cdot\mathbf{u}_1}{\mathbf{u}_1\cdot\mathbf{u}_1}\mathbf{u}_1$$
+- 마지막에 $\mathbf{e}_i = \mathbf{u}_i/\|\mathbf{u}_i\|$. 길이를 바꿔도 직교성은 유지된다.
+la.planeproj:
+- '$\mathbf{v}$를 법선 성분과 평면 위 성분으로 나눈다: $\mathbf{v} = \mathbf{v}_\perp + \mathbf{v}_\parallel$, $\mathbf{v}_\perp \parallel \mathbf{n}$, $\mathbf{v}_\parallel\cdot\mathbf{n} = 0$.'
+- '법선 성분은 $\mathbf{n}$ 위로의 사영이다: $\mathbf{v}_\perp = \dfrac{\mathbf{n}\cdot\mathbf{v}}{\mathbf{n}\cdot\mathbf{n}}\mathbf{n}$.'
+- $$\mathbf{v}_\parallel = \mathbf{v} - \frac{\mathbf{n}\cdot\mathbf{v}}{\mathbf{n}\cdot\mathbf{n}}\mathbf{n}$$

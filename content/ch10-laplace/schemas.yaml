@@ -6,28 +6,28 @@
   title: 1계 초기값 문제
   generator: ivp:ivp1
   steps: [변환, Y 정리, 부분분수, 역변환]
-  hint: "양변을 변환하면 y′ → sY − y(0). Y로 정리하고, 강제항이 있으면 부분분수로 쪼갠 뒤 표로 되돌린다."
+  hint: '양변을 변환하면 $y^{\prime} \to sY - y(0)$. $Y$로 정리하고, 강제항이 있으면 부분분수로 쪼갠 뒤 표로 되돌린다.'
 
 - id: lap.ivp2.real
   title: 2계 · 서로 다른 실근
   generator: ivp:ivp2_real
   steps: [변환, Y 정리, 부분분수, 역변환]
-  hint: "분모 s² + ps + q가 (s − r₁)(s − r₂)로 인수분해되면 부분분수 → e^{r₁t}, e^{r₂t}."
+  hint: '분모 $s^2 + ps + q$가 $(s - r_1)(s - r_2)$로 인수분해되면 부분분수 → $e^{r_1t}$, $e^{r_2t}$.'
 
 - id: lap.ivp2.repeated
   title: 2계 · 중근
   generator: ivp:ivp2_repeated
   steps: [변환, Y 정리, 부분분수, 역변환]
-  hint: "분모가 (s − r)²이면 분자를 (s − r)로 다시 써서 A/(s − r) + B/(s − r)²로 나눈다. 1/(s − r)² ↔ t e^{rt}."
+  hint: '분모가 $(s - r)^2$이면 분자를 $(s - r)$로 다시 써서 $\dfrac{A}{s - r} + \dfrac{B}{(s - r)^2}$로 나눈다. $\dfrac{1}{(s - r)^2} \leftrightarrow te^{rt}$.'
 
 - id: lap.ivp2.complex
   title: 2계 · 복소근
   generator: ivp:ivp2_complex
   steps: [변환, Y 정리, 완전제곱, 역변환]
-  hint: "분모가 실수로 인수분해되지 않으면 완전제곱 (s − α)² + β²로 바꾸고 s-이동으로 e^{αt}cos βt, e^{αt}sin βt를 얻는다."
+  hint: '분모가 실수로 인수분해되지 않으면 완전제곱 $(s - \alpha)^2 + \beta^2$로 바꾸고 $s$-이동으로 $e^{\alpha t}\cos\beta t$, $e^{\alpha t}\sin\beta t$를 얻는다.'
 
 - id: lap.ivp2.impulse
   title: 2계 · 충격 입력
   generator: ivp:ivp2_impulse
   steps: [변환, Y 정리, 역변환(t-이동)]
-  hint: "δ(t − c) → e^{−cs}. e^{−cs}가 붙은 항은 t-이동 정리로 u(t − c)f(t − c)가 된다."
+  hint: '$\delta(t - c) \to e^{-cs}$. $e^{-cs}$가 붙은 항은 $t$-이동 정리로 $u(t - c)f(t - c)$가 된다.'

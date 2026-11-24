@@ -385,6 +385,13 @@ def build_chapter(cdir, catalog, seed="v0"):
         u, i = build_schemas(yaml.safe_load((cdir / "schemas.yaml").read_text()), cdir / "templates", report, seed)
         units += u
         items += i
+    dpath = cdir / "derivations.yaml"
+    deriv = yaml.safe_load(dpath.read_text()) if dpath.exists() else {}
+    for u in units:
+        if u["id"] in (deriv or {}):
+            u["derivation"] = deriv[u["id"]]
+        else:
+            report.append(f"- 유도 없음: {u['id']}")
     pack = {"format": FORMAT, "built": datetime.date.today().isoformat(),
             "chapter": {"id": cid, "slug": meta["slug"], "title": meta["title"], "summary": meta.get("summary", ""),
                         "part": cat["part"], "level": cat["level"], "prereqs": cat["prereqs"],

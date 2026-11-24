@@ -3,9 +3,9 @@
   title: Gram–Schmidt 정규직교화
   generator: la1:gram_schmidt
   steps: [내적 계산, 사영 빼기, e₁ 정규화, e₂ 정규화]
-  hint: "u₁ = v₁, u₂ = v₂ − (v₂·u₁/u₁·u₁)u₁, 마지막에 각자 길이로 나눈다."
+  hint: '$\mathbf{u}_1 = \mathbf{v}_1$, $\mathbf{u}_2 = \mathbf{v}_2 - \dfrac{\mathbf{v}_2\cdot\mathbf{u}_1}{\mathbf{u}_1\cdot\mathbf{u}_1}\mathbf{u}_1$, 마지막에 각자 길이로 나눈다.'
 - id: la.planeproj
   title: 평면 위로의 사영
   generator: la1:plane_projection
   steps: [법선과 내적, 법선 성분, 빼기]
-  hint: "평면 n·x = 0 위로의 사영 = v − (n·v/n·n) n. 법선 방향 성분을 빼면 남는 것이 평면 위 성분."
+  hint: '평면 $\mathbf{n}\cdot\mathbf{x} = 0$ 위로의 사영은 $\mathbf{v} - \dfrac{\mathbf{n}\cdot\mathbf{v}}{\mathbf{n}\cdot\mathbf{n}}\mathbf{n}$. 법선 방향 성분을 빼면 남는 것이 평면 위 성분.'

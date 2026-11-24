@@ -4,6 +4,7 @@ import * as store from './store.js';
 import * as E from './engine.js';
 import * as S from './session.js';
 import { playMcq, playOrder, clearKeys, escapeHtml, shuffle } from './modes.js';
+import { rich, setRich } from './tex.js';
 
 const $ = (s) => document.querySelector(s);
 const el = (tag, cls, text) => {
@@ -25,12 +26,43 @@ async function reload() {
   G.states = E.replay(G.log);
 }
 
-/** 힌트 문장 안의 ^{…}, _{…}를 위·아래첨자로. */
-function hintHtml(t) {
-  return escapeHtml(t).replace(/\^\{([^}]*)\}/g, '<sup>$1</sup>').replace(/_\{([^}]*)\}/g, '<sub>$1</sub>');
-}
+const hintHtml = (t) => rich(t);
 
 const errName = (id) => G.errName[id] || (id === 'timeout' ? '시간 초과' : id || '');
+
+// ------------------------------------------------------------------ 유도 보기
+let derivKey = null;
+function showDerivation(m) {
+  const p = G.packs.get(m.chapter);
+  $('#deriv-kicker').textContent = `${m.chapter}장 ${p.chapter.title} · 유도`;
+  setRich($('#deriv-title'), m.unit.title);
+  const body = $('#deriv-body');
+  body.textContent = '';
+  for (const line of m.unit.derivation || ['아직 유도가 없습니다.']) {
+    const isBlock = line.startsWith('$$') && line.endsWith('$$');
+    body.appendChild(setRich(el(isBlock ? 'div' : 'p'), line));
+  }
+  $('#deriv').hidden = false;
+  $('#deriv-close').focus({ preventScroll: true });
+  derivKey = (e) => {
+    if (e.key === 'Escape' || e.key === 'Enter') {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      closeDerivation();
+    } else if ('1234'.includes(e.key) && e.key) e.stopImmediatePropagation();
+  };
+  addEventListener('keydown', derivKey, true);
+}
+function closeDerivation() {
+  $('#deriv').hidden = true;
+  if (derivKey) removeEventListener('keydown', derivKey, true);
+  derivKey = null;
+}
+function derivButton(m, label = '유도 보기', cls = 'btn ghost') {
+  const b = el('button', cls, label);
+  b.addEventListener('click', (e) => { e.stopPropagation(); showDerivation(m); });
+  return b;
+}
 
 // ------------------------------------------------------------------ 홈
 function renderHome() {
@@ -122,7 +154,7 @@ function renderChapter(cid) {
   const s = chapterStats(cid);
   $('#ch-title').textContent = `${cid}장 ${p.chapter.title}`;
   $('#ch-meta').textContent = `${p.chapter.part} · ${p.chapter.level} · 단위 ${s.total}개 · 배운 단위 ${s.learned} · 숙련 ${s.mastered}`;
-  $('#ch-summary').textContent = p.chapter.summary;
+  setRich($('#ch-summary'), p.chapter.summary);
   const act = $('#ch-actions');
   act.textContent = '';
   if (open) {
@@ -140,7 +172,7 @@ function renderChapter(cid) {
     const st = G.states.get(u.id);
     const tr = el('tr');
     const n = p.items.filter((it) => it.unit === u.id).length;
-    tr.appendChild(el('td', null, u.title));
+    tr.appendChild(setRich(el('td'), u.title));
     tr.appendChild(el('td', null, u.kind === 'atom' ? '미니멀 훈련' : '순서 맞추기'));
     tr.appendChild(el('td', 'num', String(n)));
     tr.appendChild(el('td', null, !st ? '새 단위' : E.isMastered(st) ? '숙련' : E.isDue(st) ? '복습 필요' : '학습 중'));
@@ -152,6 +184,9 @@ function renderChapter(cid) {
     td.appendChild(r);
     tr.appendChild(td);
     tr.appendChild(el('td', null, dueText(st)));
+    const tdb = el('td');
+    tdb.appendChild(derivButton(G.meta.get(u.id), '유도', 'btn ghost small'));
+    tr.appendChild(tdb);
     tb.appendChild(tr);
   }
   show('chapter');
@@ -163,7 +198,7 @@ function introCard(box, m) {
     box.textContent = '';
     const p = G.packs.get(m.chapter);
     box.appendChild(el('div', 'kicker', `새 단위 · ${m.chapter}장 ${p.chapter.title}`));
-    box.appendChild(el('h2', 'intro-title', m.unit.title));
+    box.appendChild(setRich(el('h2', 'intro-title'), m.unit.title));
     if (m.unit.hint) {
       const h = el('p', 'intro-hint');
       h.innerHTML = hintHtml(m.unit.hint);
@@ -176,7 +211,9 @@ function introCard(box, m) {
     const k = (e) => { if (e.key === 'Enter') { e.preventDefault(); go(); } };
     b.addEventListener('click', go);
     addEventListener('keydown', k);
-    box.appendChild(b);
+    const row = el('div', 'intro-actions');
+    row.append(b, derivButton(m));
+    box.appendChild(row);
   });
 }
 
@@ -191,7 +228,7 @@ async function connectionCard(box, chapters) {
   await store.kvSet('connSeen', [...seen]);
   const d = el('div', 'conn');
   d.appendChild(el('b', null, `연결 카드 · ${pick.c}장`));
-  d.appendChild(el('p', null, pick.t));
+  d.appendChild(setRich(el('p'), pick.t));
   box.appendChild(d);
   return d;
 }
@@ -239,13 +276,13 @@ async function runSession(chapter) {
     $('#s-prog').style.width = `${Math.round((done / (done + q.length + 1)) * 100)}%`;
     $('#s-count').textContent = `${done + 1} / ${done + q.length + 1}`;
     $('#s-combo').textContent = combo >= 2 ? `콤보 ${combo}` : '';
-    $('#s-unit').textContent = `${m.chapter}장 · ${m.unit.title}`;
+    setRich($('#s-unit'), `${m.chapter}장 · ${m.unit.title}`);
     if (e.intro) await race(introCard(card, m));
     if (G.quit) break;
     const st = G.states.get(e.unit);
     const item = S.pickItem(m, st, G.log);
     const ctx = {
-      hint: m.unit.hint, hintHtml: hintHtml(m.unit.hint), errName,
+      hint: m.unit.hint, hintHtml: hintHtml(m.unit.hint), errName, derivButton: () => derivButton(m),
       prefill: e.mode === 'order' && (!st || st.attempts < 2) && item.tier === 1 ? 1 : 0,
     };
     const result = await race((e.mode === 'mcq' ? playMcq : playOrder)(card, item, ctx));
@@ -295,8 +332,8 @@ async function renderSummary(r) {
     });
   box.appendChild(nums);
   const name = (u) => G.meta.get(u)?.unit.title || u;
-  if (r.newUnits.length) box.appendChild(el('p', null, `새로 배운 단위: ${r.newUnits.map(name).join(', ')}`));
-  if (r.masteredNow.length) box.appendChild(el('p', null, `숙련된 단위: ${r.masteredNow.map(name).join(', ')}`));
+  if (r.newUnits.length) box.appendChild(setRich(el('p'), `새로 배운 단위: ${r.newUnits.map(name).join(', ')}`));
+  if (r.masteredNow.length) box.appendChild(setRich(el('p'), `숙련된 단위: ${r.masteredNow.map(name).join(', ')}`));
   if (r.chapters.length) await connectionCard(box, r.chapters);
   show('summary');
 }
@@ -338,6 +375,8 @@ async function main() {
   await reload();
   await bindSettings();
   $('#ch-back').addEventListener('click', renderHome);
+  $('#deriv-close').addEventListener('click', closeDerivation);
+  $('#deriv').addEventListener('click', (e) => { if (e.target.id === 'deriv') closeDerivation(); });
   $('#sum-home').addEventListener('click', renderHome);
   $('#s-quit').addEventListener('click', () => { G.quit = true; clearKeys(); $('#card').textContent = ''; G.quitR?.(); });
   renderHome();

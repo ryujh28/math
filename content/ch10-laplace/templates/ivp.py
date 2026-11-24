@@ -16,22 +16,22 @@ P2 = r"y^{\prime\prime}"
 P1 = r"y^{\prime}"
 
 WHY = {
-    "ic_drop_p": "y′의 변환 sY − y(0)에서 −y(0)을 빠뜨렸습니다.",
-    "ic_drop_1": "ℒ{y′} = sY − y(0)인데 −y(0) 항이 빠졌습니다.",
-    "ic_sign": "도함수 변환의 초기값 항은 모두 − 부호입니다: s²Y − s·y(0) − y′(0).",
-    "num": "Y로 정리할 때 분자의 초기값 항을 잘못 모았습니다.",
-    "pf_sign": "부분분수 계수의 부호가 틀렸습니다. 통분하면 원래 분자와 달라집니다.",
-    "pf_coef": "부분분수 계수를 잘못 구했습니다. 통분하면 원래 분자와 달라집니다.",
-    "exp_sign": "1/(s − r) ↔ e^{rt}: 지수의 부호는 극점과 같습니다.",
-    "swap": "계수를 서로 바꿔 붙였습니다. 각 계수는 자기 극점의 항에 붙습니다.",
-    "rep_t": "1/(s − r)²의 역변환은 t·e^{rt}입니다. t가 빠졌습니다.",
-    "rep_coef": "(s − r)² 꼴로 나눌 때 분자를 (s − r)로 다시 써야 합니다. r·y(0) 항이 빠졌습니다.",
-    "csq_sign": "완전제곱 s² + ps + q = (s − α)² + β²에서 α의 부호가 틀렸습니다.",
-    "csq_beta": "sin 항은 β/((s − α)² + β²) 꼴이어야 합니다. 계수를 β로 나누지 않았습니다.",
-    "imp_u": "e^{−cs}가 붙은 항은 t-이동 정리로 되돌립니다. u(t − c)가 빠지면 t < c에서도 진동하게 됩니다.",
-    "imp_shift": "t-이동 정리는 함수 전체를 c만큼 옮깁니다: sin ω(t − c)여야 합니다.",
-    "imp_delta": "δ(t − c)의 변환은 1이 아니라 e^{−cs}입니다.",
-    "y_coef": "초기조건으로 정한 계수가 틀렸습니다.",
+    "ic_drop_p": r"$y^{\prime}$의 변환 $sY - y(0)$에서 $-y(0)$을 빠뜨렸습니다.",
+    "ic_drop_1": r"$\mathcal{L}\{y^{\prime}\} = sY - y(0)$인데 $-y(0)$ 항이 빠졌습니다.",
+    "ic_sign": r"도함수 변환의 초기값 항은 모두 $-$ 부호입니다: $s^2Y - sy(0) - y^{\prime}(0)$.",
+    "num": r"$Y$로 정리할 때 분자의 초기값 항을 잘못 모았습니다.",
+    "pf_sign": r"부분분수 계수의 부호가 틀렸습니다. 통분하면 원래 분자와 달라집니다.",
+    "pf_coef": r"부분분수 계수를 잘못 구했습니다. 통분하면 원래 분자와 달라집니다.",
+    "exp_sign": r"$\dfrac{1}{s - r} \leftrightarrow e^{rt}$: 지수의 부호는 극점과 같습니다.",
+    "swap": r"계수를 서로 바꿔 붙였습니다. 각 계수는 자기 극점의 항에 붙습니다.",
+    "rep_t": r"$\dfrac{1}{(s - r)^2}$의 역변환은 $te^{rt}$입니다. $t$가 빠졌습니다.",
+    "rep_coef": r"$(s - r)^2$ 꼴로 나눌 때 분자를 $(s - r)$로 다시 써야 합니다. $r\,y(0)$ 항이 빠졌습니다.",
+    "csq_sign": r"완전제곱 $s^2 + ps + q = (s - \alpha)^2 + \beta^2$에서 $\alpha$의 부호가 틀렸습니다.",
+    "csq_beta": r"$\sin$ 항은 $\dfrac{\beta}{(s - \alpha)^2 + \beta^2}$ 꼴이어야 합니다. 계수를 $\beta$로 나누지 않았습니다.",
+    "imp_u": r"$e^{-cs}$가 붙은 항은 $t$-이동 정리로 되돌립니다. $u(t - c)$가 빠지면 $t < c$에서도 진동하게 됩니다.",
+    "imp_shift": r"$t$-이동 정리는 함수 전체를 $c$만큼 옮깁니다: $\sin\omega(t - c)$여야 합니다.",
+    "imp_delta": r"$\delta(t - c)$의 변환은 $1$이 아니라 $e^{-cs}$입니다.",
+    "y_coef": r"초기조건으로 정한 계수가 틀렸습니다.",
 }
 
 
@@ -82,7 +82,7 @@ def _ivp1_case(a, y0, k, b, tier):
     if k == 0:
         y = y0 * sp.exp(-a * t)
         decoys.append({"pos": 1, "kind": "Y", "expr": y0 / (s - a), "tex": "Y = " + tex(y0 / (s - a)),
-                       "error": "sign", "why": "sY + aY = (s + a)Y 이므로 분모는 s + a입니다."})
+                       "error": "sign", "why": r"$sY + aY = (s + a)Y$이므로 분모는 $s + a$입니다."})
         decoys.append({"pos": 2, "kind": "y", "expr": y0 * sp.exp(a * t), "tex": "y = " + tex(y0 * sp.exp(a * t)),
                        "error": "sign", "why": WHY["exp_sign"]})
     else:
