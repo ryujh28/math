@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>점검 · Isn't she lovely</title>
+<link rel="stylesheet" href="app/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="app/css/style.css">
+<script src="app/vendor/katex/katex.min.js"></script>
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>Isn't she lovely</h1>
+    <p class="sub"><a href="./">← 게임으로</a> · 점검 화면 — 팩, 수식 렌더링, 기록 저장, 복습 엔진이 함께 동작하는지 확인합니다.</p>
+  </div>
+  <label class="switch"><input type="checkbox" id="test-mode"> 테스트 모드: 모든 장 열기</label>
+</header>
+
+<main>
+  <section class="card" id="checks">
+    <h2>M0 점검</h2>
+    <ul class="checks" id="check-list"><li class="wait">점검 중…</li></ul>
+  </section>
+
+  <section class="card">
+    <h2>분야 지도</h2>
+    <p class="note">칸을 누르면 아래에 장 상세가 열립니다. 막대는 숙련 비율, 빗금은 아직 만들지 않은 장입니다.</p>
+    <div id="map"></div>
+  </section>
+
+  <section class="card" id="chapter" hidden>
+    <div class="ch-head">
+      <h2 id="ch-title"></h2>
+      <span class="note" id="ch-meta"></span>
+    </div>
+    <p id="ch-summary" class="note"></p>
+    <div class="scroll">
+      <table class="units">
+        <thead><tr><th>단위</th><th>종류</th><th>단계</th><th class="num">문제</th><th>상태</th><th>녹슬기</th><th>다음 복습</th></tr></thead>
+        <tbody id="unit-rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card" id="sample" hidden>
+    <div class="ch-head">
+      <h2 id="sample-title"></h2>
+      <button class="btn ghost" id="sample-next">다른 문제</button>
+    </div>
+    <div id="sample-body"></div>
+    <div class="grades" id="grades">
+      <span class="note">직접 등급 기록 (엔진 테스트용):</span>
+      <button class="btn ghost" data-g="1">Again</button>
+      <button class="btn ghost" data-g="2">Hard</button>
+      <button class="btn ghost" data-g="3">Good</button>
+      <button class="btn ghost" data-g="4">Easy</button>
+    </div>
+    <p class="note" id="sample-msg"></p>
+  </section>
+
+  <section class="card">
+    <h2>기록</h2>
+    <p class="note" id="log-stats"></p>
+    <div class="row">
+      <button class="btn ghost" id="log-copy">내보내기 (복사)</button>
+      <button class="btn ghost" id="log-import-open">가져오기</button>
+      <button class="btn ghost danger" id="log-reset">기록 전부 지우기</button>
+    </div>
+    <div id="import-box" hidden>
+      <textarea id="import-text" rows="5" placeholder="다른 기기에서 내보낸 기록(JSON)을 붙여넣으세요"></textarea>
+      <button class="btn" id="log-import">합치기</button>
+    </div>
+    <div id="confirm-box" hidden class="confirm">
+      <span>이 기기의 기록을 모두 지웁니다. 되돌릴 수 없습니다.</span>
+      <button class="btn danger" id="log-reset-yes">지우기</button>
+      <button class="btn ghost" id="log-reset-no">취소</button>
+    </div>
+  </section>
+</main>
+<script type="module" src="app/js/check.js"></script>
+</body>
+</html>

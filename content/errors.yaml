@@ -1,0 +1,23 @@
+# 전역 오류 분류. 모든 오답 보기·오답 블록·오류 사냥 문제는 이 중 하나에 속한다.
+- id: sign
+  name: 부호
+- id: initial_condition
+  name: 초기·경계조건
+- id: missing_factor
+  name: 계수·인자 누락
+- id: conjugate
+  name: 켤레·절댓값
+- id: bounds
+  name: 적분 구간·극한
+- id: jacobian
+  name: Jacobian·척도인자
+- id: branch
+  name: 분지 절단·다가성
+- id: normalization
+  name: 정규화·직교성
+- id: algebra
+  name: 대수 실수
+- id: theorem_condition
+  name: 정리 적용 조건
+- id: wrong_pair
+  name: 다른 변환쌍과 혼동

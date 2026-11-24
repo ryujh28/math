@@ -1,0 +1,65 @@
+# 1장 벡터공간과 내적 · 사실 원자
+- id: la.dot
+  kind: gen
+  title: 내적 계산
+  generator: la1:dot
+  hint: "u·v = u₁v₁ + u₂v₂ + u₃v₃. 성분끼리 곱해서 모두 더한다."
+- id: la.norm
+  kind: gen
+  title: 벡터의 길이
+  generator: la1:norm
+  hint: "‖v‖ = √(v·v). 제곱합의 제곱근."
+- id: la.orth
+  kind: gen
+  title: 직교 조건
+  generator: la1:orth_k
+  hint: "u ⟂ v ⇔ u·v = 0. 내적을 k에 대한 일차식으로 놓고 푼다."
+- id: la.proj
+  kind: gen
+  title: 벡터 사영
+  generator: la1:proj
+  hint: "proj_v u = (u·v / v·v) v. 분모는 ‖v‖가 아니라 ‖v‖²."
+- id: la.cs
+  kind: formula
+  title: Cauchy–Schwarz 부등식
+  tier: 1
+  prompt: '\text{모든 } \mathbf{u}, \mathbf{v} \text{에 대해 성립하는 것은?}'
+  answer: '|\mathbf{u}\cdot\mathbf{v}| \le \|\mathbf{u}\|\,\|\mathbf{v}\|'
+  wrong:
+    - {tex: '|\mathbf{u}\cdot\mathbf{v}| \ge \|\mathbf{u}\|\,\|\mathbf{v}\|', error: sign}
+    - {tex: '\|\mathbf{u}+\mathbf{v}\| = \|\mathbf{u}\| + \|\mathbf{v}\|', error: theorem_condition}
+    - {tex: '|\mathbf{u}\cdot\mathbf{v}| \le \|\mathbf{u}\|^{2}\,\|\mathbf{v}\|^{2}', error: algebra}
+  hint: "|u·v| ≤ ‖u‖‖v‖. 등호는 u와 v가 평행할 때만. 그래서 cos θ = u·v/(‖u‖‖v‖)가 −1과 1 사이에 있다."
+- id: la.angle
+  kind: formula
+  title: 두 벡터 사이의 각
+  tier: 1
+  prompt: '\cos\theta = \;?'
+  answer: '\dfrac{\mathbf{u}\cdot\mathbf{v}}{\|\mathbf{u}\|\,\|\mathbf{v}\|}'
+  wrong:
+    - {tex: '\dfrac{\mathbf{u}\cdot\mathbf{v}}{\|\mathbf{u}\|^{2}\,\|\mathbf{v}\|^{2}}', error: normalization}
+    - {tex: '\dfrac{\|\mathbf{u}\times\mathbf{v}\|}{\|\mathbf{u}\|\,\|\mathbf{v}\|}', error: wrong_pair}
+    - {tex: '\dfrac{\|\mathbf{u}\|\,\|\mathbf{v}\|}{\mathbf{u}\cdot\mathbf{v}}', error: algebra}
+  hint: "u·v = ‖u‖‖v‖cos θ. 외적의 크기는 sin θ에 대응한다."
+- id: la.gsformula
+  kind: formula
+  title: Gram–Schmidt 공식
+  tier: 2
+  prompt: '\mathbf{u}_2 = \;?'
+  answer: '\mathbf{v}_2 - \dfrac{\mathbf{v}_2\cdot\mathbf{u}_1}{\mathbf{u}_1\cdot\mathbf{u}_1}\,\mathbf{u}_1'
+  wrong:
+    - {tex: '\mathbf{v}_2 + \dfrac{\mathbf{v}_2\cdot\mathbf{u}_1}{\mathbf{u}_1\cdot\mathbf{u}_1}\,\mathbf{u}_1', error: sign}
+    - {tex: '\mathbf{v}_2 - \dfrac{\mathbf{v}_2\cdot\mathbf{u}_1}{\|\mathbf{u}_1\|}\,\mathbf{u}_1', error: normalization}
+    - {tex: '\mathbf{v}_2 - \dfrac{\mathbf{v}_2\cdot\mathbf{u}_1}{\mathbf{v}_2\cdot\mathbf{v}_2}\,\mathbf{v}_2', error: algebra}
+  hint: "앞에서 만든 u₁ 방향 성분(사영)을 v₂에서 빼면 u₁에 직교하는 u₂가 남는다."
+- id: la.triangle
+  kind: formula
+  title: 삼각부등식
+  tier: 1
+  prompt: '\|\mathbf{u}+\mathbf{v}\| \;\square\; \|\mathbf{u}\| + \|\mathbf{v}\|\ \text{에서}\ \square = \;?'
+  answer: '\le'
+  wrong:
+    - {tex: '\ge', error: sign}
+    - {tex: '=', error: theorem_condition}
+    - {tex: '<', error: theorem_condition}
+  hint: "‖u + v‖ ≤ ‖u‖ + ‖v‖. 같은 방향일 때만 등호."

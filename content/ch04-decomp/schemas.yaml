@@ -1,0 +1,11 @@
+# 4장 행렬 분해 · 풀이 뼈대
+- id: la.lsq
+  title: 최소제곱 직선 맞춤
+  generator: la4:lsq_line
+  steps: [A와 b, 정규방정식, 해, 직선]
+  hint: "A = [1 xᵢ], b = [yᵢ]. AᵀA = [[n, Σx], [Σx, Σx²]], Aᵀb = [Σy, Σxy]를 풀면 (c₀, c₁)."
+- id: la.lu
+  title: 3×3 LU 분해
+  generator: la4:lu3
+  steps: [1열 승수, 1열 소거, 2열 승수, L과 U]
+  hint: "Gauss 소거의 승수 lᵢⱼ를 L의 (i, j) 자리에, 소거 결과를 U에."

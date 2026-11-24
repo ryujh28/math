@@ -1,0 +1,11 @@
+# 5장 행렬함수와 이차형식 · 풀이 뼈대
+- id: la.expat
+  title: "대각화로 e^At"
+  generator: la5:exp_At
+  steps: [고유값과 P, "e^Dt", 공식, 결과]
+  hint: "고유값·고유벡터로 P와 D를 만들고 e^{At} = Pe^{Dt}P⁻¹."
+- id: la.paxes
+  title: 이차형식의 주축 변환
+  generator: la5:principal_axes
+  steps: [대칭행렬, 고유값, 주축 형태, 판정]
+  hint: "q = xᵀAx. A의 고유값 λ₁, λ₂로 q = λ₁X² + λ₂Y². 부호로 모양(타원/쌍곡선)과 정부호가 정해진다."

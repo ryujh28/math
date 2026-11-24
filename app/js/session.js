@@ -1,0 +1,127 @@
+// 세션 구성: 오늘 무엇을 얼마나 낼지 정한다. DOM을 쓰지 않는다 (node 테스트 가능).
+import * as E from './engine.js';
+
+export const DEFAULTS = { minutes: 10, capMinutes: 15, newPerDay: 3, testMode: false };
+const EST = { mcq: 10, order: 75, intro: 20 }; // 초
+
+const dayKey = (ts) => new Date(ts).toLocaleDateString('sv-SE'); // YYYY-MM-DD (로컬)
+
+/** 오늘 처음 배운 단위 수. */
+export function newToday(log, now = Date.now()) {
+  const first = new Map();
+  for (const r of log) if (r.unit && (!first.has(r.unit) || r.ts < first.get(r.unit))) first.set(r.unit, r.ts);
+  const today = dayKey(now);
+  return [...first.values()].filter((ts) => dayKey(ts) === today).length;
+}
+
+/** 연속 기록: 세션을 한 날을 센다. 7일 안에 하루까지는 빠져도 이어진다(유지권). */
+export function streak(log, now = Date.now()) {
+  const days = new Set(log.filter((r) => r.kind === 'session' && r.n > 0).map((r) => dayKey(r.ts)));
+  const day = 864e5;
+  let d = now;
+  if (!days.has(dayKey(d))) d -= day; // 오늘 아직 안 했으면 어제부터
+  let count = 0, lastFreeze = -Infinity, i = 0, doneToday = days.has(dayKey(now));
+  while (i < 3650) {
+    if (days.has(dayKey(d))) count++;
+    else if (i - lastFreeze >= 7 && count > 0 && days.has(dayKey(d - day))) lastFreeze = i;
+    else break;
+    d -= day;
+    i++;
+  }
+  return { count, doneToday };
+}
+
+export function unitMeta(packs) {
+  const meta = new Map();
+  for (const [cid, p] of packs) {
+    p.units.forEach((u, i) => meta.set(u.id, { unit: u, chapter: cid, order: i, items: p.items.filter((it) => it.unit === u.id) }));
+  }
+  return meta;
+}
+
+export function openChapters(index, packs, states, settings) {
+  const mm = new Map();
+  for (const [id, p] of packs) mm.set(id, E.chapterMastery(p, states));
+  return index.chapters.filter((c) => packs.has(c.id) && E.isUnlocked(c, mm, { testMode: settings.testMode, startIds: index.chapters.filter((x) => x.start_open).map((x) => x.id) })).map((c) => c.id);
+}
+
+const modeOf = (u) => (u.kind === 'schema' ? 'order' : 'mcq');
+
+/** 아직 배우지 않은 단위를 장끼리 번갈아 가며, 장 안에서는 쉬운 것부터. */
+export function newCandidates(meta, open, states) {
+  const byCh = new Map(open.map((c) => [c, []]));
+  for (const [id, m] of meta) if (byCh.has(m.chapter) && !states.has(id) && m.items.length) byCh.get(m.chapter).push(m);
+  for (const l of byCh.values()) l.sort((a, b) => (a.unit.tiers[0] || 1) - (b.unit.tiers[0] || 1) || (a.unit.kind === 'schema') - (b.unit.kind === 'schema') || a.order - b.order);
+  const out = [];
+  const lists = [...byCh.values()];
+  for (let k = 0; lists.some((l) => l.length > k); k++) for (const l of lists) if (l[k]) out.push(l[k]);
+  return out;
+}
+
+/**
+ * 오늘 세션 계획.
+ * 반환: { queue: [{unit, chapter, mode, isNew, intro}], dueCount, newCount, estMin }
+ */
+export function planSession({ index, packs, states, log, settings = DEFAULTS, now = Date.now(), chapter = null }) {
+  const meta = unitMeta(packs);
+  let open = openChapters(index, packs, states, settings);
+  if (chapter != null) open = open.filter((c) => c === chapter);
+  const budget = settings.minutes * 60;
+  const nowD = new Date(now);
+
+  const learned = [...meta.values()].filter((m) => open.includes(m.chapter) && states.has(m.unit.id));
+  let due = learned.filter((m) => E.isDue(states.get(m.unit.id), nowD));
+  if (chapter != null && due.length === 0) due = learned; // 장 연습: 복습할 게 없으면 배운 것 전부
+  due.sort((a, b) => E.retrievability(states.get(a.unit.id), nowD) - E.retrievability(states.get(b.unit.id), nowD));
+
+  const queue = [];
+  let est = 0;
+  const atoms = due.filter((m) => m.unit.kind === 'atom');
+  const schemas = due.filter((m) => m.unit.kind !== 'atom');
+  // 워밍업: 원자 2분
+  while (atoms.length && est < 120) {
+    const m = atoms.shift();
+    queue.push({ unit: m.unit.id, chapter: m.chapter, mode: 'mcq', isNew: false });
+    est += EST.mcq;
+  }
+  // 나머지 복습: 뼈대와 원자를 섞어서
+  const rest = [];
+  while (schemas.length || atoms.length) {
+    if (schemas.length) rest.push(schemas.shift());
+    if (atoms.length) rest.push(atoms.shift());
+    if (atoms.length) rest.push(atoms.shift());
+  }
+  for (const m of rest) {
+    const c = EST[modeOf(m.unit)];
+    if (est + c > budget && queue.length) break;
+    queue.push({ unit: m.unit.id, chapter: m.chapter, mode: modeOf(m.unit), isNew: false });
+    est += c;
+  }
+  const dueCount = queue.length;
+  // 새 단위
+  const quota = chapter != null ? settings.newPerDay : Math.max(0, settings.newPerDay - newToday(log, now));
+  const fresh = newCandidates(meta, open, states).slice(0, quota);
+  const later = [];
+  for (const m of fresh) {
+    const mode = modeOf(m.unit);
+    if (est + EST.intro + 2 * EST[mode] > budget * 1.3 && queue.length) break;
+    queue.push({ unit: m.unit.id, chapter: m.chapter, mode, isNew: true, intro: true });
+    later.push({ unit: m.unit.id, chapter: m.chapter, mode, isNew: true });
+    est += EST.intro + 2 * EST[mode];
+  }
+  // 새 단위의 두 번째 문제는 맨 뒤에 (다른 문제 몇 개를 사이에 두고 다시 떠올리게)
+  queue.push(...later);
+  return { queue, dueCount, newCount: later.length, estMin: Math.max(1, Math.round(est / 60)) };
+}
+
+/** 단위에 맞는 문제 하나: 난이도 단계 맞추고, 최근에 낸 문제는 피한다. */
+export function pickItem(m, st, log, rand = Math.random) {
+  const tier = E.tierFor(m.unit, st);
+  const recent = new Set(log.filter((r) => r.unit === m.unit.id).slice(-8).map((r) => r.item));
+  let pool = m.items.filter((it) => it.tier === tier);
+  if (!pool.length) pool = m.items.filter((it) => it.tier <= tier);
+  if (!pool.length) pool = m.items;
+  const fresh = pool.filter((it) => !recent.has(it.id));
+  const from = fresh.length ? fresh : pool;
+  return from[Math.floor(rand() * from.length)];
+}

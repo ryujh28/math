@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#16181c">
+<title>Isn't she lovely</title>
+<link rel="stylesheet" href="app/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="app/css/style.css">
+<link rel="stylesheet" href="app/css/game.css">
+<script src="app/vendor/katex/katex.min.js"></script>
+</head>
+<body class="game">
+
+<section id="home" class="view">
+  <header class="top">
+    <div>
+      <h1>Isn't she lovely</h1>
+      <p class="sub" id="streak"></p>
+    </div>
+  </header>
+  <main>
+    <section class="card today" id="today"><p class="note">불러오는 중…</p></section>
+    <section class="card">
+      <h2>스킬 지도</h2>
+      <p class="note">막대는 배운 단위의 기억 유지 평균입니다. 시간이 지나면 줄어들고, 복습하면 다시 찹니다.</p>
+      <div id="map"></div>
+    </section>
+    <section class="card settings">
+      <h2>설정</h2>
+      <div class="row">
+        <label>세션 길이
+          <select id="set-min"><option value="5">5분</option><option value="10">10분</option><option value="15">15분</option></select>
+        </label>
+        <label>하루 새 단위
+          <select id="set-new"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+        </label>
+        <label class="switch"><input type="checkbox" id="set-test"> 테스트 모드: 모든 장 열기</label>
+      </div>
+      <p class="note"><a href="check.html">점검 화면</a>에서 기록 내보내기·가져오기와 팩 점검을 할 수 있습니다.</p>
+    </section>
+  </main>
+</section>
+
+<section id="chapter" class="view" hidden>
+  <main>
+    <button class="btn ghost" id="ch-back">← 홈</button>
+    <section class="card">
+      <h2 id="ch-title"></h2>
+      <p class="note" id="ch-meta"></p>
+      <p id="ch-summary"></p>
+      <div id="ch-actions" class="row"></div>
+      <div class="scroll">
+        <table class="units">
+          <thead><tr><th>단위</th><th>모드</th><th class="num">문제</th><th>상태</th><th>기억</th><th>다음 복습</th></tr></thead>
+          <tbody id="ch-units"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</section>
+
+<section id="session" class="view" hidden>
+  <div class="sbar">
+    <div class="sbar-row">
+      <span id="s-count"></span>
+      <span id="s-unit" class="s-unit"></span>
+      <span id="s-combo" class="combo"></span>
+      <span id="s-time"></span>
+      <button class="btn ghost small" id="s-quit">끝내기</button>
+    </div>
+    <div class="prog"><i id="s-prog"></i></div>
+  </div>
+  <main>
+    <section class="card play" id="card"></section>
+  </main>
+</section>
+
+<section id="summary" class="view" hidden>
+  <main>
+    <section class="card">
+      <h2>오늘 세션 끝</h2>
+      <div id="sum-body"></div>
+      <div class="row"><button class="btn" id="sum-home">홈으로</button></div>
+    </section>
+  </main>
+</section>
+
+<script type="module" src="app/js/game.js"></script>
+</body>
+</html>

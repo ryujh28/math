@@ -1,0 +1,16 @@
+# 6장 1계 ODE · 풀이 뼈대
+- id: ode.linear
+  title: 적분인자로 1계 선형
+  generator: ode1:linear
+  steps: [적분인자, 곱의 미분, 적분, 초기조건, 해]
+  hint: "μ = e^{∫p dx}를 곱하면 좌변이 (μy)′. 적분 → 상수 C → μ로 나눈다."
+- id: ode.separable
+  title: 변수분리
+  generator: ode1:separable
+  steps: [분리, 적분, 초기조건, 해]
+  hint: "dy/g(y) = f(x)dx로 나누고 양변 적분, 초기조건으로 C를 정하고 y로 정리."
+- id: ode.exact
+  title: 완전미분방정식
+  generator: ode1:exact
+  steps: [완전 확인, x로 적분, h(y) 결정, 초기조건]
+  hint: "M_y = N_x 확인 → F = ∫M dx + h(y) → F_y = N으로 h → F(x, y) = F(x₀, y₀)."

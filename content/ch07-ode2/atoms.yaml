@@ -1,0 +1,48 @@
+# 7장 2계 선형 ODE · 사실 원자
+- {id: ode2.form, kind: gen, title: 동차해의 꼴, generator: "ode2:general_form", hint: "서로 다른 실근 → C₁e^{r₁x} + C₂e^{r₂x}, 중근 → (C₁ + C₂x)e^{rx}, 복소근 α ± iβ → e^{αx}(C₁cos βx + C₂sin βx)."}
+- {id: ode2.trial, kind: gen, title: 특수해의 꼴, generator: "ode2:trial_form", tier: 2, hint: "강제항과 같은 꼴로 추측. 동차해와 겹치면 x를 곱한다. cos에는 cos와 sin을 같이."}
+- {id: ode2.wronskian, kind: gen, title: Wronskian, generator: "ode2:wronskian", tier: 2, hint: "W(y₁, y₂) = y₁y₂′ − y₁′y₂. e^{ax}, e^{bx}면 (b − a)e^{(a+b)x}."}
+- id: ode2.varparam
+  kind: formula
+  title: 매개변수 변환법
+  tier: 3
+  prompt: "y^{\\prime\\prime} + py^{\\prime} + qy = R(x)\\text{의 특수해 } y_p = \\;?"
+  answer: "-y_1\\int\\dfrac{y_2R}{W}\\,dx + y_2\\int\\dfrac{y_1R}{W}\\,dx"
+  wrong:
+    - {tex: "y_1\\int\\dfrac{y_2R}{W}\\,dx - y_2\\int\\dfrac{y_1R}{W}\\,dx", error: sign}
+    - {tex: "-y_1\\int y_2R\\,dx + y_2\\int y_1R\\,dx", error: missing_factor}
+    - {tex: "-y_1\\int\\dfrac{y_1R}{W}\\,dx + y_2\\int\\dfrac{y_2R}{W}\\,dx", error: algebra}
+  hint: "y_p = u₁y₁ + u₂y₂, u₁′ = −y₂R/W, u₂′ = y₁R/W. 각 적분에는 '상대' 해가 들어간다."
+- id: ode2.eulerform
+  kind: formula
+  title: Euler–Cauchy 방정식
+  tier: 2
+  prompt: "x^{2}y^{\\prime\\prime} + axy^{\\prime} + by = 0\\text{에 } y = x^{r}\\text{을 넣으면}"
+  answer: "r(r - 1) + ar + b = 0"
+  wrong:
+    - {tex: "r^{2} + ar + b = 0", error: algebra}
+    - {tex: "r(r + 1) + ar + b = 0", error: sign}
+    - {tex: "r^{2} + ar\\,x + b = 0", error: algebra}
+  hint: "x²(x^r)″ = r(r − 1)x^r, x(x^r)′ = r x^r. 그래서 −r 항이 생긴다."
+- id: ode2.reduction
+  kind: formula
+  title: 계수 낮추기
+  tier: 3
+  prompt: "y_1\\text{이 해일 때 두 번째 해 } y_2 = \\;?"
+  answer: "y_1\\int\\dfrac{e^{-\\int p\\,dx}}{y_1^{2}}\\,dx"
+  wrong:
+    - {tex: "y_1\\int\\dfrac{e^{\\int p\\,dx}}{y_1^{2}}\\,dx", error: sign}
+    - {tex: "y_1\\int\\dfrac{e^{-\\int p\\,dx}}{y_1}\\,dx", error: algebra}
+    - {tex: "x\\,y_1", error: theorem_condition}
+  hint: "y₂ = v y₁로 놓으면 v′ = e^{−∫p}/y₁². 중근일 때 v = x가 되어 x e^{rx}가 나온다."
+- id: ode2.superpos
+  kind: formula
+  title: 해의 구조
+  tier: 1
+  prompt: "L[y] = R\\text{의 일반해는?}"
+  answer: "y = y_h + y_p"
+  wrong:
+    - {tex: "y = y_h\\,y_p", error: algebra}
+    - {tex: "y = y_p", error: missing_factor}
+    - {tex: "y = y_h - y_p", error: sign}
+  hint: "동차해 전체(상수 2개) + 특수해 하나. 상수는 초기조건으로 정한다."

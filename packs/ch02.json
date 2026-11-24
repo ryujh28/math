@@ -1,0 +1,4786 @@
+{
+ "format": 0,
+ "built": "2026-11-24",
+ "chapter": {
+  "id": 2,
+  "slug": "matrices",
+  "title": "행렬과 선형변환",
+  "summary": "행렬곱·행렬식·역행렬과 Gauss 소거로 연립방정식을 푼다.",
+  "part": "선형대수",
+  "level": "학부",
+  "prereqs": [
+   1
+  ],
+  "connections": [
+   "Gauss 소거에서 쓴 승수들을 모으면 L, 남은 위삼각행렬이 U입니다. 4장의 LU 분해는 소거 과정을 기록한 것입니다.",
+   "det A는 선형변환이 부피를 몇 배로 늘리는지입니다. det = 0이면 공간이 납작해져 역변환이 없습니다.",
+   "행렬곱이 교환되지 않는 이유는 함수 합성 f∘g ≠ g∘f와 같습니다. 회전 후 반사와 반사 후 회전은 다릅니다.",
+   "Cramer 공식과 여인수 전개는 이론적으로 아름답지만 계산량은 n!입니다. 그래서 실제 계산은 소거법으로 합니다."
+  ]
+ },
+ "units": [
+  {
+   "id": "la.det2",
+   "kind": "atom",
+   "title": "2×2 행렬식",
+   "hint": "det = ad − bc. 주대각 곱에서 반대각 곱을 뺀다.",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.inv2",
+   "kind": "atom",
+   "title": "2×2 역행렬",
+   "hint": "A⁻¹ = (1/det A)·[[d, −b], [−c, a]]. a와 d는 자리를 바꾸고, b와 c는 부호만 바꾼다.",
+   "tiers": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "la.matmul",
+   "kind": "atom",
+   "title": "행렬곱",
+   "hint": "(AB)ᵢⱼ = A의 i행 · B의 j열. 일반적으로 AB ≠ BA.",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.rank",
+   "kind": "atom",
+   "title": "계수(rank)",
+   "hint": "rank = 일차독립인 행(또는 열)의 최대 개수 = 소거 후 남는 피벗 개수.",
+   "tiers": [
+    2
+   ]
+  },
+  {
+   "id": "la.det3",
+   "kind": "atom",
+   "title": "3×3 행렬식",
+   "hint": "1행 전개: a₁₁M₁₁ − a₁₂M₁₂ + a₁₃M₁₃. 부호는 + − + .",
+   "tiers": [
+    2
+   ]
+  },
+  {
+   "id": "la.detprod",
+   "kind": "atom",
+   "title": "행렬식의 곱셈 성질",
+   "hint": "det(AB) = det A · det B. 부피 배율은 곱해진다.",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.invprod",
+   "kind": "atom",
+   "title": "곱의 역행렬",
+   "hint": "(AB)⁻¹ = B⁻¹A⁻¹. 양말을 신고 신발을 신었으면 신발부터 벗는다.",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.transprod",
+   "kind": "atom",
+   "title": "곱의 전치",
+   "hint": "(AB)ᵀ = BᵀAᵀ. 역행렬과 같은 순서 뒤집기.",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.detscale",
+   "kind": "atom",
+   "title": "상수배의 행렬식",
+   "hint": "det(kA) = kⁿ det A. n개 행 각각에서 k가 하나씩 나온다.",
+   "tiers": [
+    2
+   ]
+  },
+  {
+   "id": "la.invertible",
+   "kind": "atom",
+   "title": "가역 조건",
+   "hint": "가역 ⇔ det ≠ 0 ⇔ rank = n ⇔ Ax = 0의 해가 0뿐.",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.gauss",
+   "kind": "schema",
+   "title": "Gauss 소거",
+   "hint": "피벗 아래를 0으로 만드는 행 연산 Rᵢ − lᵢ₁R₁, 위삼각이 되면 뒤에서부터 대입한다.",
+   "steps": [
+    "1열 소거",
+    "2열 소거",
+    "x₃",
+    "뒤에서부터 대입"
+   ],
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.cofactor",
+   "kind": "schema",
+   "title": "3×3 여인수 전개",
+   "hint": "det A = a₁₁M₁₁ − a₁₂M₁₂ + a₁₃M₁₃. Mᵢⱼ는 i행 j열을 지운 2×2 행렬식.",
+   "steps": [
+    "전개식",
+    "소행렬식",
+    "대입",
+    "결과"
+   ],
+   "tiers": [
+    1,
+    2
+   ]
+  }
+ ],
+ "items": [
+  {
+   "id": "la.det2#0",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}3 & 0 \\\\ 3 & -3\\end{pmatrix} = \\;?",
+   "answer": "-9",
+   "wrong": [
+    {
+     "tex": "9",
+     "error": "sign"
+    },
+    {
+     "tex": "-8",
+     "error": "algebra"
+    },
+    {
+     "tex": "-10",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#1",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}4 & 3 \\\\ -3 & 4\\end{pmatrix} = \\;?",
+   "answer": "25",
+   "wrong": [
+    {
+     "tex": "7",
+     "error": "sign"
+    },
+    {
+     "tex": "-25",
+     "error": "sign"
+    },
+    {
+     "tex": "24",
+     "error": "algebra"
+    },
+    {
+     "tex": "-24",
+     "error": "algebra"
+    },
+    {
+     "tex": "16",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "26",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#2",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}-2 & -1 \\\\ 3 & 2\\end{pmatrix} = \\;?",
+   "answer": "-1",
+   "wrong": [
+    {
+     "tex": "-7",
+     "error": "sign"
+    },
+    {
+     "tex": "1",
+     "error": "sign"
+    },
+    {
+     "tex": "-4",
+     "error": "algebra"
+    },
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "-2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#3",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}3 & 0 \\\\ 1 & 1\\end{pmatrix} = \\;?",
+   "answer": "3",
+   "wrong": [
+    {
+     "tex": "-3",
+     "error": "sign"
+    },
+    {
+     "tex": "-1",
+     "error": "algebra"
+    },
+    {
+     "tex": "4",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#4",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}0 & -2 \\\\ 4 & -3\\end{pmatrix} = \\;?",
+   "answer": "8",
+   "wrong": [
+    {
+     "tex": "-8",
+     "error": "sign"
+    },
+    {
+     "tex": "12",
+     "error": "algebra"
+    },
+    {
+     "tex": "-6",
+     "error": "algebra"
+    },
+    {
+     "tex": "0",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "9",
+     "error": "algebra"
+    },
+    {
+     "tex": "7",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#5",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}0 & 4 \\\\ 4 & 0\\end{pmatrix} = \\;?",
+   "answer": "-16",
+   "wrong": [
+    {
+     "tex": "16",
+     "error": "sign"
+    },
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "-15",
+     "error": "algebra"
+    },
+    {
+     "tex": "-17",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#6",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}-1 & 1 \\\\ -2 & 2\\end{pmatrix} = \\;?",
+   "answer": "0",
+   "wrong": [
+    {
+     "tex": "-4",
+     "error": "sign"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    },
+    {
+     "tex": "-2",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "-1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#7",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}-1 & -2 \\\\ 1 & -2\\end{pmatrix} = \\;?",
+   "answer": "4",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "sign"
+    },
+    {
+     "tex": "-4",
+     "error": "sign"
+    },
+    {
+     "tex": "-5",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "5",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#8",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}2 & 0 \\\\ 0 & 4\\end{pmatrix} = \\;?",
+   "answer": "8",
+   "wrong": [
+    {
+     "tex": "-8",
+     "error": "sign"
+    },
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "9",
+     "error": "algebra"
+    },
+    {
+     "tex": "7",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#9",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}3 & 3 \\\\ -3 & 4\\end{pmatrix} = \\;?",
+   "answer": "21",
+   "wrong": [
+    {
+     "tex": "3",
+     "error": "sign"
+    },
+    {
+     "tex": "-21",
+     "error": "sign"
+    },
+    {
+     "tex": "12",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "22",
+     "error": "algebra"
+    },
+    {
+     "tex": "20",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#10",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}1 & 0 \\\\ -2 & 2\\end{pmatrix} = \\;?",
+   "answer": "2",
+   "wrong": [
+    {
+     "tex": "-2",
+     "error": "sign"
+    },
+    {
+     "tex": "4",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#11",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}4 & 4 \\\\ 4 & 3\\end{pmatrix} = \\;?",
+   "answer": "-4",
+   "wrong": [
+    {
+     "tex": "28",
+     "error": "sign"
+    },
+    {
+     "tex": "4",
+     "error": "sign"
+    },
+    {
+     "tex": "12",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "-3",
+     "error": "algebra"
+    },
+    {
+     "tex": "-5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#12",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}1 & -3 \\\\ 3 & -2\\end{pmatrix} = \\;?",
+   "answer": "7",
+   "wrong": [
+    {
+     "tex": "-11",
+     "error": "sign"
+    },
+    {
+     "tex": "-7",
+     "error": "sign"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    },
+    {
+     "tex": "-3",
+     "error": "algebra"
+    },
+    {
+     "tex": "-2",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "8",
+     "error": "algebra"
+    },
+    {
+     "tex": "6",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#13",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}2 & 2 \\\\ -2 & 4\\end{pmatrix} = \\;?",
+   "answer": "12",
+   "wrong": [
+    {
+     "tex": "4",
+     "error": "sign"
+    },
+    {
+     "tex": "-12",
+     "error": "sign"
+    },
+    {
+     "tex": "8",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "13",
+     "error": "algebra"
+    },
+    {
+     "tex": "11",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#14",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}0 & 3 \\\\ 3 & -1\\end{pmatrix} = \\;?",
+   "answer": "-9",
+   "wrong": [
+    {
+     "tex": "9",
+     "error": "sign"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    },
+    {
+     "tex": "0",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "-8",
+     "error": "algebra"
+    },
+    {
+     "tex": "-10",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det2#15",
+   "unit": "la.det2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}-3 & -3 \\\\ -3 & -3\\end{pmatrix} = \\;?",
+   "answer": "0",
+   "wrong": [
+    {
+     "tex": "18",
+     "error": "sign"
+    },
+    {
+     "tex": "9",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "-1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#0",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-3 & 4 \\\\ -3 & 3\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}1 & - \\frac{4}{3} \\\\ 1 & -1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}3 & -4 \\\\ 3 & -3\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & \\frac{4}{3} \\\\ -1 & -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & - \\frac{4}{3} \\\\ 1 & 1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & 1 \\\\ - \\frac{4}{3} & -1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#1",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-3 & 2 \\\\ 1 & -1\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}-1 & -2 \\\\ -1 & -3\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-1 & 2 \\\\ 1 & -3\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}-3 & -2 \\\\ -1 & -1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & -1 \\\\ -2 & -3\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#2",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-2 & 2 \\\\ 0 & -1\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}- \\frac{1}{2} & -1 \\\\ 0 & -1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-1 & -2 \\\\ 0 & -2\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}- \\frac{1}{2} & 1 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & -1 \\\\ 0 & - \\frac{1}{2}\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}- \\frac{1}{2} & 0 \\\\ -1 & -1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#3",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-2 & 1 \\\\ -3 & 0\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}0 & - \\frac{1}{3} \\\\ 1 & - \\frac{2}{3}\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}0 & -1 \\\\ 3 & -2\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & \\frac{1}{3} \\\\ -1 & - \\frac{2}{3}\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}- \\frac{2}{3} & - \\frac{1}{3} \\\\ 1 & 0\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & 1 \\\\ - \\frac{1}{3} & - \\frac{2}{3}\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#4",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-1 & 4 \\\\ 0 & -2\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}-1 & -2 \\\\ 0 & - \\frac{1}{2}\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-2 & -4 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & 2 \\\\ 0 & - \\frac{1}{2}\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}- \\frac{1}{2} & -2 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & 0 \\\\ -2 & - \\frac{1}{2}\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#5",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}4 & -2 \\\\ -1 & 0\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}0 & -1 \\\\ - \\frac{1}{2} & -2\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}0 & 2 \\\\ 1 & 4\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & 1 \\\\ \\frac{1}{2} & -2\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}-2 & -1 \\\\ - \\frac{1}{2} & 0\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & - \\frac{1}{2} \\\\ -1 & -2\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#6",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-2 & 1 \\\\ -2 & 0\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}0 & - \\frac{1}{2} \\\\ 1 & -1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}0 & -1 \\\\ 2 & -2\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & \\frac{1}{2} \\\\ -1 & -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & - \\frac{1}{2} \\\\ 1 & 0\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & 1 \\\\ - \\frac{1}{2} & -1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#7",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-2 & 0 \\\\ 3 & -1\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}- \\frac{1}{2} & 0 \\\\ - \\frac{3}{2} & -1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-1 & 0 \\\\ -3 & -2\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}- \\frac{1}{2} & 0 \\\\ \\frac{3}{2} & -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & 0 \\\\ - \\frac{3}{2} & - \\frac{1}{2}\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}- \\frac{1}{2} & - \\frac{3}{2} \\\\ 0 & -1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#8",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}0 & 2 \\\\ -1 & 1\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}\\frac{1}{2} & -1 \\\\ \\frac{1}{2} & 0\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 & -2 \\\\ 1 & 0\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}\\frac{1}{2} & 1 \\\\ - \\frac{1}{2} & 0\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & -1 \\\\ \\frac{1}{2} & \\frac{1}{2}\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}\\frac{1}{2} & \\frac{1}{2} \\\\ -1 & 0\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#9",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-1 & 4 \\\\ 0 & 1\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}-1 & 4 \\\\ 0 & 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 & -4 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & -4 \\\\ 0 & 1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & 4 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & 0 \\\\ 4 & 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#10",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}1 & 2 \\\\ 1 & 3\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}3 & -2 \\\\ -1 & 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}3 & 2 \\\\ 1 & 1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & -2 \\\\ -1 & 3\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}3 & -1 \\\\ -2 & 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#11",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-1 & 0 \\\\ -3 & -2\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}-1 & 0 \\\\ \\frac{3}{2} & - \\frac{1}{2}\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-2 & 0 \\\\ 3 & -1\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & 0 \\\\ - \\frac{3}{2} & - \\frac{1}{2}\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}- \\frac{1}{2} & 0 \\\\ \\frac{3}{2} & -1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & \\frac{3}{2} \\\\ 0 & - \\frac{1}{2}\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#12",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}4 & -3 \\\\ -2 & 2\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}1 & \\frac{3}{2} \\\\ 1 & 2\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}2 & 3 \\\\ 2 & 4\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & - \\frac{3}{2} \\\\ -1 & 2\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 & \\frac{3}{2} \\\\ 1 & 1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & 1 \\\\ \\frac{3}{2} & 2\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#13",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}1 & 0 \\\\ 4 & 2\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}1 & 0 \\\\ -2 & \\frac{1}{2}\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}2 & 0 \\\\ -4 & 1\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & 0 \\\\ 2 & \\frac{1}{2}\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}\\frac{1}{2} & 0 \\\\ -2 & 1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & -2 \\\\ 0 & \\frac{1}{2}\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#14",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-2 & -2 \\\\ 1 & 0\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}0 & 1 \\\\ - \\frac{1}{2} & -1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}0 & 2 \\\\ -1 & -2\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & -1 \\\\ \\frac{1}{2} & -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & 1 \\\\ - \\frac{1}{2} & 0\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & - \\frac{1}{2} \\\\ 1 & -1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#15",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}2 & -1 \\\\ -1 & 0\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}0 & -1 \\\\ -1 & -2\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}0 & 1 \\\\ 1 & 2\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & 1 \\\\ 1 & -2\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}-2 & -1 \\\\ -1 & 0\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#16",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-1 & 1 \\\\ 1 & 0\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}0 & 1 \\\\ 1 & 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}0 & -1 \\\\ -1 & -1\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & -1 \\\\ -1 & 1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & 1 \\\\ 1 & 0\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#17",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-1 & -2 \\\\ 3 & 4\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}2 & 1 \\\\ - \\frac{3}{2} & - \\frac{1}{2}\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}4 & 2 \\\\ -3 & -1\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 & -1 \\\\ \\frac{3}{2} & - \\frac{1}{2}\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}- \\frac{1}{2} & 1 \\\\ - \\frac{3}{2} & 2\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 & - \\frac{3}{2} \\\\ 1 & - \\frac{1}{2}\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#18",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-1 & 3 \\\\ 1 & -1\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}\\frac{1}{2} & \\frac{3}{2} \\\\ \\frac{1}{2} & \\frac{1}{2}\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-1 & -3 \\\\ -1 & -1\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}\\frac{1}{2} & - \\frac{3}{2} \\\\ - \\frac{1}{2} & \\frac{1}{2}\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}\\frac{1}{2} & \\frac{1}{2} \\\\ \\frac{3}{2} & \\frac{1}{2}\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#19",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-2 & 2 \\\\ -1 & 2\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}-1 & 1 \\\\ - \\frac{1}{2} & 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}2 & -2 \\\\ 1 & -2\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & -1 \\\\ \\frac{1}{2} & 1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & 1 \\\\ - \\frac{1}{2} & -1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & - \\frac{1}{2} \\\\ 1 & 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#20",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}2 & 0 \\\\ 1 & -1\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}\\frac{1}{2} & 0 \\\\ \\frac{1}{2} & -1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-1 & 0 \\\\ -1 & 2\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}\\frac{1}{2} & 0 \\\\ - \\frac{1}{2} & -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & 0 \\\\ \\frac{1}{2} & \\frac{1}{2}\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}\\frac{1}{2} & \\frac{1}{2} \\\\ 0 & -1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#21",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}2 & -2 \\\\ -3 & 4\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}2 & 1 \\\\ \\frac{3}{2} & 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}4 & 2 \\\\ 3 & 2\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 & -1 \\\\ - \\frac{3}{2} & 1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & 1 \\\\ \\frac{3}{2} & 2\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 & \\frac{3}{2} \\\\ 1 & 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#22",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}2 & 1 \\\\ 3 & 1\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}-1 & 1 \\\\ 3 & -2\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 & -1 \\\\ -3 & 2\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & -1 \\\\ -3 & -2\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}-2 & 1 \\\\ 3 & -1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & 3 \\\\ 1 & -2\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#23",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}1 & 0 \\\\ 4 & -1\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}1 & 0 \\\\ 4 & -1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-1 & 0 \\\\ -4 & 1\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & 0 \\\\ -4 & -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & 0 \\\\ 4 & 1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & 4 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#24",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}2 & -1 \\\\ -2 & 0\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}0 & - \\frac{1}{2} \\\\ -1 & -1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}0 & 1 \\\\ 2 & 2\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & \\frac{1}{2} \\\\ 1 & -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & - \\frac{1}{2} \\\\ -1 & 0\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & -1 \\\\ - \\frac{1}{2} & -1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#25",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}0 & -2 \\\\ -1 & 1\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}- \\frac{1}{2} & -1 \\\\ - \\frac{1}{2} & 0\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 & 2 \\\\ 1 & 0\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}- \\frac{1}{2} & 1 \\\\ \\frac{1}{2} & 0\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & -1 \\\\ - \\frac{1}{2} & - \\frac{1}{2}\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}- \\frac{1}{2} & - \\frac{1}{2} \\\\ -1 & 0\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.inv2#26",
+   "unit": "la.inv2",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-2 & -2 \\\\ 3 & 2\\end{pmatrix}^{-1} = \\;?",
+   "answer": "\\begin{pmatrix}1 & 1 \\\\ - \\frac{3}{2} & -1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}2 & 2 \\\\ -3 & -2\\end{pmatrix}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & -1 \\\\ \\frac{3}{2} & -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & 1 \\\\ - \\frac{3}{2} & 1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & - \\frac{3}{2} \\\\ 1 & -1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.matmul#0",
+   "unit": "la.matmul",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}1 & 0 \\\\ 2 & -1\\end{pmatrix}\\begin{pmatrix}0 & -2 \\\\ -1 & 2\\end{pmatrix} = \\;?",
+   "answer": "\\begin{pmatrix}0 & -2 \\\\ 1 & -6\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-4 & 2 \\\\ 3 & -2\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & 0 \\\\ -2 & -2\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}-2 & 2 \\\\ 1 & -2\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & -1 \\\\ 2 & -4\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.matmul#1",
+   "unit": "la.matmul",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-1 & 3 \\\\ 1 & 2\\end{pmatrix}\\begin{pmatrix}2 & 0 \\\\ 0 & -1\\end{pmatrix} = \\;?",
+   "answer": "\\begin{pmatrix}-2 & -3 \\\\ 2 & -2\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-2 & 6 \\\\ -1 & -2\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}-2 & 0 \\\\ 0 & -2\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}-2 & -1 \\\\ 6 & -2\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.matmul#2",
+   "unit": "la.matmul",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-2 & 0 \\\\ -2 & 0\\end{pmatrix}\\begin{pmatrix}0 & 3 \\\\ 1 & 2\\end{pmatrix} = \\;?",
+   "answer": "\\begin{pmatrix}0 & -6 \\\\ 0 & -6\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-6 & 0 \\\\ -6 & 0\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & 0 \\\\ -2 & 0\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}-2 & -10 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & -2 \\\\ 0 & -2\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.matmul#3",
+   "unit": "la.matmul",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-1 & 2 \\\\ 2 & -1\\end{pmatrix}\\begin{pmatrix}-1 & 0 \\\\ -2 & 3\\end{pmatrix} = \\;?",
+   "answer": "\\begin{pmatrix}-3 & 6 \\\\ 0 & -3\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 & -2 \\\\ 8 & -7\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & 0 \\\\ -4 & -3\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & 8 \\\\ -2 & -7\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.matmul#4",
+   "unit": "la.matmul",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}2 & 1 \\\\ 1 & 3\\end{pmatrix}\\begin{pmatrix}-2 & 0 \\\\ -1 & -2\\end{pmatrix} = \\;?",
+   "answer": "\\begin{pmatrix}-5 & -2 \\\\ -5 & -6\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-4 & -2 \\\\ -4 & -7\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}-4 & 0 \\\\ -1 & -6\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}-4 & -4 \\\\ -2 & -7\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.matmul#5",
+   "unit": "la.matmul",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}0 & 2 \\\\ 1 & 3\\end{pmatrix}\\begin{pmatrix}1 & 1 \\\\ -1 & -2\\end{pmatrix} = \\;?",
+   "answer": "\\begin{pmatrix}-2 & -4 \\\\ -2 & -5\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 & 5 \\\\ -2 & -8\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & 2 \\\\ -1 & -6\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 & -2 \\\\ -1 & -4\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 & -4 \\\\ 4 & -7\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.matmul#6",
+   "unit": "la.matmul",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}2 & 1 \\\\ 3 & -2\\end{pmatrix}\\begin{pmatrix}-1 & 0 \\\\ 0 & 3\\end{pmatrix} = \\;?",
+   "answer": "\\begin{pmatrix}-2 & 3 \\\\ -3 & -6\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-2 & -1 \\\\ 9 & -6\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}-2 & 0 \\\\ 0 & -6\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}-2 & 9 \\\\ -1 & -6\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.matmul#7",
+   "unit": "la.matmul",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}2 & -2 \\\\ 2 & -2\\end{pmatrix}\\begin{pmatrix}-2 & -2 \\\\ 1 & 2\\end{pmatrix} = \\;?",
+   "answer": "\\begin{pmatrix}-6 & -8 \\\\ -6 & -8\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-8 & 8 \\\\ 6 & -6\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}-4 & 4 \\\\ 2 & -4\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}-2 & 0 \\\\ 2 & 0\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & -2 \\\\ 0 & -2\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.matmul#8",
+   "unit": "la.matmul",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}3 & -2 \\\\ -1 & 2\\end{pmatrix}\\begin{pmatrix}3 & 0 \\\\ -2 & 2\\end{pmatrix} = \\;?",
+   "answer": "\\begin{pmatrix}13 & -4 \\\\ -7 & 4\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}9 & -6 \\\\ -8 & 8\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}9 & 0 \\\\ 2 & 4\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}11 & -2 \\\\ -10 & 4\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}9 & -10 \\\\ -3 & 6\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#0",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}0 & 1 & -2 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 0\\end{pmatrix} = \\;?",
+   "answer": "1",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#1",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}0 & 2 & -2 \\\\ -4 & 0 & -4 \\\\ -4 & -2 & -8\\end{pmatrix} = \\;?",
+   "answer": "3",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#2",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}-4 & 4 & -2 \\\\ 2 & -2 & 1 \\\\ 2 & -4 & 0\\end{pmatrix} = \\;?",
+   "answer": "2",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#3",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}4 & -4 & 2 \\\\ 0 & 0 & 0 \\\\ 0 & 0 & 0\\end{pmatrix} = \\;?",
+   "answer": "1",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#4",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}2 & 0 & -1 \\\\ 4 & 0 & -2 \\\\ 2 & 0 & -1\\end{pmatrix} = \\;?",
+   "answer": "1",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#5",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}0 & 2 & -2 \\\\ 0 & 1 & -1 \\\\ 0 & -1 & 1\\end{pmatrix} = \\;?",
+   "answer": "1",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#6",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}0 & 0 & 2 \\\\ 0 & 4 & 2 \\\\ -4 & -6 & -4\\end{pmatrix} = \\;?",
+   "answer": "3",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#7",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}-1 & 0 & 2 \\\\ -1 & 0 & 2 \\\\ -1 & 0 & 2\\end{pmatrix} = \\;?",
+   "answer": "1",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#8",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}2 & -2 & -5 \\\\ 1 & -1 & -1 \\\\ 1 & -1 & -2\\end{pmatrix} = \\;?",
+   "answer": "2",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#9",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}2 & 1 & 1 \\\\ 2 & 1 & 1 \\\\ 4 & 2 & 2\\end{pmatrix} = \\;?",
+   "answer": "1",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#10",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}5 & -2 & 5 \\\\ 0 & -1 & 3 \\\\ 3 & 0 & 1\\end{pmatrix} = \\;?",
+   "answer": "3",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#11",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}-1 & 2 & 0 \\\\ 0 & -5 & 2 \\\\ -6 & 2 & 4\\end{pmatrix} = \\;?",
+   "answer": "2",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#12",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}-1 & 2 & -1 \\\\ 2 & -2 & 0 \\\\ 0 & -4 & 4\\end{pmatrix} = \\;?",
+   "answer": "2",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#13",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}-2 & -2 & -4 \\\\ 2 & -2 & 4 \\\\ -2 & -2 & -4\\end{pmatrix} = \\;?",
+   "answer": "2",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#14",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}1 & -6 & -5 \\\\ 2 & -4 & -2 \\\\ 0 & -4 & -4\\end{pmatrix} = \\;?",
+   "answer": "2",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#15",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}1 & 0 & -3 \\\\ 6 & -4 & 0 \\\\ 4 & -4 & 0\\end{pmatrix} = \\;?",
+   "answer": "3",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#16",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}-1 & -3 & 1 \\\\ 0 & -4 & 3 \\\\ -1 & -2 & 0\\end{pmatrix} = \\;?",
+   "answer": "3",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#17",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}0 & 4 & 2 \\\\ -2 & -2 & 5 \\\\ 2 & 2 & 1\\end{pmatrix} = \\;?",
+   "answer": "3",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#18",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}2 & -2 & 1 \\\\ -2 & 2 & -1 \\\\ -4 & 4 & -2\\end{pmatrix} = \\;?",
+   "answer": "1",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#19",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}2 & -2 & 2 \\\\ -2 & 2 & -4 \\\\ -4 & 4 & -4\\end{pmatrix} = \\;?",
+   "answer": "2",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#20",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}-6 & -3 & 7 \\\\ 4 & 2 & -2 \\\\ 4 & 4 & -4\\end{pmatrix} = \\;?",
+   "answer": "3",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#21",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}-2 & -2 & -1 \\\\ -4 & -4 & -2 \\\\ -2 & -2 & -1\\end{pmatrix} = \\;?",
+   "answer": "1",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#22",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}-4 & -2 & 2 \\\\ 1 & 3 & -2 \\\\ 0 & 9 & -1\\end{pmatrix} = \\;?",
+   "answer": "3",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.rank#23",
+   "unit": "la.rank",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\operatorname{rank}\\begin{pmatrix}0 & -1 & -4 \\\\ 1 & 0 & 2 \\\\ 1 & -1 & -2\\end{pmatrix} = \\;?",
+   "answer": "2",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det3#0",
+   "unit": "la.det3",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}2 & 1 & 0 \\\\ 0 & 2 & -2 \\\\ -2 & 2 & 3\\end{pmatrix} = \\;?",
+   "answer": "24",
+   "wrong": [
+    {
+     "tex": "16",
+     "error": "sign"
+    },
+    {
+     "tex": "-24",
+     "error": "sign"
+    },
+    {
+     "tex": "12",
+     "error": "algebra"
+    },
+    {
+     "tex": "26",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det3#1",
+   "unit": "la.det3",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}0 & 0 & 1 \\\\ 2 & 1 & 0 \\\\ -1 & 3 & 1\\end{pmatrix} = \\;?",
+   "answer": "7",
+   "wrong": [
+    {
+     "tex": "-7",
+     "error": "sign"
+    },
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "9",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det3#2",
+   "unit": "la.det3",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}1 & 1 & 3 \\\\ -1 & -2 & -2 \\\\ 2 & -2 & 0\\end{pmatrix} = \\;?",
+   "answer": "10",
+   "wrong": [
+    {
+     "tex": "18",
+     "error": "sign"
+    },
+    {
+     "tex": "-10",
+     "error": "sign"
+    },
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "12",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det3#3",
+   "unit": "la.det3",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}-1 & -1 & -2 \\\\ 3 & 0 & 2 \\\\ 3 & 2 & 2\\end{pmatrix} = \\;?",
+   "answer": "-8",
+   "wrong": [
+    {
+     "tex": "8",
+     "error": "sign"
+    },
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "-6",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det3#4",
+   "unit": "la.det3",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}2 & 2 & 3 \\\\ 3 & 2 & -2 \\\\ 3 & 0 & -1\\end{pmatrix} = \\;?",
+   "answer": "-28",
+   "wrong": [
+    {
+     "tex": "-16",
+     "error": "sign"
+    },
+    {
+     "tex": "28",
+     "error": "sign"
+    },
+    {
+     "tex": "-4",
+     "error": "algebra"
+    },
+    {
+     "tex": "-26",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det3#5",
+   "unit": "la.det3",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}1 & 1 & -1 \\\\ -1 & 2 & -1 \\\\ 3 & 2 & -2\\end{pmatrix} = \\;?",
+   "answer": "1",
+   "wrong": [
+    {
+     "tex": "11",
+     "error": "sign"
+    },
+    {
+     "tex": "-1",
+     "error": "sign"
+    },
+    {
+     "tex": "-4",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det3#6",
+   "unit": "la.det3",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}-2 & -1 & 1 \\\\ 2 & 3 & 1 \\\\ -2 & 1 & -1\\end{pmatrix} = \\;?",
+   "answer": "16",
+   "wrong": [
+    {
+     "tex": "-16",
+     "error": "sign"
+    },
+    {
+     "tex": "6",
+     "error": "algebra"
+    },
+    {
+     "tex": "18",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det3#7",
+   "unit": "la.det3",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}2 & -2 & 1 \\\\ 0 & -2 & -2 \\\\ -1 & 3 & 2\\end{pmatrix} = \\;?",
+   "answer": "-2",
+   "wrong": [
+    {
+     "tex": "6",
+     "error": "sign"
+    },
+    {
+     "tex": "2",
+     "error": "sign"
+    },
+    {
+     "tex": "-8",
+     "error": "algebra"
+    },
+    {
+     "tex": "0",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det3#8",
+   "unit": "la.det3",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}1 & 2 & 2 \\\\ 3 & -2 & -1 \\\\ 2 & 2 & 3\\end{pmatrix} = \\;?",
+   "answer": "-6",
+   "wrong": [
+    {
+     "tex": "38",
+     "error": "sign"
+    },
+    {
+     "tex": "6",
+     "error": "sign"
+    },
+    {
+     "tex": "-4",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det3#9",
+   "unit": "la.det3",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}3 & 0 & 3 \\\\ 2 & 3 & -2 \\\\ 1 & 0 & -2\\end{pmatrix} = \\;?",
+   "answer": "-27",
+   "wrong": [
+    {
+     "tex": "27",
+     "error": "sign"
+    },
+    {
+     "tex": "-18",
+     "error": "algebra"
+    },
+    {
+     "tex": "-25",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det3#10",
+   "unit": "la.det3",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}1 & 0 & 3 \\\\ 1 & -2 & -1 \\\\ 3 & 3 & 0\\end{pmatrix} = \\;?",
+   "answer": "30",
+   "wrong": [
+    {
+     "tex": "-30",
+     "error": "sign"
+    },
+    {
+     "tex": "0",
+     "error": "algebra"
+    },
+    {
+     "tex": "32",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det3#11",
+   "unit": "la.det3",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}0 & -2 & -2 \\\\ 2 & -1 & 3 \\\\ 0 & 1 & -1\\end{pmatrix} = \\;?",
+   "answer": "-8",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "sign"
+    },
+    {
+     "tex": "8",
+     "error": "sign"
+    },
+    {
+     "tex": "-6",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det3#12",
+   "unit": "la.det3",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}-2 & 2 & 3 \\\\ 1 & 1 & 1 \\\\ -2 & 2 & 1\\end{pmatrix} = \\;?",
+   "answer": "8",
+   "wrong": [
+    {
+     "tex": "20",
+     "error": "sign"
+    },
+    {
+     "tex": "-8",
+     "error": "sign"
+    },
+    {
+     "tex": "-2",
+     "error": "algebra"
+    },
+    {
+     "tex": "10",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.det3#13",
+   "unit": "la.det3",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "\\det\\begin{pmatrix}2 & -1 & -2 \\\\ 2 & 3 & 0 \\\\ 0 & 3 & -1\\end{pmatrix} = \\;?",
+   "answer": "-20",
+   "wrong": [
+    {
+     "tex": "-16",
+     "error": "sign"
+    },
+    {
+     "tex": "20",
+     "error": "sign"
+    },
+    {
+     "tex": "-6",
+     "error": "algebra"
+    },
+    {
+     "tex": "-18",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.detprod#0",
+   "unit": "la.detprod",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\det(AB) = \\;?",
+   "answer": "\\det A\\,\\det B",
+   "wrong": [
+    {
+     "tex": "\\det A + \\det B",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\det(BA)^{-1}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\det A\\,\\det B^{-1}",
+     "error": "algebra"
+    }
+   ],
+   "verified": "hand"
+  },
+  {
+   "id": "la.invprod#0",
+   "unit": "la.invprod",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "(AB)^{-1} = \\;?",
+   "answer": "B^{-1}A^{-1}",
+   "wrong": [
+    {
+     "tex": "A^{-1}B^{-1}",
+     "error": "algebra"
+    },
+    {
+     "tex": "B^{-1}+A^{-1}",
+     "error": "algebra"
+    },
+    {
+     "tex": "(BA)^{-1}",
+     "error": "algebra"
+    }
+   ],
+   "verified": "hand"
+  },
+  {
+   "id": "la.transprod#0",
+   "unit": "la.transprod",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "(AB)^{T} = \\;?",
+   "answer": "B^{T}A^{T}",
+   "wrong": [
+    {
+     "tex": "A^{T}B^{T}",
+     "error": "algebra"
+    },
+    {
+     "tex": "BA",
+     "error": "algebra"
+    },
+    {
+     "tex": "(BA)^{-1}",
+     "error": "wrong_pair"
+    }
+   ],
+   "verified": "hand"
+  },
+  {
+   "id": "la.detscale#0",
+   "unit": "la.detscale",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A \\in \\mathbb{R}^{n\\times n}\\text{일 때 } \\det(kA) = \\;?",
+   "answer": "k^{n}\\det A",
+   "wrong": [
+    {
+     "tex": "k\\det A",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "nk\\det A",
+     "error": "algebra"
+    },
+    {
+     "tex": "k^{2}\\det A",
+     "error": "algebra"
+    }
+   ],
+   "verified": "hand"
+  },
+  {
+   "id": "la.invertible#0",
+   "unit": "la.invertible",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A \\in \\mathbb{R}^{n\\times n}\\text{가 가역} \\iff \\;?",
+   "answer": "\\det A \\ne 0",
+   "wrong": [
+    {
+     "tex": "\\det A = 0",
+     "error": "sign"
+    },
+    {
+     "tex": "\\operatorname{rank} A < n",
+     "error": "theorem_condition"
+    },
+    {
+     "tex": "A = A^{T}",
+     "error": "theorem_condition"
+    }
+   ],
+   "verified": "hand"
+  },
+  {
+   "id": "la.gauss#0",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}-1 & 2 & -2 & 0 \\\\ 2 & -2 & 4 & 6 \\\\ 0 & -2 & 3 & 0\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 2 & -2 & 0 \\\\ 0 & 2 & 0 & 6 \\\\ 0 & -2 & 3 & 0\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 2 & -2 & 0 \\\\ 0 & 2 & 0 & 6 \\\\ 0 & 0 & 3 & 6\\end{array}\\right)",
+    "x_3 = 2",
+    "(x_1, x_2, x_3) = \\left(2,\\ 3,\\ 2\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 2 & -2 & 0 \\\\ 4 & -6 & 8 & 6 \\\\ 0 & -2 & 3 & 0\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 2 & -2 & 0 \\\\ 0 & 2 & 0 & 6 \\\\ 0 & 0 & 3 & 7\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 3",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#1",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}1 & -1 & -2 & 2 \\\\ 1 & -2 & -2 & 5 \\\\ -1 & 0 & 5 & -2\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -1 & -2 & 2 \\\\ 0 & -1 & 0 & 3 \\\\ 0 & -1 & 3 & 0\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -1 & -2 & 2 \\\\ 0 & -1 & 0 & 3 \\\\ 0 & 0 & 3 & -3\\end{array}\\right)",
+    "x_3 = -1",
+    "(x_1, x_2, x_3) = \\left(-3,\\ -3,\\ -1\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -1 & -2 & 2 \\\\ 2 & -3 & -4 & 7 \\\\ 0 & -1 & 3 & 0\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -1 & -2 & 2 \\\\ 0 & -1 & 0 & 3 \\\\ 0 & 0 & 3 & -2\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 0",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(-1,\\ -3,\\ -3\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#2",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}2 & -2 & -1 & 0 \\\\ -4 & 5 & 3 & -4 \\\\ 0 & 2 & 3 & -10\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & -2 & -1 & 0 \\\\ 0 & 1 & 1 & -4 \\\\ 0 & 2 & 3 & -10\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & -2 & -1 & 0 \\\\ 0 & 1 & 1 & -4 \\\\ 0 & 0 & 1 & -2\\end{array}\\right)",
+    "x_3 = -2",
+    "(x_1, x_2, x_3) = \\left(-3,\\ -2,\\ -2\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & -2 & -1 & 0 \\\\ -8 & 9 & 5 & -4 \\\\ 0 & 2 & 3 & -10\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & -2 & -1 & 0 \\\\ 0 & 1 & 1 & -4 \\\\ 0 & 0 & 1 & -1\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = -1",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(-2,\\ -2,\\ -3\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#3",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}-1 & 1 & -1 & -5 \\\\ -2 & 1 & 0 & -5 \\\\ -2 & 2 & -1 & -9\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 1 & -1 & -5 \\\\ 0 & -1 & 2 & 5 \\\\ 0 & 0 & 1 & 1\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 1 & -1 & -5 \\\\ 0 & -1 & 2 & 5 \\\\ 0 & 0 & 1 & 1\\end{array}\\right)",
+    "x_3 = 1",
+    "(x_1, x_2, x_3) = \\left(1,\\ -3,\\ 1\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 1 & -1 & -5 \\\\ -4 & 3 & -2 & -15 \\\\ 0 & 0 & 1 & 1\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 1 & -1 & -5 \\\\ 0 & -1 & 2 & 5 \\\\ 0 & 0 & 1 & 2\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 2",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#4",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}1 & 0 & -2 & 8 \\\\ -2 & 2 & 2 & -10 \\\\ -1 & -2 & 3 & -11\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 0 & -2 & 8 \\\\ 0 & 2 & -2 & 6 \\\\ 0 & -2 & 1 & -3\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 0 & -2 & 8 \\\\ 0 & 2 & -2 & 6 \\\\ 0 & 0 & -1 & 3\\end{array}\\right)",
+    "x_3 = -3",
+    "(x_1, x_2, x_3) = \\left(2,\\ 0,\\ -3\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 0 & -2 & 8 \\\\ -4 & 2 & 6 & -26 \\\\ 0 & -2 & 1 & -3\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 0 & -2 & 8 \\\\ 0 & 2 & -2 & 6 \\\\ 0 & 0 & -1 & 4\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = -2",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(-3,\\ 0,\\ 2\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#5",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}-1 & 2 & -1 & -7 \\\\ -2 & 3 & -3 & -12 \\\\ -1 & 2 & -2 & -8\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 2 & -1 & -7 \\\\ 0 & -1 & -1 & 2 \\\\ 0 & 0 & -1 & -1\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 2 & -1 & -7 \\\\ 0 & -1 & -1 & 2 \\\\ 0 & 0 & -1 & -1\\end{array}\\right)",
+    "x_3 = 1",
+    "(x_1, x_2, x_3) = \\left(0,\\ -3,\\ 1\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 2 & -1 & -7 \\\\ -4 & 7 & -5 & -26 \\\\ 0 & 0 & -1 & -1\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 2 & -1 & -7 \\\\ 0 & -1 & -1 & 2 \\\\ 0 & 0 & -1 & 0\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 2",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(1,\\ -3,\\ 0\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#6",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}1 & 1 & 1 & -1 \\\\ 2 & 1 & 2 & -1 \\\\ 2 & 0 & 5 & -3\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 1 & 1 & -1 \\\\ 0 & -1 & 0 & 1 \\\\ 0 & -2 & 3 & -1\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 1 & 1 & -1 \\\\ 0 & -1 & 0 & 1 \\\\ 0 & 0 & 3 & -3\\end{array}\\right)",
+    "x_3 = -1",
+    "(x_1, x_2, x_3) = \\left(1,\\ -1,\\ -1\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 1 & 1 & -1 \\\\ 4 & 3 & 4 & -3 \\\\ 0 & -2 & 3 & -1\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 1 & 1 & -1 \\\\ 0 & -1 & 0 & 1 \\\\ 0 & 0 & 3 & -2\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 0",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(-1,\\ -1,\\ 1\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#7",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}-1 & 0 & 2 & -5 \\\\ -1 & -1 & 2 & -2 \\\\ -2 & -1 & 5 & -8\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 2 & -5 \\\\ 0 & -1 & 0 & 3 \\\\ 0 & -1 & 1 & 2\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 2 & -5 \\\\ 0 & -1 & 0 & 3 \\\\ 0 & 0 & 1 & -1\\end{array}\\right)",
+    "x_3 = -1",
+    "(x_1, x_2, x_3) = \\left(3,\\ -3,\\ -1\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 2 & -5 \\\\ -2 & -1 & 4 & -7 \\\\ 0 & -1 & 1 & 2\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 2 & -5 \\\\ 0 & -1 & 0 & 3 \\\\ 0 & 0 & 1 & 0\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 0",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(-1,\\ -3,\\ 3\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#8",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}1 & -2 & 0 & -2 \\\\ 2 & -5 & 0 & -6 \\\\ -2 & 6 & 3 & 11\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -2 & 0 & -2 \\\\ 0 & -1 & 0 & -2 \\\\ 0 & 2 & 3 & 7\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -2 & 0 & -2 \\\\ 0 & -1 & 0 & -2 \\\\ 0 & 0 & 3 & 3\\end{array}\\right)",
+    "x_3 = 1",
+    "(x_1, x_2, x_3) = \\left(2,\\ 2,\\ 1\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -2 & 0 & -2 \\\\ 4 & -9 & 0 & -10 \\\\ 0 & 2 & 3 & 7\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -2 & 0 & -2 \\\\ 0 & -1 & 0 & -2 \\\\ 0 & 0 & 3 & 4\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 2",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(1,\\ 2,\\ 2\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#9",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}2 & -2 & 0 & -2 \\\\ -4 & 6 & 0 & 10 \\\\ -2 & 0 & 2 & -10\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & -2 & 0 & -2 \\\\ 0 & 2 & 0 & 6 \\\\ 0 & -2 & 2 & -12\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & -2 & 0 & -2 \\\\ 0 & 2 & 0 & 6 \\\\ 0 & 0 & 2 & -6\\end{array}\\right)",
+    "x_3 = -3",
+    "(x_1, x_2, x_3) = \\left(2,\\ 3,\\ -3\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & -2 & 0 & -2 \\\\ -8 & 10 & 0 & 14 \\\\ 0 & -2 & 2 & -12\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & -2 & 0 & -2 \\\\ 0 & 2 & 0 & 6 \\\\ 0 & 0 & 2 & -5\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = -2",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(-3,\\ 3,\\ 2\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#10",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}2 & 2 & -2 & -4 \\\\ 4 & 6 & -2 & -8 \\\\ 2 & -2 & -4 & 0\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 2 & -2 & -4 \\\\ 0 & 2 & 2 & 0 \\\\ 0 & -4 & -2 & 4\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 2 & -2 & -4 \\\\ 0 & 2 & 2 & 0 \\\\ 0 & 0 & 2 & 4\\end{array}\\right)",
+    "x_3 = 2",
+    "(x_1, x_2, x_3) = \\left(2,\\ -2,\\ 2\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 2 & -2 & -4 \\\\ 8 & 10 & -6 & -16 \\\\ 0 & -4 & -2 & 4\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 2 & -2 & -4 \\\\ 0 & 2 & 2 & 0 \\\\ 0 & 0 & 2 & 5\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 3",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#11",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}2 & 1 & 2 & 3 \\\\ -2 & -2 & -2 & -2 \\\\ 0 & 1 & 1 & 1\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 1 & 2 & 3 \\\\ 0 & -1 & 0 & 1 \\\\ 0 & 1 & 1 & 1\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 1 & 2 & 3 \\\\ 0 & -1 & 0 & 1 \\\\ 0 & 0 & 1 & 2\\end{array}\\right)",
+    "x_3 = 2",
+    "(x_1, x_2, x_3) = \\left(0,\\ -1,\\ 2\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 1 & 2 & 3 \\\\ -4 & -3 & -4 & -5 \\\\ 0 & 1 & 1 & 1\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 1 & 2 & 3 \\\\ 0 & -1 & 0 & 1 \\\\ 0 & 0 & 1 & 3\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 3",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(2,\\ -1,\\ 0\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#12",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}2 & -2 & 1 & -1 \\\\ -4 & 6 & 0 & 2 \\\\ 4 & -8 & -3 & -1\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & -2 & 1 & -1 \\\\ 0 & 2 & 2 & 0 \\\\ 0 & -4 & -5 & 1\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & -2 & 1 & -1 \\\\ 0 & 2 & 2 & 0 \\\\ 0 & 0 & -1 & 1\\end{array}\\right)",
+    "x_3 = -1",
+    "(x_1, x_2, x_3) = \\left(1,\\ 1,\\ -1\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & -2 & 1 & -1 \\\\ -8 & 10 & -2 & 4 \\\\ 0 & -4 & -5 & 1\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & -2 & 1 & -1 \\\\ 0 & 2 & 2 & 0 \\\\ 0 & 0 & -1 & 2\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 0",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(-1,\\ 1,\\ 1\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#13",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}1 & 1 & 0 & -3 \\\\ 0 & 2 & 1 & -8 \\\\ 2 & -2 & 0 & 6\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 1 & 0 & -3 \\\\ 0 & 2 & 1 & -8 \\\\ 0 & -4 & 0 & 12\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 1 & 0 & -3 \\\\ 0 & 2 & 1 & -8 \\\\ 0 & 0 & 2 & -4\\end{array}\\right)",
+    "x_3 = -2",
+    "(x_1, x_2, x_3) = \\left(0,\\ -3,\\ -2\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 1 & 0 & -3 \\\\ 0 & 2 & 1 & -8 \\\\ 4 & 0 & 0 & 0\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 1 & 0 & -3 \\\\ 0 & 2 & 1 & -8 \\\\ 0 & 0 & 2 & -3\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = -1",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(-2,\\ -3,\\ 0\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#14",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}2 & 0 & -2 & 2 \\\\ 4 & -1 & -3 & 8 \\\\ -2 & 2 & 3 & -4\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 0 & -2 & 2 \\\\ 0 & -1 & 1 & 4 \\\\ 0 & 2 & 1 & -2\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 0 & -2 & 2 \\\\ 0 & -1 & 1 & 4 \\\\ 0 & 0 & 3 & 6\\end{array}\\right)",
+    "x_3 = 2",
+    "(x_1, x_2, x_3) = \\left(3,\\ -2,\\ 2\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 0 & -2 & 2 \\\\ 8 & -1 & -7 & 12 \\\\ 0 & 2 & 1 & -2\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 0 & -2 & 2 \\\\ 0 & -1 & 1 & 4 \\\\ 0 & 0 & 3 & 7\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 3",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(2,\\ -2,\\ 3\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#15",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}-1 & -2 & 2 & 5 \\\\ -1 & 0 & 0 & -1 \\\\ -1 & 0 & 2 & -1\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -2 & 2 & 5 \\\\ 0 & 2 & -2 & -6 \\\\ 0 & 2 & 0 & -6\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -2 & 2 & 5 \\\\ 0 & 2 & -2 & -6 \\\\ 0 & 0 & 2 & 0\\end{array}\\right)",
+    "x_3 = 0",
+    "(x_1, x_2, x_3) = \\left(1,\\ -3,\\ 0\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -2 & 2 & 5 \\\\ -2 & -2 & 2 & 4 \\\\ 0 & 2 & 0 & -6\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -2 & 2 & 5 \\\\ 0 & 2 & -2 & -6 \\\\ 0 & 0 & 2 & 1\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 1",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(0,\\ -3,\\ 1\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#16",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}1 & -2 & 0 & -2 \\\\ -2 & 3 & -1 & 4 \\\\ 0 & -2 & 1 & -3\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -2 & 0 & -2 \\\\ 0 & -1 & -1 & 0 \\\\ 0 & -2 & 1 & -3\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -2 & 0 & -2 \\\\ 0 & -1 & -1 & 0 \\\\ 0 & 0 & 3 & -3\\end{array}\\right)",
+    "x_3 = -1",
+    "(x_1, x_2, x_3) = \\left(0,\\ 1,\\ -1\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -2 & 0 & -2 \\\\ -4 & 7 & -1 & 8 \\\\ 0 & -2 & 1 & -3\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -2 & 0 & -2 \\\\ 0 & -1 & -1 & 0 \\\\ 0 & 0 & 3 & -2\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 0",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(-1,\\ 1,\\ 0\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#17",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}-1 & -2 & 0 & 9 \\\\ -1 & -3 & -1 & 11 \\\\ 0 & -1 & 1 & 4\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -2 & 0 & 9 \\\\ 0 & -1 & -1 & 2 \\\\ 0 & -1 & 1 & 4\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -2 & 0 & 9 \\\\ 0 & -1 & -1 & 2 \\\\ 0 & 0 & 2 & 2\\end{array}\\right)",
+    "x_3 = 1",
+    "(x_1, x_2, x_3) = \\left(-3,\\ -3,\\ 1\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -2 & 0 & 9 \\\\ -2 & -5 & -1 & 20 \\\\ 0 & -1 & 1 & 4\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -2 & 0 & 9 \\\\ 0 & -1 & -1 & 2 \\\\ 0 & 0 & 2 & 3\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 2",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(1,\\ -3,\\ -3\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#18",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}-1 & -1 & 2 & -5 \\\\ -1 & 0 & 2 & -3 \\\\ 0 & 1 & 3 & -7\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -1 & 2 & -5 \\\\ 0 & 1 & 0 & 2 \\\\ 0 & 1 & 3 & -7\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -1 & 2 & -5 \\\\ 0 & 1 & 0 & 2 \\\\ 0 & 0 & 3 & -9\\end{array}\\right)",
+    "x_3 = -3",
+    "(x_1, x_2, x_3) = \\left(-3,\\ 2,\\ -3\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -1 & 2 & -5 \\\\ -2 & -1 & 4 & -8 \\\\ 0 & 1 & 3 & -7\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -1 & 2 & -5 \\\\ 0 & 1 & 0 & 2 \\\\ 0 & 0 & 3 & -8\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = -2",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#19",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}1 & -1 & -2 & 7 \\\\ -2 & 3 & 2 & -10 \\\\ 1 & -3 & 5 & -7\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -1 & -2 & 7 \\\\ 0 & 1 & -2 & 4 \\\\ 0 & -2 & 7 & -14\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -1 & -2 & 7 \\\\ 0 & 1 & -2 & 4 \\\\ 0 & 0 & 3 & -6\\end{array}\\right)",
+    "x_3 = -2",
+    "(x_1, x_2, x_3) = \\left(3,\\ 0,\\ -2\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -1 & -2 & 7 \\\\ -4 & 5 & 6 & -24 \\\\ 0 & -2 & 7 & -14\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & -1 & -2 & 7 \\\\ 0 & 1 & -2 & 4 \\\\ 0 & 0 & 3 & -5\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = -1",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(-2,\\ 0,\\ 3\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#20",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}-1 & 0 & 0 & 3 \\\\ -1 & -1 & -2 & 3 \\\\ 0 & 2 & 5 & 1\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 0 & 3 \\\\ 0 & -1 & -2 & 0 \\\\ 0 & 2 & 5 & 1\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 0 & 3 \\\\ 0 & -1 & -2 & 0 \\\\ 0 & 0 & 1 & 1\\end{array}\\right)",
+    "x_3 = 1",
+    "(x_1, x_2, x_3) = \\left(-3,\\ -2,\\ 1\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 0 & 3 \\\\ -2 & -1 & -2 & 6 \\\\ 0 & 2 & 5 & 1\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 0 & 3 \\\\ 0 & -1 & -2 & 0 \\\\ 0 & 0 & 1 & 2\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 2",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(1,\\ -2,\\ -3\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#21",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}-1 & 0 & 0 & -2 \\\\ -2 & 2 & 2 & -8 \\\\ 2 & 0 & 1 & 4\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 0 & -2 \\\\ 0 & 2 & 2 & -4 \\\\ 0 & 0 & 1 & 0\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 0 & -2 \\\\ 0 & 2 & 2 & -4 \\\\ 0 & 0 & 1 & 0\\end{array}\\right)",
+    "x_3 = 0",
+    "(x_1, x_2, x_3) = \\left(2,\\ -2,\\ 0\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 0 & -2 \\\\ -4 & 2 & 2 & -12 \\\\ 0 & 0 & 1 & 0\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 0 & -2 \\\\ 0 & 2 & 2 & -4 \\\\ 0 & 0 & 1 & 1\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 1",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(0,\\ -2,\\ 2\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#22",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}-1 & -1 & -2 & 2 \\\\ 1 & 3 & 0 & -4 \\\\ 1 & -1 & 5 & 0\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -1 & -2 & 2 \\\\ 0 & 2 & -2 & -2 \\\\ 0 & -2 & 3 & 2\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -1 & -2 & 2 \\\\ 0 & 2 & -2 & -2 \\\\ 0 & 0 & 1 & 0\\end{array}\\right)",
+    "x_3 = 0",
+    "(x_1, x_2, x_3) = \\left(-1,\\ -1,\\ 0\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -1 & -2 & 2 \\\\ 2 & 4 & 2 & -6 \\\\ 0 & -2 & 3 & 2\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & -1 & -2 & 2 \\\\ 0 & 2 & -2 & -2 \\\\ 0 & 0 & 1 & 1\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 1",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(0,\\ -1,\\ -1\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#23",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}2 & 1 & 2 & -5 \\\\ -4 & -3 & -3 & 8 \\\\ 0 & -1 & 0 & 1\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 1 & 2 & -5 \\\\ 0 & -1 & 1 & -2 \\\\ 0 & -1 & 0 & 1\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 1 & 2 & -5 \\\\ 0 & -1 & 1 & -2 \\\\ 0 & 0 & -1 & 3\\end{array}\\right)",
+    "x_3 = -3",
+    "(x_1, x_2, x_3) = \\left(1,\\ -1,\\ -3\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 1 & 2 & -5 \\\\ -8 & -5 & -7 & 18 \\\\ 0 & -1 & 0 & 1\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 1 & 2 & -5 \\\\ 0 & -1 & 1 & -2 \\\\ 0 & 0 & -1 & 4\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = -2",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(-3,\\ -1,\\ 1\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#24",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}-1 & 2 & 2 & 0 \\\\ 1 & -1 & -2 & 2 \\\\ -1 & 4 & 1 & 7\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 2 & 2 & 0 \\\\ 0 & 1 & 0 & 2 \\\\ 0 & 2 & -1 & 7\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 2 & 2 & 0 \\\\ 0 & 1 & 0 & 2 \\\\ 0 & 0 & -1 & 3\\end{array}\\right)",
+    "x_3 = -3",
+    "(x_1, x_2, x_3) = \\left(-2,\\ 2,\\ -3\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 2 & 2 & 0 \\\\ 2 & -3 & -4 & 2 \\\\ 0 & 2 & -1 & 7\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 2 & 2 & 0 \\\\ 0 & 1 & 0 & 2 \\\\ 0 & 0 & -1 & 4\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = -2",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(-3,\\ 2,\\ -2\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#25",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}2 & 0 & -2 & 8 \\\\ -4 & -1 & 2 & -12 \\\\ 4 & 2 & 3 & -1\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 0 & -2 & 8 \\\\ 0 & -1 & -2 & 4 \\\\ 0 & 2 & 7 & -17\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 0 & -2 & 8 \\\\ 0 & -1 & -2 & 4 \\\\ 0 & 0 & 3 & -9\\end{array}\\right)",
+    "x_3 = -3",
+    "(x_1, x_2, x_3) = \\left(1,\\ 2,\\ -3\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 0 & -2 & 8 \\\\ -8 & -1 & 6 & -28 \\\\ 0 & 2 & 7 & -17\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 0 & -2 & 8 \\\\ 0 & -1 & -2 & 4 \\\\ 0 & 0 & 3 & -8\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = -2",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(-3,\\ 2,\\ 1\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#26",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}2 & 0 & -1 & 1 \\\\ -2 & -1 & 1 & 1 \\\\ 0 & -1 & 3 & 11\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 0 & -1 & 1 \\\\ 0 & -1 & 0 & 2 \\\\ 0 & -1 & 3 & 11\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 0 & -1 & 1 \\\\ 0 & -1 & 0 & 2 \\\\ 0 & 0 & 3 & 9\\end{array}\\right)",
+    "x_3 = 3",
+    "(x_1, x_2, x_3) = \\left(2,\\ -2,\\ 3\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 0 & -1 & 1 \\\\ -4 & -1 & 2 & 0 \\\\ 0 & -1 & 3 & 11\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}2 & 0 & -1 & 1 \\\\ 0 & -1 & 0 & 2 \\\\ 0 & 0 & 3 & 10\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 4",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(3,\\ -2,\\ 2\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#27",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}-1 & 1 & 0 & -1 \\\\ 2 & -1 & -2 & 4 \\\\ 1 & 0 & -1 & 3\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 1 & 0 & -1 \\\\ 0 & 1 & -2 & 2 \\\\ 0 & 1 & -1 & 2\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 1 & 0 & -1 \\\\ 0 & 1 & -2 & 2 \\\\ 0 & 0 & 1 & 0\\end{array}\\right)",
+    "x_3 = 0",
+    "(x_1, x_2, x_3) = \\left(3,\\ 2,\\ 0\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 1 & 0 & -1 \\\\ 4 & -3 & -2 & 6 \\\\ 0 & 1 & -1 & 2\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 1 & 0 & -1 \\\\ 0 & 1 & -2 & 2 \\\\ 0 & 0 & 1 & 1\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 1",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(0,\\ 2,\\ 3\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#28",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}1 & 2 & 0 & 0 \\\\ -2 & -2 & -1 & 0 \\\\ 1 & -2 & 5 & 6\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 2 & 0 & 0 \\\\ 0 & 2 & -1 & 0 \\\\ 0 & -4 & 5 & 6\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 2 & 0 & 0 \\\\ 0 & 2 & -1 & 0 \\\\ 0 & 0 & 3 & 6\\end{array}\\right)",
+    "x_3 = 2",
+    "(x_1, x_2, x_3) = \\left(-2,\\ 1,\\ 2\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 2 & 0 & 0 \\\\ -4 & -6 & -1 & 0 \\\\ 0 & -4 & 5 & 6\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}1 & 2 & 0 & 0 \\\\ 0 & 2 & -1 & 0 \\\\ 0 & 0 & 3 & 7\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 3",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(2,\\ 1,\\ -2\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.gauss#29",
+   "unit": "la.gauss",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\left(\\begin{array}{ccc|c}-1 & 0 & 1 & 1 \\\\ -1 & 2 & 1 & -3 \\\\ -2 & 4 & 5 & -6\\end{array}\\right)\\ \\text{를 Gauss 소거로 풀기}",
+   "steps": [
+    "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 1 & 1 \\\\ 0 & 2 & 0 & -4 \\\\ 0 & 4 & 3 & -8\\end{array}\\right)",
+    "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 1 & 1 \\\\ 0 & 2 & 0 & -4 \\\\ 0 & 0 & 3 & 0\\end{array}\\right)",
+    "x_3 = 0",
+    "(x_1, x_2, x_3) = \\left(-1,\\ -2,\\ 0\\right)"
+   ],
+   "decoys": [
+    {
+     "tex": "R_2, R_3\\ \\text{에서 1열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 1 & 1 \\\\ -2 & 2 & 2 & -2 \\\\ 0 & 4 & 3 & -8\\end{array}\\right)",
+     "error": "sign",
+     "why": "행 연산 R₂ − l·R₁에서 부호를 반대로 적용했습니다. 피벗 아래가 0이 되지 않거나 해가 달라집니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\text{2열 소거:}\\ \\left(\\begin{array}{ccc|c}-1 & 0 & 1 & 1 \\\\ 0 & 2 & 0 & -4 \\\\ 0 & 0 & 3 & 1\\end{array}\\right)",
+     "error": "algebra",
+     "why": "소거 중 산술 실수가 있습니다. 이 첨가행렬은 원래 방정식과 해가 다릅니다.",
+     "pos": 1
+    },
+    {
+     "tex": "x_3 = 1",
+     "error": "algebra",
+     "why": "뒤에서부터 대입할 때 계산이 틀렸습니다.",
+     "pos": 2
+    },
+    {
+     "tex": "(x_1, x_2, x_3) = \\left(0,\\ -2,\\ -1\\right)",
+     "error": "algebra",
+     "why": "해의 성분 순서가 뒤바뀌었습니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#0",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\det\\begin{pmatrix}1 & 3 & -3 \\\\ -1 & 2 & 0 \\\\ 1 & 3 & -1\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = \\begin{vmatrix}2 & 0 \\\\ 3 & -1\\end{vmatrix} - 3\\begin{vmatrix}-1 & 0 \\\\ 1 & -1\\end{vmatrix} - 3\\begin{vmatrix}-1 & 2 \\\\ 1 & 3\\end{vmatrix}",
+    "M_{11} = -2,\\ M_{12} = 1,\\ M_{13} = -5",
+    "\\det A = \\cdot(-2) - 3\\cdot(1) - 3\\cdot(-5)",
+    "\\det A = 10"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = \\begin{vmatrix}2 & 0 \\\\ 3 & -1\\end{vmatrix} + 3\\begin{vmatrix}-1 & 0 \\\\ 1 & -1\\end{vmatrix} - 3\\begin{vmatrix}-1 & 2 \\\\ 1 & 3\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = -2,\\ M_{12} = 2,\\ M_{13} = -5",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = 12",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = -10",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#1",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\det\\begin{pmatrix}1 & -1 & 1 \\\\ -1 & -3 & 3 \\\\ -1 & -3 & 1\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = \\begin{vmatrix}-3 & 3 \\\\ -3 & 1\\end{vmatrix} + \\begin{vmatrix}-1 & 3 \\\\ -1 & 1\\end{vmatrix} + \\begin{vmatrix}-1 & -3 \\\\ -1 & -3\\end{vmatrix}",
+    "M_{11} = 6,\\ M_{12} = 2,\\ M_{13} = 0",
+    "\\det A = \\cdot(6) + \\cdot(2) + \\cdot(0)",
+    "\\det A = 8"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = \\begin{vmatrix}-3 & 3 \\\\ -3 & 1\\end{vmatrix} - \\begin{vmatrix}-1 & 3 \\\\ -1 & 1\\end{vmatrix} + \\begin{vmatrix}-1 & -3 \\\\ -1 & -3\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = 6,\\ M_{12} = 3,\\ M_{13} = 0",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = 10",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = -8",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#2",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\det\\begin{pmatrix}2 & 2 & 2 \\\\ 1 & 0 & -2 \\\\ -1 & -2 & -1\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = 2\\begin{vmatrix}0 & -2 \\\\ -2 & -1\\end{vmatrix} - 2\\begin{vmatrix}1 & -2 \\\\ -1 & -1\\end{vmatrix} + 2\\begin{vmatrix}1 & 0 \\\\ -1 & -2\\end{vmatrix}",
+    "M_{11} = -4,\\ M_{12} = -3,\\ M_{13} = -2",
+    "\\det A = 2\\cdot(-4) - 2\\cdot(-3) + 2\\cdot(-2)",
+    "\\det A = -6"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = 2\\begin{vmatrix}0 & -2 \\\\ -2 & -1\\end{vmatrix} + 2\\begin{vmatrix}1 & -2 \\\\ -1 & -1\\end{vmatrix} + 2\\begin{vmatrix}1 & 0 \\\\ -1 & -2\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = -4,\\ M_{12} = -2,\\ M_{13} = -2",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -4",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 6",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#3",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\det\\begin{pmatrix}1 & 1 & -3 \\\\ -2 & -2 & -1 \\\\ -2 & 0 & 2\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = \\begin{vmatrix}-2 & -1 \\\\ 0 & 2\\end{vmatrix} - \\begin{vmatrix}-2 & -1 \\\\ -2 & 2\\end{vmatrix} - 3\\begin{vmatrix}-2 & -2 \\\\ -2 & 0\\end{vmatrix}",
+    "M_{11} = -4,\\ M_{12} = -6,\\ M_{13} = -4",
+    "\\det A = \\cdot(-4) - \\cdot(-6) - 3\\cdot(-4)",
+    "\\det A = 14"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = \\begin{vmatrix}-2 & -1 \\\\ 0 & 2\\end{vmatrix} + \\begin{vmatrix}-2 & -1 \\\\ -2 & 2\\end{vmatrix} - 3\\begin{vmatrix}-2 & -2 \\\\ -2 & 0\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = -4,\\ M_{12} = -5,\\ M_{13} = -4",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = 16",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = -14",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#4",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\det\\begin{pmatrix}2 & -1 & -1 \\\\ 3 & -3 & 1 \\\\ 0 & 3 & 3\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = 2\\begin{vmatrix}-3 & 1 \\\\ 3 & 3\\end{vmatrix} + \\begin{vmatrix}3 & 1 \\\\ 0 & 3\\end{vmatrix} - \\begin{vmatrix}3 & -3 \\\\ 0 & 3\\end{vmatrix}",
+    "M_{11} = -12,\\ M_{12} = 9,\\ M_{13} = 9",
+    "\\det A = 2\\cdot(-12) + \\cdot(9) - \\cdot(9)",
+    "\\det A = -24"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = 2\\begin{vmatrix}-3 & 1 \\\\ 3 & 3\\end{vmatrix} - \\begin{vmatrix}3 & 1 \\\\ 0 & 3\\end{vmatrix} - \\begin{vmatrix}3 & -3 \\\\ 0 & 3\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = -12,\\ M_{12} = 10,\\ M_{13} = 9",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -22",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 24",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#5",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\det\\begin{pmatrix}3 & 2 & -1 \\\\ -3 & 0 & 3 \\\\ -1 & -3 & 2\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = 3\\begin{vmatrix}0 & 3 \\\\ -3 & 2\\end{vmatrix} - 2\\begin{vmatrix}-3 & 3 \\\\ -1 & 2\\end{vmatrix} - \\begin{vmatrix}-3 & 0 \\\\ -1 & -3\\end{vmatrix}",
+    "M_{11} = 9,\\ M_{12} = -3,\\ M_{13} = 9",
+    "\\det A = 3\\cdot(9) - 2\\cdot(-3) - \\cdot(9)",
+    "\\det A = 24"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = 3\\begin{vmatrix}0 & 3 \\\\ -3 & 2\\end{vmatrix} + 2\\begin{vmatrix}-3 & 3 \\\\ -1 & 2\\end{vmatrix} - \\begin{vmatrix}-3 & 0 \\\\ -1 & -3\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = 9,\\ M_{12} = -2,\\ M_{13} = 9",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = 26",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = -24",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#6",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\det\\begin{pmatrix}-3 & 1 & -3 \\\\ 1 & 1 & -3 \\\\ 3 & 0 & -1\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = -3\\begin{vmatrix}1 & -3 \\\\ 0 & -1\\end{vmatrix} - \\begin{vmatrix}1 & -3 \\\\ 3 & -1\\end{vmatrix} - 3\\begin{vmatrix}1 & 1 \\\\ 3 & 0\\end{vmatrix}",
+    "M_{11} = -1,\\ M_{12} = 8,\\ M_{13} = -3",
+    "\\det A = -3\\cdot(-1) - \\cdot(8) - 3\\cdot(-3)",
+    "\\det A = 4"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = -3\\begin{vmatrix}1 & -3 \\\\ 0 & -1\\end{vmatrix} + \\begin{vmatrix}1 & -3 \\\\ 3 & -1\\end{vmatrix} - 3\\begin{vmatrix}1 & 1 \\\\ 3 & 0\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = -1,\\ M_{12} = 9,\\ M_{13} = -3",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = 6",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = -4",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#7",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 1,
+   "problem": "\\det\\begin{pmatrix}-3 & -3 & 2 \\\\ 3 & -2 & -1 \\\\ 0 & 0 & -3\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = -3\\begin{vmatrix}-2 & -1 \\\\ 0 & -3\\end{vmatrix} + 3\\begin{vmatrix}3 & -1 \\\\ 0 & -3\\end{vmatrix} + 2\\begin{vmatrix}3 & -2 \\\\ 0 & 0\\end{vmatrix}",
+    "M_{11} = 6,\\ M_{12} = -9,\\ M_{13} = 0",
+    "\\det A = -3\\cdot(6) + 3\\cdot(-9) + 2\\cdot(0)",
+    "\\det A = -45"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = -3\\begin{vmatrix}-2 & -1 \\\\ 0 & -3\\end{vmatrix} - 3\\begin{vmatrix}3 & -1 \\\\ 0 & -3\\end{vmatrix} + 2\\begin{vmatrix}3 & -2 \\\\ 0 & 0\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = 6,\\ M_{12} = -8,\\ M_{13} = 0",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -43",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 45",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#8",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}-1 & -1 & -3 \\\\ 4 & 0 & -2 \\\\ 0 & 0 & -2\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = -\\begin{vmatrix}0 & -2 \\\\ 0 & -2\\end{vmatrix} + \\begin{vmatrix}4 & -2 \\\\ 0 & -2\\end{vmatrix} - 3\\begin{vmatrix}4 & 0 \\\\ 0 & 0\\end{vmatrix}",
+    "M_{11} = 0,\\ M_{12} = -8,\\ M_{13} = 0",
+    "\\det A = -\\cdot(0) + \\cdot(-8) - 3\\cdot(0)",
+    "\\det A = -8"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = -\\begin{vmatrix}0 & -2 \\\\ 0 & -2\\end{vmatrix} - \\begin{vmatrix}4 & -2 \\\\ 0 & -2\\end{vmatrix} - 3\\begin{vmatrix}4 & 0 \\\\ 0 & 0\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = 0,\\ M_{12} = -7,\\ M_{13} = 0",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -6",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 8",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#9",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}4 & -3 & 4 \\\\ -2 & 0 & 2 \\\\ -2 & -1 & -1\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = 4\\begin{vmatrix}0 & 2 \\\\ -1 & -1\\end{vmatrix} + 3\\begin{vmatrix}-2 & 2 \\\\ -2 & -1\\end{vmatrix} + 4\\begin{vmatrix}-2 & 0 \\\\ -2 & -1\\end{vmatrix}",
+    "M_{11} = 2,\\ M_{12} = 6,\\ M_{13} = 2",
+    "\\det A = 4\\cdot(2) + 3\\cdot(6) + 4\\cdot(2)",
+    "\\det A = 34"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = 4\\begin{vmatrix}0 & 2 \\\\ -1 & -1\\end{vmatrix} - 3\\begin{vmatrix}-2 & 2 \\\\ -2 & -1\\end{vmatrix} + 4\\begin{vmatrix}-2 & 0 \\\\ -2 & -1\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = 2,\\ M_{12} = 7,\\ M_{13} = 2",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = 36",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = -34",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#10",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}1 & 4 & -2 \\\\ -3 & 2 & 1 \\\\ 1 & 0 & -2\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = \\begin{vmatrix}2 & 1 \\\\ 0 & -2\\end{vmatrix} - 4\\begin{vmatrix}-3 & 1 \\\\ 1 & -2\\end{vmatrix} - 2\\begin{vmatrix}-3 & 2 \\\\ 1 & 0\\end{vmatrix}",
+    "M_{11} = -4,\\ M_{12} = 5,\\ M_{13} = -2",
+    "\\det A = \\cdot(-4) - 4\\cdot(5) - 2\\cdot(-2)",
+    "\\det A = -20"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = \\begin{vmatrix}2 & 1 \\\\ 0 & -2\\end{vmatrix} + 4\\begin{vmatrix}-3 & 1 \\\\ 1 & -2\\end{vmatrix} - 2\\begin{vmatrix}-3 & 2 \\\\ 1 & 0\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = -4,\\ M_{12} = 6,\\ M_{13} = -2",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -18",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 20",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#11",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}3 & 3 & 2 \\\\ 4 & 0 & -2 \\\\ -3 & 4 & -1\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = 3\\begin{vmatrix}0 & -2 \\\\ 4 & -1\\end{vmatrix} - 3\\begin{vmatrix}4 & -2 \\\\ -3 & -1\\end{vmatrix} + 2\\begin{vmatrix}4 & 0 \\\\ -3 & 4\\end{vmatrix}",
+    "M_{11} = 8,\\ M_{12} = -10,\\ M_{13} = 16",
+    "\\det A = 3\\cdot(8) - 3\\cdot(-10) + 2\\cdot(16)",
+    "\\det A = 86"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = 3\\begin{vmatrix}0 & -2 \\\\ 4 & -1\\end{vmatrix} + 3\\begin{vmatrix}4 & -2 \\\\ -3 & -1\\end{vmatrix} + 2\\begin{vmatrix}4 & 0 \\\\ -3 & 4\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = 8,\\ M_{12} = -9,\\ M_{13} = 16",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = 88",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = -86",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#12",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}-1 & 3 & 3 \\\\ 1 & 4 & 0 \\\\ 4 & -1 & 0\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = -\\begin{vmatrix}4 & 0 \\\\ -1 & 0\\end{vmatrix} - 3\\begin{vmatrix}1 & 0 \\\\ 4 & 0\\end{vmatrix} + 3\\begin{vmatrix}1 & 4 \\\\ 4 & -1\\end{vmatrix}",
+    "M_{11} = 0,\\ M_{12} = 0,\\ M_{13} = -17",
+    "\\det A = -\\cdot(0) - 3\\cdot(0) + 3\\cdot(-17)",
+    "\\det A = -51"
+   ],
+   "decoys": [
+    {
+     "tex": "M_{11} = 0,\\ M_{12} = 1,\\ M_{13} = -17",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -49",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 51",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#13",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}-3 & 4 & 4 \\\\ 4 & 2 & -1 \\\\ 1 & -1 & 2\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = -3\\begin{vmatrix}2 & -1 \\\\ -1 & 2\\end{vmatrix} - 4\\begin{vmatrix}4 & -1 \\\\ 1 & 2\\end{vmatrix} + 4\\begin{vmatrix}4 & 2 \\\\ 1 & -1\\end{vmatrix}",
+    "M_{11} = 3,\\ M_{12} = 9,\\ M_{13} = -6",
+    "\\det A = -3\\cdot(3) - 4\\cdot(9) + 4\\cdot(-6)",
+    "\\det A = -69"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = -3\\begin{vmatrix}2 & -1 \\\\ -1 & 2\\end{vmatrix} + 4\\begin{vmatrix}4 & -1 \\\\ 1 & 2\\end{vmatrix} + 4\\begin{vmatrix}4 & 2 \\\\ 1 & -1\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = 3,\\ M_{12} = 10,\\ M_{13} = -6",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -67",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 69",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#14",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}-2 & -1 & -2 \\\\ 1 & 3 & 4 \\\\ -2 & -1 & 3\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = -2\\begin{vmatrix}3 & 4 \\\\ -1 & 3\\end{vmatrix} + \\begin{vmatrix}1 & 4 \\\\ -2 & 3\\end{vmatrix} - 2\\begin{vmatrix}1 & 3 \\\\ -2 & -1\\end{vmatrix}",
+    "M_{11} = 13,\\ M_{12} = 11,\\ M_{13} = 5",
+    "\\det A = -2\\cdot(13) + \\cdot(11) - 2\\cdot(5)",
+    "\\det A = -25"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = -2\\begin{vmatrix}3 & 4 \\\\ -1 & 3\\end{vmatrix} - \\begin{vmatrix}1 & 4 \\\\ -2 & 3\\end{vmatrix} - 2\\begin{vmatrix}1 & 3 \\\\ -2 & -1\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = 13,\\ M_{12} = 12,\\ M_{13} = 5",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -23",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 25",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#15",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}-1 & -2 & -2 \\\\ -3 & 4 & -1 \\\\ 2 & 3 & 4\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = -\\begin{vmatrix}4 & -1 \\\\ 3 & 4\\end{vmatrix} + 2\\begin{vmatrix}-3 & -1 \\\\ 2 & 4\\end{vmatrix} - 2\\begin{vmatrix}-3 & 4 \\\\ 2 & 3\\end{vmatrix}",
+    "M_{11} = 19,\\ M_{12} = -10,\\ M_{13} = -17",
+    "\\det A = -\\cdot(19) + 2\\cdot(-10) - 2\\cdot(-17)",
+    "\\det A = -5"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = -\\begin{vmatrix}4 & -1 \\\\ 3 & 4\\end{vmatrix} - 2\\begin{vmatrix}-3 & -1 \\\\ 2 & 4\\end{vmatrix} - 2\\begin{vmatrix}-3 & 4 \\\\ 2 & 3\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = 19,\\ M_{12} = -9,\\ M_{13} = -17",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -3",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 5",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#16",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}-3 & 3 & -3 \\\\ 0 & 1 & 3 \\\\ 3 & 4 & 0\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = -3\\begin{vmatrix}1 & 3 \\\\ 4 & 0\\end{vmatrix} - 3\\begin{vmatrix}0 & 3 \\\\ 3 & 0\\end{vmatrix} - 3\\begin{vmatrix}0 & 1 \\\\ 3 & 4\\end{vmatrix}",
+    "M_{11} = -12,\\ M_{12} = -9,\\ M_{13} = -3",
+    "\\det A = -3\\cdot(-12) - 3\\cdot(-9) - 3\\cdot(-3)",
+    "\\det A = 72"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = -3\\begin{vmatrix}1 & 3 \\\\ 4 & 0\\end{vmatrix} + 3\\begin{vmatrix}0 & 3 \\\\ 3 & 0\\end{vmatrix} - 3\\begin{vmatrix}0 & 1 \\\\ 3 & 4\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = -12,\\ M_{12} = -8,\\ M_{13} = -3",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = 74",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = -72",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#17",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}3 & -2 & 2 \\\\ -1 & -1 & 4 \\\\ -3 & 1 & -1\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = 3\\begin{vmatrix}-1 & 4 \\\\ 1 & -1\\end{vmatrix} + 2\\begin{vmatrix}-1 & 4 \\\\ -3 & -1\\end{vmatrix} + 2\\begin{vmatrix}-1 & -1 \\\\ -3 & 1\\end{vmatrix}",
+    "M_{11} = -3,\\ M_{12} = 13,\\ M_{13} = -4",
+    "\\det A = 3\\cdot(-3) + 2\\cdot(13) + 2\\cdot(-4)",
+    "\\det A = 9"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = 3\\begin{vmatrix}-1 & 4 \\\\ 1 & -1\\end{vmatrix} - 2\\begin{vmatrix}-1 & 4 \\\\ -3 & -1\\end{vmatrix} + 2\\begin{vmatrix}-1 & -1 \\\\ -3 & 1\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = -3,\\ M_{12} = 14,\\ M_{13} = -4",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = 11",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = -9",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#18",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}3 & 3 & 4 \\\\ -3 & 2 & 4 \\\\ -2 & 2 & -3\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = 3\\begin{vmatrix}2 & 4 \\\\ 2 & -3\\end{vmatrix} - 3\\begin{vmatrix}-3 & 4 \\\\ -2 & -3\\end{vmatrix} + 4\\begin{vmatrix}-3 & 2 \\\\ -2 & 2\\end{vmatrix}",
+    "M_{11} = -14,\\ M_{12} = 17,\\ M_{13} = -2",
+    "\\det A = 3\\cdot(-14) - 3\\cdot(17) + 4\\cdot(-2)",
+    "\\det A = -101"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = 3\\begin{vmatrix}2 & 4 \\\\ 2 & -3\\end{vmatrix} + 3\\begin{vmatrix}-3 & 4 \\\\ -2 & -3\\end{vmatrix} + 4\\begin{vmatrix}-3 & 2 \\\\ -2 & 2\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = -14,\\ M_{12} = 18,\\ M_{13} = -2",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -99",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 101",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#19",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}4 & 3 & 2 \\\\ 4 & 3 & 1 \\\\ -3 & -2 & -1\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = 4\\begin{vmatrix}3 & 1 \\\\ -2 & -1\\end{vmatrix} - 3\\begin{vmatrix}4 & 1 \\\\ -3 & -1\\end{vmatrix} + 2\\begin{vmatrix}4 & 3 \\\\ -3 & -2\\end{vmatrix}",
+    "M_{11} = -1,\\ M_{12} = -1,\\ M_{13} = 1",
+    "\\det A = 4\\cdot(-1) - 3\\cdot(-1) + 2\\cdot(1)",
+    "\\det A = 1"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = 4\\begin{vmatrix}3 & 1 \\\\ -2 & -1\\end{vmatrix} + 3\\begin{vmatrix}4 & 1 \\\\ -3 & -1\\end{vmatrix} + 2\\begin{vmatrix}4 & 3 \\\\ -3 & -2\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = -1,\\ M_{12} = 0,\\ M_{13} = 1",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = 3",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = -1",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#20",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}3 & 4 & 1 \\\\ -1 & 3 & 1 \\\\ -2 & 0 & 0\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = 3\\begin{vmatrix}3 & 1 \\\\ 0 & 0\\end{vmatrix} - 4\\begin{vmatrix}-1 & 1 \\\\ -2 & 0\\end{vmatrix} + \\begin{vmatrix}-1 & 3 \\\\ -2 & 0\\end{vmatrix}",
+    "M_{11} = 0,\\ M_{12} = 2,\\ M_{13} = 6",
+    "\\det A = 3\\cdot(0) - 4\\cdot(2) + \\cdot(6)",
+    "\\det A = -2"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = 3\\begin{vmatrix}3 & 1 \\\\ 0 & 0\\end{vmatrix} + 4\\begin{vmatrix}-1 & 1 \\\\ -2 & 0\\end{vmatrix} + \\begin{vmatrix}-1 & 3 \\\\ -2 & 0\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = 0,\\ M_{12} = 3,\\ M_{13} = 6",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = 0",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 2",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#21",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}3 & -2 & -1 \\\\ -3 & 4 & -1 \\\\ -2 & -2 & 1\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = 3\\begin{vmatrix}4 & -1 \\\\ -2 & 1\\end{vmatrix} + 2\\begin{vmatrix}-3 & -1 \\\\ -2 & 1\\end{vmatrix} - \\begin{vmatrix}-3 & 4 \\\\ -2 & -2\\end{vmatrix}",
+    "M_{11} = 2,\\ M_{12} = -5,\\ M_{13} = 14",
+    "\\det A = 3\\cdot(2) + 2\\cdot(-5) - \\cdot(14)",
+    "\\det A = -18"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = 3\\begin{vmatrix}4 & -1 \\\\ -2 & 1\\end{vmatrix} - 2\\begin{vmatrix}-3 & -1 \\\\ -2 & 1\\end{vmatrix} - \\begin{vmatrix}-3 & 4 \\\\ -2 & -2\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = 2,\\ M_{12} = -4,\\ M_{13} = 14",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -16",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 18",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#22",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}-2 & 4 & 3 \\\\ 0 & 2 & -1 \\\\ 3 & 1 & 2\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = -2\\begin{vmatrix}2 & -1 \\\\ 1 & 2\\end{vmatrix} - 4\\begin{vmatrix}0 & -1 \\\\ 3 & 2\\end{vmatrix} + 3\\begin{vmatrix}0 & 2 \\\\ 3 & 1\\end{vmatrix}",
+    "M_{11} = 5,\\ M_{12} = 3,\\ M_{13} = -6",
+    "\\det A = -2\\cdot(5) - 4\\cdot(3) + 3\\cdot(-6)",
+    "\\det A = -40"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = -2\\begin{vmatrix}2 & -1 \\\\ 1 & 2\\end{vmatrix} + 4\\begin{vmatrix}0 & -1 \\\\ 3 & 2\\end{vmatrix} + 3\\begin{vmatrix}0 & 2 \\\\ 3 & 1\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = 5,\\ M_{12} = 4,\\ M_{13} = -6",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -38",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 40",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#23",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}-1 & 1 & 2 \\\\ 3 & 4 & 0 \\\\ -1 & -1 & -1\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = -\\begin{vmatrix}4 & 0 \\\\ -1 & -1\\end{vmatrix} - \\begin{vmatrix}3 & 0 \\\\ -1 & -1\\end{vmatrix} + 2\\begin{vmatrix}3 & 4 \\\\ -1 & -1\\end{vmatrix}",
+    "M_{11} = -4,\\ M_{12} = -3,\\ M_{13} = 1",
+    "\\det A = -\\cdot(-4) - \\cdot(-3) + 2\\cdot(1)",
+    "\\det A = 9"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = -\\begin{vmatrix}4 & 0 \\\\ -1 & -1\\end{vmatrix} + \\begin{vmatrix}3 & 0 \\\\ -1 & -1\\end{vmatrix} + 2\\begin{vmatrix}3 & 4 \\\\ -1 & -1\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = -4,\\ M_{12} = -2,\\ M_{13} = 1",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = 11",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = -9",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#24",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}-3 & 2 & 2 \\\\ -3 & -2 & -3 \\\\ 3 & 4 & 4\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = -3\\begin{vmatrix}-2 & -3 \\\\ 4 & 4\\end{vmatrix} - 2\\begin{vmatrix}-3 & -3 \\\\ 3 & 4\\end{vmatrix} + 2\\begin{vmatrix}-3 & -2 \\\\ 3 & 4\\end{vmatrix}",
+    "M_{11} = 4,\\ M_{12} = -3,\\ M_{13} = -6",
+    "\\det A = -3\\cdot(4) - 2\\cdot(-3) + 2\\cdot(-6)",
+    "\\det A = -18"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = -3\\begin{vmatrix}-2 & -3 \\\\ 4 & 4\\end{vmatrix} + 2\\begin{vmatrix}-3 & -3 \\\\ 3 & 4\\end{vmatrix} + 2\\begin{vmatrix}-3 & -2 \\\\ 3 & 4\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = 4,\\ M_{12} = -2,\\ M_{13} = -6",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -16",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 18",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#25",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}1 & 2 & -3 \\\\ -1 & -3 & 4 \\\\ 1 & 3 & -1\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = \\begin{vmatrix}-3 & 4 \\\\ 3 & -1\\end{vmatrix} - 2\\begin{vmatrix}-1 & 4 \\\\ 1 & -1\\end{vmatrix} - 3\\begin{vmatrix}-1 & -3 \\\\ 1 & 3\\end{vmatrix}",
+    "M_{11} = -9,\\ M_{12} = -3,\\ M_{13} = 0",
+    "\\det A = \\cdot(-9) - 2\\cdot(-3) - 3\\cdot(0)",
+    "\\det A = -3"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = \\begin{vmatrix}-3 & 4 \\\\ 3 & -1\\end{vmatrix} + 2\\begin{vmatrix}-1 & 4 \\\\ 1 & -1\\end{vmatrix} - 3\\begin{vmatrix}-1 & -3 \\\\ 1 & 3\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = -9,\\ M_{12} = -2,\\ M_{13} = 0",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -1",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 3",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.cofactor#26",
+   "unit": "la.cofactor",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\det\\begin{pmatrix}4 & -3 & 4 \\\\ 4 & 3 & 3 \\\\ -2 & 0 & -3\\end{pmatrix}\\ \\text{를 1행 여인수 전개로}",
+   "steps": [
+    "\\det A = 4\\begin{vmatrix}3 & 3 \\\\ 0 & -3\\end{vmatrix} + 3\\begin{vmatrix}4 & 3 \\\\ -2 & -3\\end{vmatrix} + 4\\begin{vmatrix}4 & 3 \\\\ -2 & 0\\end{vmatrix}",
+    "M_{11} = -9,\\ M_{12} = -6,\\ M_{13} = 6",
+    "\\det A = 4\\cdot(-9) + 3\\cdot(-6) + 4\\cdot(6)",
+    "\\det A = -30"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det A = 4\\begin{vmatrix}3 & 3 \\\\ 0 & -3\\end{vmatrix} - 3\\begin{vmatrix}4 & 3 \\\\ -2 & -3\\end{vmatrix} + 4\\begin{vmatrix}4 & 3 \\\\ -2 & 0\\end{vmatrix}",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 0
+    },
+    {
+     "tex": "M_{11} = -9,\\ M_{12} = -5,\\ M_{13} = 6",
+     "error": "algebra",
+     "why": "소행렬식 하나를 잘못 계산했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "\\det A = -28",
+     "error": "algebra",
+     "why": "마지막 합산이 틀렸습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\det A = 30",
+     "error": "sign",
+     "why": "여인수 전개의 부호는 + − + 로 번갈아 바뀝니다.",
+     "pos": 3
+    }
+   ]
+  }
+ ]
+}

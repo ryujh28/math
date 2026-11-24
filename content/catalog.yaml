@@ -1,0 +1,40 @@
+# 39개 장의 목록과 선수 관계. start_open: 처음부터 열린 장.
+- {id: 1, title: 벡터공간과 내적, part: 선형대수, prereqs: [], level: 학부}
+- {id: 2, title: 행렬과 선형변환, part: 선형대수, prereqs: [1], level: 학부}
+- {id: 3, title: 고유값 문제, part: 선형대수, prereqs: [2], level: 학부}
+- {id: 4, title: 행렬 분해, part: 선형대수, prereqs: [3], level: 학부}
+- {id: 5, title: 행렬함수와 이차형식, part: 선형대수, prereqs: [3], level: 학부}
+- {id: 6, title: 1계 ODE, part: 상미분방정식, prereqs: [], level: 학부, start_open: true}
+- {id: 7, title: 2계 선형 ODE, part: 상미분방정식, prereqs: [], level: 학부, start_open: true}
+- {id: 8, title: 고계 및 연립 ODE, part: 상미분방정식, prereqs: [3, 5, 7], level: 학부}
+- {id: 9, title: 급수해와 Frobenius, part: 상미분방정식, prereqs: [7], level: 학부→대학원}
+- {id: 10, title: Laplace 변환, part: 상미분방정식, prereqs: [], level: 학부, start_open: true}
+- {id: 11, title: 벡터 미분, part: 벡터해석, prereqs: [], level: 학부}
+- {id: 12, title: 선·면적분과 적분정리, part: 벡터해석, prereqs: [11], level: 학부}
+- {id: 13, title: 곡선좌표계, part: 벡터해석, prereqs: [11], level: 학부}
+- {id: 14, title: Fourier 급수, part: Fourier 해석, prereqs: [7], level: 학부}
+- {id: 15, title: Fourier 변환, part: Fourier 해석, prereqs: [14], level: 학부}
+- {id: 16, title: 기타 적분변환, part: Fourier 해석, prereqs: [15], level: 대학원}
+- {id: 17, title: PDE 기초, part: 편미분방정식, prereqs: [12, 14], level: 학부}
+- {id: 18, title: 변수분리 (직교좌표), part: 편미분방정식, prereqs: [14, 17], level: 학부}
+- {id: 19, title: 변수분리 (원통·구 좌표), part: 편미분방정식, prereqs: [9, 13, 18], level: 학부→대학원}
+- {id: 20, title: 변환법으로 푸는 PDE, part: 편미분방정식, prereqs: [10, 15, 18], level: 학부}
+- {id: 21, title: Helmholtz 방정식과 파동 전파, part: 편미분방정식, prereqs: [15, 19], level: 대학원}
+- {id: 22, title: 해석함수, part: 복소해석, prereqs: [], level: 학부}
+- {id: 23, title: 복소적분, part: 복소해석, prereqs: [12, 22], level: 학부}
+- {id: 24, title: 복소급수, part: 복소해석, prereqs: [23], level: 학부}
+- {id: 25, title: 유수 정리, part: 복소해석, prereqs: [24], level: 학부→대학원}
+- {id: 26, title: 등각사상, part: 복소해석, prereqs: [22], level: 학부}
+- {id: 27, title: 해석적 연속과 분산 관계, part: 복소해석, prereqs: [15, 25], level: 대학원}
+- {id: 28, title: Sturm–Liouville 문제, part: 특수함수, prereqs: [3, 18], level: 대학원}
+- {id: 29, title: 감마·베타 함수, part: 특수함수, prereqs: [10], level: 학부→대학원}
+- {id: 30, title: Bessel 함수, part: 특수함수, prereqs: [9, 28, 29], level: 대학원}
+- {id: 31, title: Legendre 함수와 구면조화, part: 특수함수, prereqs: [9, 28], level: 대학원}
+- {id: 32, title: 기타 직교다항식, part: 특수함수, prereqs: [28], level: 대학원}
+- {id: 33, title: 기타 특수함수, part: 특수함수, prereqs: [25, 29], level: 대학원}
+- {id: 34, title: Green 함수, part: 고급 방법, prereqs: [20, 28], level: 대학원}
+- {id: 35, title: 적분방정식, part: 고급 방법, prereqs: [34], level: 대학원}
+- {id: 36, title: 변분법, part: 고급 방법, prereqs: [12], level: 대학원}
+- {id: 37, title: 점근해석과 섭동론, part: 고급 방법, prereqs: [25, 29], level: 대학원}
+- {id: 38, title: 텐서 해석, part: 고급 방법, prereqs: [3, 13], level: 대학원}
+- {id: 39, title: 군론 기초, part: 고급 방법, prereqs: [3], level: 대학원}

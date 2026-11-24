@@ -1,0 +1,5642 @@
+{
+ "format": 0,
+ "built": "2026-11-24",
+ "chapter": {
+  "id": 3,
+  "slug": "eigen",
+  "title": "고유값 문제",
+  "summary": "det(A − λI) = 0으로 고유값을, (A − λI)v = 0으로 고유벡터를 구하고 A = PDP⁻¹로 대각화한다.",
+  "part": "선형대수",
+  "level": "학부",
+  "prereqs": [
+   2
+  ],
+  "connections": [
+   "x′ = Ax의 해는 고유벡터 방향으로 e^{λt}만큼 늘거나 줄어듭니다. 7장의 특성방정식은 같은 이야기를 스칼라 하나로 한 것입니다.",
+   "Sturm–Liouville 문제의 고유함수는 '무한 차원 대칭행렬'의 고유벡터입니다. 그래서 서로 직교합니다.",
+   "양자역학의 에너지 준위는 해밀토니안 행렬의 고유값입니다.",
+   "PageRank는 웹 링크 행렬의 고유값 1에 대한 고유벡터입니다."
+  ]
+ },
+ "units": [
+  {
+   "id": "la.charpoly",
+   "kind": "atom",
+   "title": "특성다항식",
+   "hint": "2×2에서 det(A − λI) = λ² − (tr A)λ + det A.",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.eig2",
+   "kind": "atom",
+   "title": "2×2 고유값",
+   "hint": "특성방정식 λ² − (tr A)λ + det A = 0의 두 근. 합 = tr A, 곱 = det A.",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.eigvec",
+   "kind": "atom",
+   "title": "고유벡터",
+   "hint": "(A − λI)v = 0의 0이 아닌 해. 2×2면 한 행만 보고 v를 정하면 된다.",
+   "tiers": [
+    2
+   ]
+  },
+  {
+   "id": "la.eigtri",
+   "kind": "atom",
+   "title": "삼각행렬의 고유값",
+   "hint": "삼각행렬의 고유값은 대각성분 그대로.",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.trdet",
+   "kind": "atom",
+   "title": "고유값과 trace·det",
+   "hint": "고유값의 합 = tr A, 곱 = det A.",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.symeig",
+   "kind": "atom",
+   "title": "대칭행렬의 고유값",
+   "hint": "실대칭행렬: 고유값 실수, 고유벡터 직교, 항상 직교대각화 가능 (스펙트럼 정리).",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.similar",
+   "kind": "atom",
+   "title": "닮은 행렬",
+   "hint": "닮음 변환은 좌표계만 바꾼다. 고유값은 같고, 고유벡터는 P만큼 바뀐다 (v ↦ P⁻¹v).",
+   "tiers": [
+    2
+   ]
+  },
+  {
+   "id": "la.eigpow",
+   "kind": "atom",
+   "title": "거듭제곱과 역행렬의 고유값",
+   "hint": "Aᵏv = λᵏv, A⁻¹v = λ⁻¹v. 같은 고유벡터, 고유값만 거듭제곱.",
+   "tiers": [
+    2
+   ]
+  },
+  {
+   "id": "la.diag",
+   "kind": "schema",
+   "title": "2×2 대각화",
+   "hint": "특성방정식 → 고유값 → 각 고유값의 고유벡터를 P의 열로, 같은 순서로 D의 대각에.",
+   "steps": [
+    "특성방정식",
+    "고유값",
+    "고유벡터",
+    "P와 D"
+   ],
+   "tiers": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "la.apow",
+   "kind": "schema",
+   "title": "대각화로 거듭제곱",
+   "hint": "Aⁿ = PDⁿP⁻¹. 대각행렬의 거듭제곱은 성분별 거듭제곱.",
+   "steps": [
+    "A = PDP⁻¹",
+    "Dⁿ",
+    "Aⁿ = PDⁿP⁻¹",
+    "결과"
+   ],
+   "tiers": [
+    2
+   ]
+  }
+ ],
+ "items": [
+  {
+   "id": "la.charpoly#0",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-3 & 2 \\\\ -3 & 2\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} + \\lambda",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} - \\lambda",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} - 1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} + \\lambda + 1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#1",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}1 & 2 \\\\ 0 & 3\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} - 4\\lambda + 3",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} + 4\\lambda + 3",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} - 4\\lambda - 3",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} - 3\\lambda + 4",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} - 4\\lambda + 4",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#2",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}1 & 0 \\\\ -3 & 4\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} - 5\\lambda + 4",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} + 5\\lambda + 4",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} - 5\\lambda - 4",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} - 4\\lambda + 5",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} - 5\\lambda + 5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#3",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & 4 \\\\ 0 & 4\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} - 4\\lambda",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} + 4\\lambda",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} + 4",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} - 4\\lambda + 1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#4",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-8 & 6 \\\\ -9 & 7\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} + \\lambda - 2",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} - \\lambda - 2",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} + \\lambda + 2",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} + 2\\lambda - 1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} + \\lambda - 1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#5",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-4 & 3 \\\\ -6 & 5\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} - \\lambda - 2",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} + \\lambda - 2",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} - \\lambda + 2",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} + 2\\lambda + 1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} - \\lambda - 1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#6",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}3 & 6 \\\\ 0 & -3\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} - 9",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} + 9",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} + 9\\lambda",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} - 8",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#7",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-5 & 2 \\\\ -6 & 2\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} + 3\\lambda + 2",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} - 3\\lambda + 2",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} + 3\\lambda - 2",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} - 2\\lambda - 3",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} + 3\\lambda + 3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#8",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}4 & -4 \\\\ 0 & 0\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} - 4\\lambda",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} + 4\\lambda",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} + 4",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} - 4\\lambda + 1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#9",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-2 & 1 \\\\ -2 & 1\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} + \\lambda",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} - \\lambda",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} - 1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} + \\lambda + 1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#10",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}3 & 1 \\\\ 0 & 2\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} - 5\\lambda + 6",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} + 5\\lambda + 6",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} - 5\\lambda - 6",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} - 6\\lambda + 5",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} - 5\\lambda + 7",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#11",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}4 & -2 \\\\ 6 & -3\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} - \\lambda",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} + \\lambda",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} + 1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} - \\lambda + 1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#12",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-2 & 0 \\\\ -4 & 2\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} - 4",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} + 4",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} + 4\\lambda",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} - 3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#13",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}3 & 3 \\\\ 0 & 0\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} - 3\\lambda",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} + 3\\lambda",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} + 3",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} - 3\\lambda + 1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#14",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-3 & 0 \\\\ -6 & 3\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} - 9",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} + 9",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} + 9\\lambda",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} - 8",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#15",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-2 & -1 \\\\ 0 & -1\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} + 3\\lambda + 2",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} - 3\\lambda + 2",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} + 3\\lambda - 2",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} - 2\\lambda - 3",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} + 3\\lambda + 3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#16",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-3 & 3 \\\\ -6 & 6\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} - 3\\lambda",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} + 3\\lambda",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} + 3",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} - 3\\lambda + 1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.charpoly#17",
+   "unit": "la.charpoly",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}2 & 4 \\\\ 0 & -2\\end{pmatrix}\\qquad \\det(A - \\lambda I) = \\;?",
+   "answer": "\\lambda^{2} - 4",
+   "wrong": [
+    {
+     "tex": "\\lambda^{2} + 4",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda^{2} + 4\\lambda",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{2} - 3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eig2#0",
+   "unit": "la.eig2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}1 & 4 \\\\ 0 & -3\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = -3,\\ 1",
+   "wrong": [
+    {
+     "tex": "\\lambda = -1,\\ 3",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = -3,\\ -2",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda = -4,\\ 2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eig2#1",
+   "unit": "la.eig2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-3 & 1 \\\\ 0 & -2\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = -3,\\ -2",
+   "wrong": [
+    {
+     "tex": "\\lambda = 2,\\ 3",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = -5,\\ 6",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda = -4,\\ -1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eig2#2",
+   "unit": "la.eig2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}4 & 0 \\\\ 2 & 2\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = 2,\\ 4",
+   "wrong": [
+    {
+     "tex": "\\lambda = -4,\\ -2",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = 6,\\ 8",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda = 1,\\ 5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eig2#3",
+   "unit": "la.eig2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}1 & 2 \\\\ -3 & 6\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = 3,\\ 4",
+   "wrong": [
+    {
+     "tex": "\\lambda = 1,\\ 6",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -4,\\ -3",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = 7,\\ 12",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eig2#4",
+   "unit": "la.eig2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}3 & 0 \\\\ 2 & 1\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = 1,\\ 3",
+   "wrong": [
+    {
+     "tex": "\\lambda = -3,\\ -1",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = 3,\\ 4",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda = 0,\\ 4",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eig2#5",
+   "unit": "la.eig2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-1 & -2 \\\\ 1 & -4\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = -3,\\ -2",
+   "wrong": [
+    {
+     "tex": "\\lambda = -4,\\ -1",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = 2,\\ 3",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = -5,\\ 6",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eig2#6",
+   "unit": "la.eig2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-3 & 5 \\\\ 0 & 2\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = -3,\\ 2",
+   "wrong": [
+    {
+     "tex": "\\lambda = -2,\\ 3",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = -6,\\ -1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda = -2,\\ 1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eig2#7",
+   "unit": "la.eig2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}8 & -6 \\\\ 9 & -7\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = -1,\\ 2",
+   "wrong": [
+    {
+     "tex": "\\lambda = -7,\\ 8",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -2,\\ 1",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = -2,\\ 3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eig2#8",
+   "unit": "la.eig2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}4 & 0 \\\\ 3 & 1\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = 1,\\ 4",
+   "wrong": [
+    {
+     "tex": "\\lambda = -4,\\ -1",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = 4,\\ 5",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda = 0,\\ 5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eig2#9",
+   "unit": "la.eig2",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}6 & -2 \\\\ 6 & -1\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = 2,\\ 3",
+   "wrong": [
+    {
+     "tex": "\\lambda = -1,\\ 6",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -3,\\ -2",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = 5,\\ 6",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda = 1,\\ 4",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#0",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-2 & 1 \\\\ -2 & 1\\end{pmatrix},\\ \\lambda = 0\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -2\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 2\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#1",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-2 & 1 \\\\ -2 & 1\\end{pmatrix},\\ \\lambda = -1\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#2",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}1 & 0 \\\\ -1 & 2\\end{pmatrix},\\ \\lambda = 1\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#3",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}2 & -3 \\\\ 0 & -1\\end{pmatrix},\\ \\lambda = 2\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}-1 \\\\ 0\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 \\\\ -1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 \\\\ 0\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#4",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}1 & -2 \\\\ 0 & 3\\end{pmatrix},\\ \\lambda = 3\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 0\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#5",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}7 & -8 \\\\ 4 & -5\\end{pmatrix},\\ \\lambda = 3\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}3 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#6",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}3 & -4 \\\\ 0 & -1\\end{pmatrix},\\ \\lambda = -1\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 0\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#7",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}4 & -1 \\\\ 2 & 1\\end{pmatrix},\\ \\lambda = 3\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#8",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}3 & 0 \\\\ 2 & 1\\end{pmatrix},\\ \\lambda = 3\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#9",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}4 & -2 \\\\ 6 & -3\\end{pmatrix},\\ \\lambda = 1\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}2 \\\\ 3\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}3 \\\\ 2\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ -3\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}3 \\\\ 3\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#10",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}2 & 2 \\\\ 0 & 4\\end{pmatrix},\\ \\lambda = 4\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 0\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#11",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & -6 \\\\ 1 & -5\\end{pmatrix},\\ \\lambda = -2\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}3 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 3\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}3 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}4 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#12",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}2 & -3 \\\\ 0 & -1\\end{pmatrix},\\ \\lambda = -1\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-1 \\\\ 0\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#13",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}4 & -6 \\\\ 1 & -1\\end{pmatrix},\\ \\lambda = 1\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}3 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#14",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}4 & -2 \\\\ 6 & -3\\end{pmatrix},\\ \\lambda = 0\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 3\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -2\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 2\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#15",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-1 & -2 \\\\ 1 & -4\\end{pmatrix},\\ \\lambda = -2\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}3 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#16",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}4 & -1 \\\\ 2 & 1\\end{pmatrix},\\ \\lambda = 2\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -2\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 2\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#17",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}1 & -4 \\\\ 0 & -3\\end{pmatrix},\\ \\lambda = -3\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 0\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#18",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}1 & -2 \\\\ 6 & -6\\end{pmatrix},\\ \\lambda = -2\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}2 \\\\ 3\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}3 \\\\ 2\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ -3\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}3 \\\\ 3\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#19",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}3 & -2 \\\\ 0 & 1\\end{pmatrix},\\ \\lambda = 1\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}-1 \\\\ 0\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#20",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-1 & -1 \\\\ 2 & -4\\end{pmatrix},\\ \\lambda = -3\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -2\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 2\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#21",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}3 & -2 \\\\ 0 & 1\\end{pmatrix},\\ \\lambda = 3\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}-1 \\\\ 0\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 \\\\ -1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 \\\\ 0\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#22",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}3 & 3 \\\\ 0 & 0\\end{pmatrix},\\ \\lambda = 0\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 0\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}-1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#23",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-3 & 0 \\\\ -4 & 1\\end{pmatrix},\\ \\lambda = -3\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#24",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}1 & 2 \\\\ 0 & 3\\end{pmatrix},\\ \\lambda = 3\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 0\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#25",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}1 & -4 \\\\ 2 & -5\\end{pmatrix},\\ \\lambda = -1\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}3 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#26",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & -6 \\\\ 1 & -5\\end{pmatrix},\\ \\lambda = -3\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}3 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#27",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}4 & -6 \\\\ 1 & -1\\end{pmatrix},\\ \\lambda = 2\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}3 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 3\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}3 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}4 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#28",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-1 & 0 \\\\ 2 & -3\\end{pmatrix},\\ \\lambda = -1\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigvec#29",
+   "unit": "la.eigvec",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}3 & -1 \\\\ 0 & 2\\end{pmatrix},\\ \\lambda = 2\\ \\text{에 대한 고유벡터는?}",
+   "answer": "\\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ 0\\end{pmatrix}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 \\\\ -1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigtri#0",
+   "unit": "la.eigtri",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}0 & 0 & 0 \\\\ -2 & -2 & 0 \\\\ -1 & 0 & 2\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = -2,\\ 0,\\ 2",
+   "wrong": [
+    {
+     "tex": "\\lambda = 0,\\ 0,\\ 0",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -2,\\ -1,\\ 0",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -2,\\ 0,\\ 0",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigtri#1",
+   "unit": "la.eigtri",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}0 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 0 & 0 & -2\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = -2,\\ 0,\\ 1",
+   "wrong": [
+    {
+     "tex": "\\lambda = 0,\\ 0,\\ 0",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -1,\\ 0,\\ 2",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = 0,\\ 0,\\ 1",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -2,\\ -1,\\ 0",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigtri#2",
+   "unit": "la.eigtri",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}0 & 0 & 0 \\\\ -2 & -2 & 0 \\\\ 2 & 2 & 3\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = -2,\\ 0,\\ 3",
+   "wrong": [
+    {
+     "tex": "\\lambda = 0,\\ 0,\\ 0",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -3,\\ 0,\\ 2",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = -2,\\ 0,\\ 2",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -2,\\ 0,\\ 1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigtri#3",
+   "unit": "la.eigtri",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}2 & 0 & 0 \\\\ 2 & -2 & 0 \\\\ 2 & -1 & 1\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = -2,\\ 1,\\ 2",
+   "wrong": [
+    {
+     "tex": "\\lambda = 0,\\ 0,\\ 2",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -2,\\ -1,\\ 2",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = -2,\\ 0,\\ 2",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -2,\\ 1,\\ 1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigtri#4",
+   "unit": "la.eigtri",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}1 & 0 & 0 \\\\ 3 & 0 & 0 \\\\ 2 & 3 & -3\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = -3,\\ 0,\\ 1",
+   "wrong": [
+    {
+     "tex": "\\lambda = 0,\\ 0,\\ 1",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -1,\\ 0,\\ 3",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = 0,\\ 0,\\ 2",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -3,\\ -2,\\ 0",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigtri#5",
+   "unit": "la.eigtri",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-1 & 2 & 1 \\\\ 0 & 2 & -1 \\\\ 0 & 0 & 3\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = -1,\\ 2,\\ 3",
+   "wrong": [
+    {
+     "tex": "\\lambda = -1,\\ 1,\\ 2",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -3,\\ -2,\\ 1",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = 0,\\ 1,\\ 2",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -1,\\ 2,\\ 4",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigtri#6",
+   "unit": "la.eigtri",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-2 & 1 & -1 \\\\ 0 & -3 & 3 \\\\ 0 & 0 & 3\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = -3,\\ -2,\\ 3",
+   "wrong": [
+    {
+     "tex": "\\lambda = -2,\\ -1,\\ 1",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -3,\\ 2,\\ 3",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = -3,\\ -1,\\ 0",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -3,\\ -2,\\ -2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigtri#7",
+   "unit": "la.eigtri",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}0 & -3 & 3 \\\\ 0 & 4 & 3 \\\\ 0 & 0 & 1\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = 0,\\ 1,\\ 4",
+   "wrong": [
+    {
+     "tex": "\\lambda = -3,\\ 0,\\ 3",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -4,\\ -1,\\ 0",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = 0,\\ 3,\\ 4",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = 0,\\ 1,\\ 5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigtri#8",
+   "unit": "la.eigtri",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}-3 & -1 & 3 \\\\ 0 & 0 & -2 \\\\ 0 & 0 & 2\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = -3,\\ 0,\\ 2",
+   "wrong": [
+    {
+     "tex": "\\lambda = -3,\\ -1,\\ 3",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -2,\\ 0,\\ 3",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda = 0,\\ 0,\\ 3",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -3,\\ -1,\\ 0",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.eigtri#9",
+   "unit": "la.eigtri",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "\\begin{pmatrix}0 & 0 & 0 \\\\ 3 & 2 & 0 \\\\ -3 & 2 & -2\\end{pmatrix}\\ \\text{의 고유값은?}",
+   "answer": "\\lambda = -2,\\ 0,\\ 2",
+   "wrong": [
+    {
+     "tex": "\\lambda = 0,\\ 0,\\ 0",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -3,\\ 0,\\ 2",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\lambda = -2,\\ 0,\\ 0",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#0",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ 2,\\ 5\\text{일 때}\\ \\det A = \\;?",
+   "answer": "10",
+   "wrong": [
+    {
+     "tex": "7",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-10",
+     "error": "sign"
+    },
+    {
+     "tex": "-3",
+     "error": "algebra"
+    },
+    {
+     "tex": "11",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#1",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ 2,\\ 3\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "5",
+   "wrong": [
+    {
+     "tex": "6",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-5",
+     "error": "sign"
+    },
+    {
+     "tex": "-1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#2",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ 3,\\ 4\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "7",
+   "wrong": [
+    {
+     "tex": "12",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-7",
+     "error": "sign"
+    },
+    {
+     "tex": "-1",
+     "error": "algebra"
+    },
+    {
+     "tex": "8",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#3",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -1,\\ 2\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "1",
+   "wrong": [
+    {
+     "tex": "-2",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-1",
+     "error": "sign"
+    },
+    {
+     "tex": "-3",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#4",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ 1,\\ 4\\text{일 때}\\ \\det A = \\;?",
+   "answer": "4",
+   "wrong": [
+    {
+     "tex": "5",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-4",
+     "error": "sign"
+    },
+    {
+     "tex": "-3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#5",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -2,\\ 4\\text{일 때}\\ \\det A = \\;?",
+   "answer": "-8",
+   "wrong": [
+    {
+     "tex": "2",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "8",
+     "error": "sign"
+    },
+    {
+     "tex": "-6",
+     "error": "algebra"
+    },
+    {
+     "tex": "-7",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#6",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -3,\\ 5\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "2",
+   "wrong": [
+    {
+     "tex": "-15",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-2",
+     "error": "sign"
+    },
+    {
+     "tex": "-8",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#7",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -3,\\ 4\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "1",
+   "wrong": [
+    {
+     "tex": "-12",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-1",
+     "error": "sign"
+    },
+    {
+     "tex": "-7",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#8",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -2,\\ 3\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "1",
+   "wrong": [
+    {
+     "tex": "-6",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-1",
+     "error": "sign"
+    },
+    {
+     "tex": "-5",
+     "error": "algebra"
+    },
+    {
+     "tex": "2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#9",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ 2,\\ 4\\text{일 때}\\ \\det A = \\;?",
+   "answer": "8",
+   "wrong": [
+    {
+     "tex": "6",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-8",
+     "error": "sign"
+    },
+    {
+     "tex": "-2",
+     "error": "algebra"
+    },
+    {
+     "tex": "9",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#10",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ 3,\\ 5\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "8",
+   "wrong": [
+    {
+     "tex": "15",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-8",
+     "error": "sign"
+    },
+    {
+     "tex": "-2",
+     "error": "algebra"
+    },
+    {
+     "tex": "9",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#11",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -2,\\ 2\\text{일 때}\\ \\det A = \\;?",
+   "answer": "-4",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "4",
+     "error": "sign"
+    },
+    {
+     "tex": "-3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#12",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ 1,\\ 2\\text{일 때}\\ \\det A = \\;?",
+   "answer": "2",
+   "wrong": [
+    {
+     "tex": "3",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-2",
+     "error": "sign"
+    },
+    {
+     "tex": "-1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#13",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -3,\\ -1\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "-4",
+   "wrong": [
+    {
+     "tex": "3",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "4",
+     "error": "sign"
+    },
+    {
+     "tex": "-2",
+     "error": "algebra"
+    },
+    {
+     "tex": "-3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#14",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -1,\\ 5\\text{일 때}\\ \\det A = \\;?",
+   "answer": "-5",
+   "wrong": [
+    {
+     "tex": "4",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "5",
+     "error": "sign"
+    },
+    {
+     "tex": "-6",
+     "error": "algebra"
+    },
+    {
+     "tex": "-4",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#15",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -3,\\ -2\\text{일 때}\\ \\det A = \\;?",
+   "answer": "6",
+   "wrong": [
+    {
+     "tex": "-5",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-6",
+     "error": "sign"
+    },
+    {
+     "tex": "-1",
+     "error": "algebra"
+    },
+    {
+     "tex": "7",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#16",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ 3,\\ 5\\text{일 때}\\ \\det A = \\;?",
+   "answer": "15",
+   "wrong": [
+    {
+     "tex": "8",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-15",
+     "error": "sign"
+    },
+    {
+     "tex": "-2",
+     "error": "algebra"
+    },
+    {
+     "tex": "16",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#17",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -3,\\ 3\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "0",
+   "wrong": [
+    {
+     "tex": "-9",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-6",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#18",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -2,\\ 4\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "2",
+   "wrong": [
+    {
+     "tex": "-8",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-2",
+     "error": "sign"
+    },
+    {
+     "tex": "-6",
+     "error": "algebra"
+    },
+    {
+     "tex": "3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#19",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -1,\\ 1\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "0",
+   "wrong": [
+    {
+     "tex": "-1",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-2",
+     "error": "algebra"
+    },
+    {
+     "tex": "1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#20",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -2,\\ 5\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "3",
+   "wrong": [
+    {
+     "tex": "-10",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-3",
+     "error": "sign"
+    },
+    {
+     "tex": "-7",
+     "error": "algebra"
+    },
+    {
+     "tex": "4",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#21",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ 1,\\ 5\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "6",
+   "wrong": [
+    {
+     "tex": "5",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-6",
+     "error": "sign"
+    },
+    {
+     "tex": "-4",
+     "error": "algebra"
+    },
+    {
+     "tex": "7",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#22",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -1,\\ 4\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "3",
+   "wrong": [
+    {
+     "tex": "-4",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-3",
+     "error": "sign"
+    },
+    {
+     "tex": "-5",
+     "error": "algebra"
+    },
+    {
+     "tex": "4",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#23",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -3,\\ 2\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "-1",
+   "wrong": [
+    {
+     "tex": "-6",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "1",
+     "error": "sign"
+    },
+    {
+     "tex": "-5",
+     "error": "algebra"
+    },
+    {
+     "tex": "0",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#24",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -3,\\ 3\\text{일 때}\\ \\det A = \\;?",
+   "answer": "-9",
+   "wrong": [
+    {
+     "tex": "0",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "9",
+     "error": "sign"
+    },
+    {
+     "tex": "-6",
+     "error": "algebra"
+    },
+    {
+     "tex": "-8",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#25",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -1,\\ 5\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "4",
+   "wrong": [
+    {
+     "tex": "-5",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-4",
+     "error": "sign"
+    },
+    {
+     "tex": "-6",
+     "error": "algebra"
+    },
+    {
+     "tex": "5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#26",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ 1,\\ 3\\text{일 때}\\ \\det A = \\;?",
+   "answer": "3",
+   "wrong": [
+    {
+     "tex": "4",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-3",
+     "error": "sign"
+    },
+    {
+     "tex": "-2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#27",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -2,\\ -1\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "-3",
+   "wrong": [
+    {
+     "tex": "2",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "3",
+     "error": "sign"
+    },
+    {
+     "tex": "-1",
+     "error": "algebra"
+    },
+    {
+     "tex": "-2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#28",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ 1,\\ 2\\text{일 때}\\ \\operatorname{tr} A = \\;?",
+   "answer": "3",
+   "wrong": [
+    {
+     "tex": "2",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "-3",
+     "error": "sign"
+    },
+    {
+     "tex": "-1",
+     "error": "algebra"
+    },
+    {
+     "tex": "4",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.trdet#29",
+   "unit": "la.trdet",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "2\\times 2\\ \\text{행렬}\\ A\\text{의 고유값이}\\ -1,\\ 2\\text{일 때}\\ \\det A = \\;?",
+   "answer": "-2",
+   "wrong": [
+    {
+     "tex": "1",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "2",
+     "error": "sign"
+    },
+    {
+     "tex": "-3",
+     "error": "algebra"
+    },
+    {
+     "tex": "-1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.symeig#0",
+   "unit": "la.symeig",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = A^{T}\\ (\\text{실수})\\text{이면 고유값과 고유벡터는?}",
+   "answer": "\\text{고유값은 실수, 다른 고유값의 고유벡터는 직교}",
+   "wrong": [
+    {
+     "tex": "\\text{고유값은 모두 양수}",
+     "error": "theorem_condition"
+    },
+    {
+     "tex": "\\text{고유값은 순허수}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "\\text{고유벡터는 서로 평행}",
+     "error": "theorem_condition"
+    }
+   ],
+   "verified": "hand"
+  },
+  {
+   "id": "la.similar#0",
+   "unit": "la.similar",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "B = P^{-1}AP\\text{일 때 } A\\text{와 } B\\text{가 공유하는 것은?}",
+   "answer": "\\text{특성다항식 (고유값, trace, det)}",
+   "wrong": [
+    {
+     "tex": "\\text{고유벡터}",
+     "error": "theorem_condition"
+    },
+    {
+     "tex": "\\text{모든 성분}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\text{전치행렬}",
+     "error": "wrong_pair"
+    }
+   ],
+   "verified": "hand"
+  },
+  {
+   "id": "la.eigpow#0",
+   "unit": "la.eigpow",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A\\mathbf{v} = \\lambda\\mathbf{v}\\text{이면 } A^{-1}\\mathbf{v} = \\;?",
+   "answer": "\\lambda^{-1}\\mathbf{v}",
+   "wrong": [
+    {
+     "tex": "-\\lambda\\mathbf{v}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\lambda\\mathbf{v}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\lambda^{-1}A\\mathbf{v}",
+     "error": "algebra"
+    }
+   ],
+   "verified": "hand"
+  },
+  {
+   "id": "la.diag#0",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}2 & 1 \\\\ 0 & 1\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 3\\lambda + 2 = 0",
+    "\\lambda = 2,\\ 1",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda + 2 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -2,\\ -1",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#1",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}-1 & -1 \\\\ 2 & -4\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + 5\\lambda + 6 = 0",
+    "\\lambda = -2,\\ -3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & -3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 5\\lambda + 6 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 2,\\ 3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#2",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}-2 & 2 \\\\ -1 & 1\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda = 0",
+    "\\lambda = -1,\\ 0",
+    "\\mathbf{v}_1 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 0\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 1,\\ 0",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#3",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}2 & -4 \\\\ 0 & -2\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 4 = 0",
+    "\\lambda = 2,\\ -2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & -2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.diag#4",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}-1 & 4 \\\\ 0 & 3\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 2\\lambda - 3 = 0",
+    "\\lambda = -1,\\ 3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 2\\lambda - 3 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 1,\\ -3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#5",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}4 & -4 \\\\ 0 & 0\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 4\\lambda = 0",
+    "\\lambda = 0,\\ 4",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 0\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & 4\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 4\\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 0,\\ -4",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#6",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}0 & 1 \\\\ 0 & -1\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda = 0",
+    "\\lambda = 0,\\ -1",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 0,\\ 1",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#7",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}-1 & 0 \\\\ 1 & -2\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda + 2 = 0",
+    "\\lambda = -1,\\ -2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & -2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 3\\lambda + 2 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 1,\\ 2",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#8",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}-1 & 2 \\\\ 0 & 1\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 1 = 0",
+    "\\lambda = -1,\\ 1",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.diag#9",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}4 & 2 \\\\ 0 & 2\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 6\\lambda + 8 = 0",
+    "\\lambda = 4,\\ 2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & 2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 6\\lambda + 8 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 4\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -4,\\ -2",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#10",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}4 & -1 \\\\ 0 & 3\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 7\\lambda + 12 = 0",
+    "\\lambda = 4,\\ 3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 7\\lambda + 12 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 4\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -4,\\ -3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#11",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}0 & 2 \\\\ -1 & 3\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 3\\lambda + 2 = 0",
+    "\\lambda = 1,\\ 2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda + 2 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -1,\\ -2",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#12",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}-2 & -1 \\\\ 0 & -3\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + 5\\lambda + 6 = 0",
+    "\\lambda = -2,\\ -3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & -3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 5\\lambda + 6 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 2,\\ 3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#13",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}1 & -1 \\\\ 0 & 0\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda = 0",
+    "\\lambda = 1,\\ 0",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 0\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -1,\\ 0",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#14",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}0 & 2 \\\\ 0 & 2\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 2\\lambda = 0",
+    "\\lambda = 2,\\ 0",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 0\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 0\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 2\\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -2,\\ 0",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#15",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}2 & -1 \\\\ 0 & 1\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 3\\lambda + 2 = 0",
+    "\\lambda = 1,\\ 2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 0\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda + 2 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -1,\\ -2",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#16",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}0 & 0 \\\\ 1 & -1\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda = 0",
+    "\\lambda = 0,\\ -1",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 0,\\ 1",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#17",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}4 & -2 \\\\ 0 & 2\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 6\\lambda + 8 = 0",
+    "\\lambda = 4,\\ 2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & 2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 6\\lambda + 8 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 4\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -4,\\ -2",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#18",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}3 & -1 \\\\ 0 & 2\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 5\\lambda + 6 = 0",
+    "\\lambda = 2,\\ 3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 0\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 5\\lambda + 6 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -2,\\ -3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#19",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}3 & -3 \\\\ 0 & 0\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 3\\lambda = 0",
+    "\\lambda = 0,\\ 3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 0\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 0,\\ -3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#20",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}1 & 1 \\\\ -2 & 4\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 5\\lambda + 6 = 0",
+    "\\lambda = 2,\\ 3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 5\\lambda + 6 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -2,\\ -3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#21",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}0 & -1 \\\\ 0 & -1\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda = 0",
+    "\\lambda = 0,\\ -1",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 0,\\ 1",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#22",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}0 & -2 \\\\ 0 & -2\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + 2\\lambda = 0",
+    "\\lambda = 0,\\ -2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 2\\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 0,\\ 2",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#23",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}-4 & 4 \\\\ -2 & 2\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + 2\\lambda = 0",
+    "\\lambda = -2,\\ 0",
+    "\\mathbf{v}_1 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 0\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 2\\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 2,\\ 0",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#24",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}-2 & 1 \\\\ 0 & -3\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + 5\\lambda + 6 = 0",
+    "\\lambda = -2,\\ -3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & -3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 5\\lambda + 6 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 2,\\ 3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#25",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}-3 & 3 \\\\ 0 & 0\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda = 0",
+    "\\lambda = 0,\\ -3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 0\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 3\\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 0,\\ 3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#26",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}-1 & 0 \\\\ 2 & -3\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + 4\\lambda + 3 = 0",
+    "\\lambda = -1,\\ -3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & -3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 4\\lambda + 3 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 1,\\ 3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#27",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}2 & 0 \\\\ 3 & -1\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 2 = 0",
+    "\\lambda = 2,\\ -1",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 2 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -2,\\ 1",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#28",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}1 & -4 \\\\ 0 & -3\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + 2\\lambda - 3 = 0",
+    "\\lambda = 1,\\ -3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & -3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 2\\lambda - 3 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -1,\\ 3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#29",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 1,
+   "problem": "A = \\begin{pmatrix}0 & 0 \\\\ -3 & 3\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 3\\lambda = 0",
+    "\\lambda = 0,\\ 3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 0,\\ -3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#30",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-5 & 6 \\\\ -3 & 4\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 2 = 0",
+    "\\lambda = -2,\\ 1",
+    "\\mathbf{v}_1 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 2 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 2,\\ -1",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#31",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & -2 \\\\ 6 & -4\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda = 0",
+    "\\lambda = 0,\\ -1",
+    "\\mathbf{v}_1 = \\begin{pmatrix}2 \\\\ 3\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+    "P = \\begin{pmatrix}2 & 1 \\\\ 3 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}3 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 3 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 0,\\ 1",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#32",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}2 & -5 \\\\ 0 & -3\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 6 = 0",
+    "\\lambda = -3,\\ 2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 0\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & 2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 6 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & -3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 3,\\ -2",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#33",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-1 & 4 \\\\ -2 & 5\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 4\\lambda + 3 = 0",
+    "\\lambda = 1,\\ 3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 4\\lambda + 3 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -1,\\ -3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#34",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-5 & 6 \\\\ -1 & 0\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + 5\\lambda + 6 = 0",
+    "\\lambda = -3,\\ -2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}3 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}3 & 2 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & -2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 5\\lambda + 6 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 3\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}3 & 2 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & -3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 3,\\ 2",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#35",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-2 & 6 \\\\ -1 & 3\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda = 0",
+    "\\lambda = 0,\\ 1",
+    "\\mathbf{v}_1 = \\begin{pmatrix}3 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}3 & 2 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 3\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}3 & 2 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 0,\\ -1",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#36",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-3 & 7 \\\\ 0 & 4\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 12 = 0",
+    "\\lambda = -3,\\ 4",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & 4\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 12 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & -3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 3,\\ -4",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#37",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}7 & -6 \\\\ 3 & -2\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 5\\lambda + 4 = 0",
+    "\\lambda = 4,\\ 1",
+    "\\mathbf{v}_1 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 5\\lambda + 4 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 4\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -4,\\ -1",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#38",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & 0 \\\\ 5 & -2\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 6 = 0",
+    "\\lambda = 3,\\ -2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & -2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 6 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -3,\\ 2",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#39",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-4 & 2 \\\\ -6 & 3\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda = 0",
+    "\\lambda = -1,\\ 0",
+    "\\mathbf{v}_1 = \\begin{pmatrix}2 \\\\ 3\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+    "P = \\begin{pmatrix}2 & 1 \\\\ 3 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 0\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}3 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 3 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 1,\\ 0",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#40",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}4 & 0 \\\\ 7 & -3\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 12 = 0",
+    "\\lambda = 4,\\ -3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & -3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 12 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & 4\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -4,\\ 3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#41",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & -5 \\\\ 0 & -2\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 6 = 0",
+    "\\lambda = 3,\\ -2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & -2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 6 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -3,\\ 2",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#42",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}6 & -8 \\\\ 4 & -6\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 4 = 0",
+    "\\lambda = 2,\\ -2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & -2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.diag#43",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-5 & 3 \\\\ -6 & 4\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 2 = 0",
+    "\\lambda = -2,\\ 1",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 2 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 2,\\ -1",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#44",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}1 & -6 \\\\ 1 & -4\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda + 2 = 0",
+    "\\lambda = -1,\\ -2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}3 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}3 & 2 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & -2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 3\\lambda + 2 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 3\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}2 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}3 & 2 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 1,\\ 2",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#45",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}2 & 5 \\\\ 0 & -3\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 6 = 0",
+    "\\lambda = 2,\\ -3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & -3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 6 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -2,\\ 3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#46",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-2 & 6 \\\\ 0 & 4\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 2\\lambda - 8 = 0",
+    "\\lambda = -2,\\ 4",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 4\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 2\\lambda - 8 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 2,\\ -4",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#47",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}0 & -2 \\\\ 3 & -5\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + 5\\lambda + 6 = 0",
+    "\\lambda = -2,\\ -3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}2 \\\\ 3\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & -3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 5\\lambda + 6 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 2,\\ 3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#48",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}0 & 2 \\\\ -4 & 6\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 6\\lambda + 8 = 0",
+    "\\lambda = 2,\\ 4",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 4\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 6\\lambda + 8 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -2,\\ -4",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#49",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-2 & 0 \\\\ -6 & 4\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 2\\lambda - 8 = 0",
+    "\\lambda = -2,\\ 4",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 4\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 2\\lambda - 8 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 2,\\ -4",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#50",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}4 & -4 \\\\ 6 & -6\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + 2\\lambda = 0",
+    "\\lambda = 0,\\ -2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}2 \\\\ 3\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - 2\\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 0,\\ 2",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#51",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-3 & 0 \\\\ -5 & 2\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} + \\lambda - 6 = 0",
+    "\\lambda = -3,\\ 2",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & 2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} - \\lambda - 6 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & -3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 3,\\ -2",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#52",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}6 & -3 \\\\ 6 & -3\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 3\\lambda = 0",
+    "\\lambda = 3,\\ 0",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 0\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -3,\\ 0",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#53",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-1 & 2 \\\\ -4 & 5\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 4\\lambda + 3 = 0",
+    "\\lambda = 1,\\ 3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}1 \\\\ 2\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 4\\lambda + 3 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -1,\\ -3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#54",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-6 & 6 \\\\ -9 & 9\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 3\\lambda = 0",
+    "\\lambda = 0,\\ 3",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}2 \\\\ 3\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = 0,\\ -3",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.diag#55",
+   "unit": "la.diag",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}4 & 5 \\\\ 0 & -1\\end{pmatrix}\\ \\text{를 대각화}",
+   "steps": [
+    "\\det(A - \\lambda I) = \\lambda^{2} - 3\\lambda - 4 = 0",
+    "\\lambda = 4,\\ -1",
+    "\\mathbf{v}_1 = \\begin{pmatrix}1 \\\\ 0\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
+    "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}4 & 0 \\\\ 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "\\det(A - \\lambda I) = \\lambda^{2} + 3\\lambda - 4 = 0",
+     "error": "sign",
+     "why": "det(A − λI) = λ² − (tr A)λ + det A. trace 항의 부호가 틀렸습니다.",
+     "pos": 0
+    },
+    {
+     "tex": "\\mathbf{v}_1 = \\begin{pmatrix}0 \\\\ 1\\end{pmatrix},\\ \\mathbf{v}_2 = \\begin{pmatrix}-1 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "(A − λI)v = 0을 만족하지 않습니다. 고유벡터가 아닙니다.",
+     "pos": 2
+    },
+    {
+     "tex": "P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 4\\end{pmatrix}",
+     "error": "algebra",
+     "why": "P의 열 순서와 D의 대각 순서가 맞지 않습니다. 같은 고유값끼리 짝지어야 합니다.",
+     "pos": 3
+    },
+    {
+     "tex": "\\lambda = -4,\\ 1",
+     "error": "sign",
+     "why": "특성방정식의 근을 잘못 구했습니다.",
+     "pos": 1
+    }
+   ]
+  },
+  {
+   "id": "la.apow#0",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & -6 \\\\ 3 & -6\\end{pmatrix}\\ \\text{일 때}\\ A^{4}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -3\\end{pmatrix}",
+    "D^{4} = \\begin{pmatrix}0 & 0 \\\\ 0 & 81\\end{pmatrix}",
+    "A^{4} = PD^{4}P^{-1}",
+    "A^{4} = \\begin{pmatrix}-81 & 162 \\\\ -81 & 162\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{4} = \\begin{pmatrix}0 & 0 \\\\ 0 & -12\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}-81 & -81 \\\\ 162 & 162\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}81 & -162 \\\\ 81 & -162\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#1",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}0 & 2 \\\\ 0 & -2\\end{pmatrix}\\ \\text{일 때}\\ A^{5}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -2\\end{pmatrix}",
+    "D^{5} = \\begin{pmatrix}0 & 0 \\\\ 0 & -32\\end{pmatrix}",
+    "A^{5} = PD^{5}P^{-1}",
+    "A^{5} = \\begin{pmatrix}0 & 32 \\\\ 0 & -32\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{5} = \\begin{pmatrix}0 & 0 \\\\ 0 & -10\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}0 & -32 \\\\ 0 & -32\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}0 & -32 \\\\ 0 & 32\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#2",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}0 & 3 \\\\ 0 & 3\\end{pmatrix}\\ \\text{일 때}\\ A^{4}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & 3\\end{pmatrix}",
+    "D^{4} = \\begin{pmatrix}0 & 0 \\\\ 0 & 81\\end{pmatrix}",
+    "A^{4} = PD^{4}P^{-1}",
+    "A^{4} = \\begin{pmatrix}0 & 81 \\\\ 0 & 81\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{4} = \\begin{pmatrix}0 & 0 \\\\ 0 & 12\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}0 & -81 \\\\ 0 & 81\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}0 & -81 \\\\ 0 & -81\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#3",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}1 & -2 \\\\ 4 & -5\\end{pmatrix}\\ \\text{일 때}\\ A^{4}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & -3\\end{pmatrix}",
+    "D^{4} = \\begin{pmatrix}1 & 0 \\\\ 0 & 81\\end{pmatrix}",
+    "A^{4} = PD^{4}P^{-1}",
+    "A^{4} = \\begin{pmatrix}-79 & 80 \\\\ -160 & 161\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{4} = \\begin{pmatrix}-4 & 0 \\\\ 0 & -12\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}-79 & -160 \\\\ 80 & 161\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}79 & -80 \\\\ 160 & -161\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#4",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}2 & 0 \\\\ -1 & 3\\end{pmatrix}\\ \\text{일 때}\\ A^{5}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 3\\end{pmatrix}",
+    "D^{5} = \\begin{pmatrix}32 & 0 \\\\ 0 & 243\\end{pmatrix}",
+    "A^{5} = PD^{5}P^{-1}",
+    "A^{5} = \\begin{pmatrix}32 & 0 \\\\ -211 & 243\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{5} = \\begin{pmatrix}10 & 0 \\\\ 0 & 15\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}32 & 0 \\\\ 211 & 243\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}-32 & 0 \\\\ 211 & -243\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#5",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-3 & -5 \\\\ 0 & 2\\end{pmatrix}\\ \\text{일 때}\\ A^{4}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & 2\\end{pmatrix}",
+    "D^{4} = \\begin{pmatrix}81 & 0 \\\\ 0 & 16\\end{pmatrix}",
+    "A^{4} = PD^{4}P^{-1}",
+    "A^{4} = \\begin{pmatrix}81 & 65 \\\\ 0 & 16\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{4} = \\begin{pmatrix}-12 & 0 \\\\ 0 & 8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}81 & -65 \\\\ 0 & 16\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}-81 & -65 \\\\ 0 & -16\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#6",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}1 & 1 \\\\ 0 & 2\\end{pmatrix}\\ \\text{일 때}\\ A^{4}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 2\\end{pmatrix}",
+    "D^{4} = \\begin{pmatrix}1 & 0 \\\\ 0 & 16\\end{pmatrix}",
+    "A^{4} = PD^{4}P^{-1}",
+    "A^{4} = \\begin{pmatrix}1 & 15 \\\\ 0 & 16\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{4} = \\begin{pmatrix}4 & 0 \\\\ 0 & 8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}1 & -15 \\\\ 0 & 16\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}-1 & -15 \\\\ 0 & -16\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#7",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}4 & -2 \\\\ 6 & -3\\end{pmatrix}\\ \\text{일 때}\\ A^{5}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}2 & 1 \\\\ 3 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 0\\end{pmatrix}",
+    "D^{5} = \\begin{pmatrix}1 & 0 \\\\ 0 & 0\\end{pmatrix}",
+    "A^{5} = PD^{5}P^{-1}",
+    "A^{5} = \\begin{pmatrix}4 & -2 \\\\ 6 & -3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{5} = \\begin{pmatrix}5 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}4 & 2 \\\\ -6 & -3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}-4 & 2 \\\\ -6 & 3\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#8",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & -4 \\\\ 0 & -1\\end{pmatrix}\\ \\text{일 때}\\ A^{3}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 3\\end{pmatrix}",
+    "D^{3} = \\begin{pmatrix}-1 & 0 \\\\ 0 & 27\\end{pmatrix}",
+    "A^{3} = PD^{3}P^{-1}",
+    "A^{3} = \\begin{pmatrix}27 & -28 \\\\ 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{3} = \\begin{pmatrix}-3 & 0 \\\\ 0 & 9\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}27 & 0 \\\\ 28 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}-27 & 28 \\\\ 0 & 1\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#9",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-2 & -1 \\\\ 0 & -1\\end{pmatrix}\\ \\text{일 때}\\ A^{3}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "D^{3} = \\begin{pmatrix}-8 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "A^{3} = PD^{3}P^{-1}",
+    "A^{3} = \\begin{pmatrix}-8 & -7 \\\\ 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{3} = \\begin{pmatrix}-6 & 0 \\\\ 0 & -3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}-8 & 7 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}8 & 7 \\\\ 0 & 1\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#10",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}7 & -8 \\\\ 4 & -5\\end{pmatrix}\\ \\text{일 때}\\ A^{5}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "D^{5} = \\begin{pmatrix}243 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "A^{5} = PD^{5}P^{-1}",
+    "A^{5} = \\begin{pmatrix}487 & -488 \\\\ 244 & -245\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{5} = \\begin{pmatrix}15 & 0 \\\\ 0 & -5\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}487 & 244 \\\\ -488 & -245\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}-487 & 488 \\\\ -244 & 245\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#11",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-1 & 1 \\\\ 0 & 0\\end{pmatrix}\\ \\text{일 때}\\ A^{5}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "D^{5} = \\begin{pmatrix}0 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "A^{5} = PD^{5}P^{-1}",
+    "A^{5} = \\begin{pmatrix}-1 & 1 \\\\ 0 & 0\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{5} = \\begin{pmatrix}0 & 0 \\\\ 0 & -5\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}-1 & 0 \\\\ -1 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}1 & -1 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#12",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}2 & -2 \\\\ 6 & -5\\end{pmatrix}\\ \\text{일 때}\\ A^{3}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}2 & 1 \\\\ 3 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & -2\\end{pmatrix}",
+    "D^{3} = \\begin{pmatrix}-1 & 0 \\\\ 0 & -8\\end{pmatrix}",
+    "A^{3} = PD^{3}P^{-1}",
+    "A^{3} = \\begin{pmatrix}20 & -14 \\\\ 42 & -29\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{3} = \\begin{pmatrix}-3 & 0 \\\\ 0 & -6\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}20 & 14 \\\\ -42 & -29\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}-20 & 14 \\\\ -42 & 29\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#13",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & -2 \\\\ 6 & -4\\end{pmatrix}\\ \\text{일 때}\\ A^{3}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}2 & 1 \\\\ 3 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}0 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "D^{3} = \\begin{pmatrix}0 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "A^{3} = PD^{3}P^{-1}",
+    "A^{3} = \\begin{pmatrix}3 & -2 \\\\ 6 & -4\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{3} = \\begin{pmatrix}0 & 0 \\\\ 0 & -3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}3 & 2 \\\\ -6 & -4\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}-3 & 2 \\\\ -6 & 4\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#14",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & -2 \\\\ 0 & 1\\end{pmatrix}\\ \\text{일 때}\\ A^{4}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 3\\end{pmatrix}",
+    "D^{4} = \\begin{pmatrix}1 & 0 \\\\ 0 & 81\\end{pmatrix}",
+    "A^{4} = PD^{4}P^{-1}",
+    "A^{4} = \\begin{pmatrix}81 & -80 \\\\ 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{4} = \\begin{pmatrix}4 & 0 \\\\ 0 & 12\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}81 & 0 \\\\ 80 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}-81 & 80 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#15",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & 3 \\\\ 0 & 0\\end{pmatrix}\\ \\text{일 때}\\ A^{4}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 0\\end{pmatrix}",
+    "D^{4} = \\begin{pmatrix}81 & 0 \\\\ 0 & 0\\end{pmatrix}",
+    "A^{4} = PD^{4}P^{-1}",
+    "A^{4} = \\begin{pmatrix}81 & 81 \\\\ 0 & 0\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{4} = \\begin{pmatrix}12 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}81 & -81 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}-81 & -81 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#16",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}0 & 2 \\\\ -3 & 5\\end{pmatrix}\\ \\text{일 때}\\ A^{4}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 3\\end{pmatrix}",
+    "D^{4} = \\begin{pmatrix}16 & 0 \\\\ 0 & 81\\end{pmatrix}",
+    "A^{4} = PD^{4}P^{-1}",
+    "A^{4} = \\begin{pmatrix}-114 & 130 \\\\ -195 & 211\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{4} = \\begin{pmatrix}8 & 0 \\\\ 0 & 12\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}-114 & -390 \\\\ 65 & 211\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}114 & -130 \\\\ 195 & -211\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#17",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & 0 \\\\ 4 & -1\\end{pmatrix}\\ \\text{일 때}\\ A^{3}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "D^{3} = \\begin{pmatrix}27 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "A^{3} = PD^{3}P^{-1}",
+    "A^{3} = \\begin{pmatrix}27 & 0 \\\\ 28 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{3} = \\begin{pmatrix}9 & 0 \\\\ 0 & -3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}27 & 0 \\\\ -28 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}-27 & 0 \\\\ -28 & 1\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#18",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-4 & 2 \\\\ -6 & 3\\end{pmatrix}\\ \\text{일 때}\\ A^{4}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}2 & 1 \\\\ 3 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & 0\\end{pmatrix}",
+    "D^{4} = \\begin{pmatrix}1 & 0 \\\\ 0 & 0\\end{pmatrix}",
+    "A^{4} = PD^{4}P^{-1}",
+    "A^{4} = \\begin{pmatrix}4 & -2 \\\\ 6 & -3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{4} = \\begin{pmatrix}-4 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}4 & 2 \\\\ -6 & -3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}-4 & 2 \\\\ -6 & 3\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#19",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}5 & -2 \\\\ 3 & 0\\end{pmatrix}\\ \\text{일 때}\\ A^{4}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix}",
+    "D^{4} = \\begin{pmatrix}81 & 0 \\\\ 0 & 16\\end{pmatrix}",
+    "A^{4} = PD^{4}P^{-1}",
+    "A^{4} = \\begin{pmatrix}211 & -130 \\\\ 195 & -114\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{4} = \\begin{pmatrix}12 & 0 \\\\ 0 & 8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}211 & 390 \\\\ -65 & -114\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}-211 & 130 \\\\ -195 & 114\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#20",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}2 & -1 \\\\ 0 & 3\\end{pmatrix}\\ \\text{일 때}\\ A^{3}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & 3\\end{pmatrix}",
+    "D^{3} = \\begin{pmatrix}8 & 0 \\\\ 0 & 27\\end{pmatrix}",
+    "A^{3} = PD^{3}P^{-1}",
+    "A^{3} = \\begin{pmatrix}8 & -19 \\\\ 0 & 27\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{3} = \\begin{pmatrix}6 & 0 \\\\ 0 & 9\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}8 & 19 \\\\ 0 & 27\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}-8 & 19 \\\\ 0 & -27\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#21",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & -4 \\\\ 2 & -3\\end{pmatrix}\\ \\text{일 때}\\ A^{3}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "D^{3} = \\begin{pmatrix}1 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "A^{3} = PD^{3}P^{-1}",
+    "A^{3} = \\begin{pmatrix}3 & -4 \\\\ 2 & -3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{3} = \\begin{pmatrix}3 & 0 \\\\ 0 & -3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}3 & 2 \\\\ -4 & -3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}-3 & 4 \\\\ -2 & 3\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#22",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-2 & 1 \\\\ 0 & -1\\end{pmatrix}\\ \\text{일 때}\\ A^{4}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-2 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "D^{4} = \\begin{pmatrix}16 & 0 \\\\ 0 & 1\\end{pmatrix}",
+    "A^{4} = PD^{4}P^{-1}",
+    "A^{4} = \\begin{pmatrix}16 & -15 \\\\ 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{4} = \\begin{pmatrix}-8 & 0 \\\\ 0 & -4\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}16 & 15 \\\\ 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}-16 & 15 \\\\ 0 & -1\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#23",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-3 & 5 \\\\ 0 & 2\\end{pmatrix}\\ \\text{일 때}\\ A^{5}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & 1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & 2\\end{pmatrix}",
+    "D^{5} = \\begin{pmatrix}-243 & 0 \\\\ 0 & 32\\end{pmatrix}",
+    "A^{5} = PD^{5}P^{-1}",
+    "A^{5} = \\begin{pmatrix}-243 & 275 \\\\ 0 & 32\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{5} = \\begin{pmatrix}-15 & 0 \\\\ 0 & 10\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}-243 & -275 \\\\ 0 & 32\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}243 & -275 \\\\ 0 & -32\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#24",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & 1 \\\\ 0 & 2\\end{pmatrix}\\ \\text{일 때}\\ A^{3}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & -1 \\\\ 0 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix}",
+    "D^{3} = \\begin{pmatrix}27 & 0 \\\\ 0 & 8\\end{pmatrix}",
+    "A^{3} = PD^{3}P^{-1}",
+    "A^{3} = \\begin{pmatrix}27 & 19 \\\\ 0 & 8\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{3} = \\begin{pmatrix}9 & 0 \\\\ 0 & 6\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}27 & -19 \\\\ 0 & 8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}-27 & -19 \\\\ 0 & -8\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#25",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & -6 \\\\ 1 & -2\\end{pmatrix}\\ \\text{일 때}\\ A^{5}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}3 & 2 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}1 & 0 \\\\ 0 & 0\\end{pmatrix}",
+    "D^{5} = \\begin{pmatrix}1 & 0 \\\\ 0 & 0\\end{pmatrix}",
+    "A^{5} = PD^{5}P^{-1}",
+    "A^{5} = \\begin{pmatrix}3 & -6 \\\\ 1 & -2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{5} = \\begin{pmatrix}5 & 0 \\\\ 0 & 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}3 & 2 \\\\ -3 & -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}-3 & 6 \\\\ -1 & 2\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#26",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}4 & -1 \\\\ 2 & 1\\end{pmatrix}\\ \\text{일 때}\\ A^{4}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ D = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix}",
+    "D^{4} = \\begin{pmatrix}81 & 0 \\\\ 0 & 16\\end{pmatrix}",
+    "A^{4} = PD^{4}P^{-1}",
+    "A^{4} = \\begin{pmatrix}146 & -65 \\\\ 130 & -49\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{4} = \\begin{pmatrix}12 & 0 \\\\ 0 & 8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}146 & 130 \\\\ -65 & -49\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{4} = \\begin{pmatrix}-146 & 65 \\\\ -130 & 49\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#27",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-3 & 0 \\\\ -6 & 3\\end{pmatrix}\\ \\text{일 때}\\ A^{5}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-3 & 0 \\\\ 0 & 3\\end{pmatrix}",
+    "D^{5} = \\begin{pmatrix}-243 & 0 \\\\ 0 & 243\\end{pmatrix}",
+    "A^{5} = PD^{5}P^{-1}",
+    "A^{5} = \\begin{pmatrix}-243 & 0 \\\\ -486 & 243\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{5} = \\begin{pmatrix}-15 & 0 \\\\ 0 & 15\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}-243 & 0 \\\\ 486 & 243\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}243 & 0 \\\\ 486 & -243\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#28",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}0 & -2 \\\\ 1 & -3\\end{pmatrix}\\ \\text{일 때}\\ A^{3}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}-1 & 0 \\\\ 0 & -2\\end{pmatrix}",
+    "D^{3} = \\begin{pmatrix}-1 & 0 \\\\ 0 & -8\\end{pmatrix}",
+    "A^{3} = PD^{3}P^{-1}",
+    "A^{3} = \\begin{pmatrix}6 & -14 \\\\ 7 & -15\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{3} = \\begin{pmatrix}-3 & 0 \\\\ 0 & -6\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}6 & 7 \\\\ -14 & -15\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{3} = \\begin{pmatrix}-6 & 14 \\\\ -7 & 15\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.apow#29",
+   "unit": "la.apow",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}5 & -6 \\\\ 3 & -4\\end{pmatrix}\\ \\text{일 때}\\ A^{5}\\ \\text{를 대각화로}",
+   "steps": [
+    "A = PDP^{-1},\\ P = \\begin{pmatrix}2 & 1 \\\\ 1 & 1\\end{pmatrix},\\ D = \\begin{pmatrix}2 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "D^{5} = \\begin{pmatrix}32 & 0 \\\\ 0 & -1\\end{pmatrix}",
+    "A^{5} = PD^{5}P^{-1}",
+    "A^{5} = \\begin{pmatrix}65 & -66 \\\\ 33 & -34\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "D^{5} = \\begin{pmatrix}10 & 0 \\\\ 0 & -5\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Dⁿ은 대각성분을 각각 n제곱한 것입니다. n을 곱하면 안 됩니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}65 & 33 \\\\ -66 & -34\\end{pmatrix}",
+     "error": "algebra",
+     "why": "A = PDP⁻¹입니다. P⁻¹DP는 다른 행렬입니다.",
+     "pos": 3
+    },
+    {
+     "tex": "A^{5} = \\begin{pmatrix}-65 & 66 \\\\ -33 & 34\\end{pmatrix}",
+     "error": "sign",
+     "why": "부호가 틀렸습니다. 고유값의 거듭제곱 부호를 확인하세요.",
+     "pos": 3
+    }
+   ]
+  }
+ ]
+}

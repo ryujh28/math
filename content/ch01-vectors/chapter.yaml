@@ -1,0 +1,9 @@
+id: 1
+slug: vectors
+title: 벡터공간과 내적
+summary: 내적으로 길이·각도·직교를 정의하고, 사영과 Gram–Schmidt로 정규직교 기저를 만든다.
+connections:
+  - "사영 proj_v u = (u·v / v·v) v 는 최소제곱법의 1차원 버전입니다. 4장의 정규방정식 AᵀAx = Aᵀb가 이걸 여러 차원으로 늘린 것입니다."
+  - "Gram–Schmidt를 행렬로 쓰면 A = QR 분해가 됩니다. Q의 열이 e₁, e₂, …, R은 계수들입니다."
+  - "함수에도 내적 ⟨f, g⟩ = ∫ f g dx를 주면 Fourier 급수는 사인·코사인이라는 정규직교 기저로의 사영이 됩니다."
+  - "Cauchy–Schwarz 부등식은 상관계수가 −1과 1 사이에 있는 이유이기도 합니다."

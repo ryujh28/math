@@ -1,0 +1,11 @@
+# 2장 행렬과 선형변환 · 풀이 뼈대
+- id: la.gauss
+  title: Gauss 소거
+  generator: la2:gauss3
+  steps: [1열 소거, 2열 소거, x₃, 뒤에서부터 대입]
+  hint: "피벗 아래를 0으로 만드는 행 연산 Rᵢ − lᵢ₁R₁, 위삼각이 되면 뒤에서부터 대입한다."
+- id: la.cofactor
+  title: 3×3 여인수 전개
+  generator: la2:cofactor3
+  steps: [전개식, 소행렬식, 대입, 결과]
+  hint: "det A = a₁₁M₁₁ − a₁₂M₁₂ + a₁₃M₁₃. Mᵢⱼ는 i행 j열을 지운 2×2 행렬식."

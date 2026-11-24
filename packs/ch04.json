@@ -1,0 +1,4220 @@
+{
+ "format": 0,
+ "built": "2026-11-24",
+ "chapter": {
+  "id": 4,
+  "slug": "decomp",
+  "title": "행렬 분해",
+  "summary": "LU·QR·SVD로 행렬을 쪼개고, 정규방정식 AᵀAx = Aᵀb로 최소제곱 문제를 푼다.",
+  "part": "선형대수",
+  "level": "학부",
+  "prereqs": [
+   3
+  ],
+  "connections": [
+   "SVD의 특이값을 큰 것부터 k개만 남기면 가장 좋은 rank-k 근사가 됩니다 (Eckart–Young). 이미지 압축과 PCA가 이 원리입니다.",
+   "최소제곱해는 b를 A의 열공간에 사영한 것입니다. 1장의 벡터 사영이 행렬로 커진 모습입니다.",
+   "OPC의 마스크 최적화도 큰 최소제곱 문제입니다. 목표 패턴과 예측 패턴의 차이 제곱합을 줄입니다.",
+   "QR 분해는 Gram–Schmidt를 행렬로 쓴 것이고, 정규방정식보다 수치적으로 안정적입니다."
+  ]
+ },
+ "units": [
+  {
+   "id": "la.ata",
+   "kind": "atom",
+   "title": "AᵀA 계산",
+   "hint": "(AᵀA)ᵢⱼ = A의 i열 · j열. 항상 대칭.",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.sv",
+   "kind": "atom",
+   "title": "특이값",
+   "hint": "특이값 σᵢ = √(AᵀA의 고유값). A 자체의 고유값과는 다르다.",
+   "tiers": [
+    2
+   ]
+  },
+  {
+   "id": "la.svd",
+   "kind": "atom",
+   "title": "SVD",
+   "hint": "A = UΣVᵀ. U, V는 직교행렬(각각 AAᵀ, AᵀA의 고유벡터), Σ는 특이값.",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.normaleq",
+   "kind": "atom",
+   "title": "정규방정식",
+   "hint": "잔차 b − Ax̂가 A의 열공간에 직교 ⇔ Aᵀ(b − Ax̂) = 0 ⇔ AᵀAx̂ = Aᵀb.",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.projmat",
+   "kind": "atom",
+   "title": "사영행렬",
+   "hint": "P = A(AᵀA)⁻¹Aᵀ. P² = P, Pᵀ = P. (AᵀA)⁻¹Aᵀ만 쓰면 사영이 아니라 최소제곱해(유사역행렬).",
+   "tiers": [
+    2
+   ]
+  },
+  {
+   "id": "la.qr",
+   "kind": "atom",
+   "title": "QR 분해",
+   "hint": "Q의 열은 정규직교 (Gram–Schmidt 결과), R은 위삼각 (계수들).",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.orthmat",
+   "kind": "atom",
+   "title": "직교행렬",
+   "hint": "직교행렬의 역행렬은 전치. 길이와 각도를 보존한다 (det = ±1).",
+   "tiers": [
+    1
+   ]
+  },
+  {
+   "id": "la.lsq",
+   "kind": "schema",
+   "title": "최소제곱 직선 맞춤",
+   "hint": "A = [1 xᵢ], b = [yᵢ]. AᵀA = [[n, Σx], [Σx, Σx²]], Aᵀb = [Σy, Σxy]를 풀면 (c₀, c₁).",
+   "steps": [
+    "A와 b",
+    "정규방정식",
+    "해",
+    "직선"
+   ],
+   "tiers": [
+    2,
+    3
+   ]
+  },
+  {
+   "id": "la.lu",
+   "kind": "schema",
+   "title": "3×3 LU 분해",
+   "hint": "Gauss 소거의 승수 lᵢⱼ를 L의 (i, j) 자리에, 소거 결과를 U에.",
+   "steps": [
+    "1열 승수",
+    "1열 소거",
+    "2열 승수",
+    "L과 U"
+   ],
+   "tiers": [
+    2
+   ]
+  }
+ ],
+ "items": [
+  {
+   "id": "la.ata#0",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-1 & -1 \\\\ 2 & 2 \\\\ 0 & 2\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}5 & 5 \\\\ 5 & 9\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}5 & -5 \\\\ -5 & 9\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}5 & 0 \\\\ 0 & 9\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}5 & 6 \\\\ 6 & 9\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}1 & 3 \\\\ 3 & 9\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.ata#1",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-1 & -1 \\\\ -1 & -2 \\\\ -1 & 0\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}3 & 3 \\\\ 3 & 5\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}3 & -3 \\\\ -3 & 5\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}3 & 0 \\\\ 0 & 5\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}3 & 4 \\\\ 4 & 5\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}9 & 9 \\\\ 9 & 9\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.ata#2",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-2 & -2 \\\\ -2 & 0 \\\\ -1 & 3\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}9 & 1 \\\\ 1 & 13\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}9 & -1 \\\\ -1 & 13\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}9 & 0 \\\\ 0 & 13\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}9 & 2 \\\\ 2 & 13\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}25 & -5 \\\\ -5 & 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.ata#3",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}2 & 0 \\\\ -2 & -2 \\\\ 0 & 1\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}8 & 4 \\\\ 4 & 5\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}8 & -4 \\\\ -4 & 5\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}8 & 0 \\\\ 0 & 5\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}8 & 5 \\\\ 5 & 5\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}0 & 0 \\\\ 0 & 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.ata#4",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}2 & 3 \\\\ 2 & 3 \\\\ 1 & 1\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}9 & 13 \\\\ 13 & 19\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}9 & -13 \\\\ -13 & 19\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}9 & 0 \\\\ 0 & 19\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}9 & 14 \\\\ 14 & 19\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}25 & 35 \\\\ 35 & 49\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.ata#5",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}2 & 0 \\\\ 3 & 1 \\\\ 1 & 0\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}14 & 3 \\\\ 3 & 1\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}14 & -3 \\\\ -3 & 1\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}14 & 0 \\\\ 0 & 1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}14 & 4 \\\\ 4 & 1\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}36 & 6 \\\\ 6 & 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.ata#6",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & 1 \\\\ 0 & 0 \\\\ 3 & 2\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}9 & 6 \\\\ 6 & 5\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}9 & -6 \\\\ -6 & 5\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}9 & 0 \\\\ 0 & 5\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}9 & 7 \\\\ 7 & 5\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}9 & 9 \\\\ 9 & 9\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.ata#7",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}1 & 3 \\\\ 2 & 0 \\\\ 2 & 1\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}9 & 5 \\\\ 5 & 10\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}9 & -5 \\\\ -5 & 10\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}9 & 0 \\\\ 0 & 10\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}9 & 6 \\\\ 6 & 10\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}25 & 20 \\\\ 20 & 16\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.ata#8",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}3 & -1 \\\\ 0 & 3 \\\\ -1 & 2\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}10 & -5 \\\\ -5 & 14\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}10 & 5 \\\\ 5 & 14\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}10 & 0 \\\\ 0 & 14\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}10 & -4 \\\\ -4 & 14\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}4 & 8 \\\\ 8 & 16\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.ata#9",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-1 & 1 \\\\ 3 & 3 \\\\ 1 & 3\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}11 & 11 \\\\ 11 & 19\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}11 & -11 \\\\ -11 & 19\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}11 & 0 \\\\ 0 & 19\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}11 & 12 \\\\ 12 & 19\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}9 & 21 \\\\ 21 & 49\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.ata#10",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-2 & 2 \\\\ 3 & -1 \\\\ 1 & 3\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}14 & -4 \\\\ -4 & 14\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}14 & 4 \\\\ 4 & 14\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}14 & 0 \\\\ 0 & 14\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}14 & -3 \\\\ -3 & 14\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}4 & 8 \\\\ 8 & 16\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.ata#11",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}1 & 0 \\\\ 3 & -1 \\\\ 1 & 2\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}11 & -1 \\\\ -1 & 5\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}11 & 1 \\\\ 1 & 5\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}11 & 0 \\\\ 0 & 5\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}25 & 5 \\\\ 5 & 1\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.ata#12",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}2 & 2 \\\\ 2 & 3 \\\\ 2 & 2\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}12 & 14 \\\\ 14 & 17\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}12 & -14 \\\\ -14 & 17\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}12 & 0 \\\\ 0 & 17\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}12 & 15 \\\\ 15 & 17\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}36 & 42 \\\\ 42 & 49\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.ata#13",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}3 & 2 \\\\ -1 & 1 \\\\ 1 & 3\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}11 & 8 \\\\ 8 & 14\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}11 & -8 \\\\ -8 & 14\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}11 & 0 \\\\ 0 & 14\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}11 & 9 \\\\ 9 & 14\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}9 & 18 \\\\ 18 & 36\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.ata#14",
+   "unit": "la.ata",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}3 & 0 \\\\ 0 & 2 \\\\ -1 & 2\\end{pmatrix}\\qquad A^{T}A = \\;?",
+   "answer": "\\begin{pmatrix}10 & -2 \\\\ -2 & 8\\end{pmatrix}",
+   "wrong": [
+    {
+     "tex": "\\begin{pmatrix}10 & 2 \\\\ 2 & 8\\end{pmatrix}",
+     "error": "sign"
+    },
+    {
+     "tex": "\\begin{pmatrix}10 & 0 \\\\ 0 & 8\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}10 & -1 \\\\ -1 & 8\\end{pmatrix}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\begin{pmatrix}4 & 8 \\\\ 8 & 16\\end{pmatrix}",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#0",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & 3 \\\\ -2 & 0\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 3,\\ \\sigma_2 = 2",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 9,\\ \\sigma_2 = 4",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 4,\\ \\sigma_2 = 2",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 3,\\ \\sigma_2 = 3",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{3},\\ \\sigma_2 = \\sqrt{2}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 5,\\ \\sigma_2 = 1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#1",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & 10 \\\\ -1 & 0\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 10,\\ \\sigma_2 = 1",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 100,\\ \\sigma_2 = 1",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 10,\\ \\sigma_2 = 2",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{10},\\ \\sigma_2 = 1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 9",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#2",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}6 & -4 \\\\ 8 & 3\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 10,\\ \\sigma_2 = 5",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 100,\\ \\sigma_2 = 25",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 10,\\ \\sigma_2 = 6",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{10},\\ \\sigma_2 = \\sqrt{5}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 15,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#3",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & -5 \\\\ 10 & 0\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 10,\\ \\sigma_2 = 5",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 100,\\ \\sigma_2 = 25",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 10,\\ \\sigma_2 = 6",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{10},\\ \\sigma_2 = \\sqrt{5}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 15,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#4",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-6 & -4 \\\\ 8 & -3\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 10,\\ \\sigma_2 = 5",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 100,\\ \\sigma_2 = 25",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 10,\\ \\sigma_2 = 6",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{10},\\ \\sigma_2 = \\sqrt{5}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 15,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#5",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & -1 \\\\ 3 & 0\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 3,\\ \\sigma_2 = 1",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 9,\\ \\sigma_2 = 1",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 4,\\ \\sigma_2 = 1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 3,\\ \\sigma_2 = 2",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{3},\\ \\sigma_2 = 1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 4,\\ \\sigma_2 = 2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#6",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}3 & 8 \\\\ -4 & 6\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 10,\\ \\sigma_2 = 5",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 100,\\ \\sigma_2 = 25",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 10,\\ \\sigma_2 = 6",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{10},\\ \\sigma_2 = \\sqrt{5}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 15,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#7",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & -2 \\\\ 5 & 0\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 5,\\ \\sigma_2 = 2",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 25,\\ \\sigma_2 = 4",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 6,\\ \\sigma_2 = 2",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 5,\\ \\sigma_2 = 3",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{5},\\ \\sigma_2 = \\sqrt{2}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 7,\\ \\sigma_2 = 3",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#8",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & -3 \\\\ 5 & 0\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 5,\\ \\sigma_2 = 3",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 25,\\ \\sigma_2 = 9",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 6,\\ \\sigma_2 = 3",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 5,\\ \\sigma_2 = 4",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{5},\\ \\sigma_2 = \\sqrt{3}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 8,\\ \\sigma_2 = 2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#9",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}4 & -3 \\\\ 6 & 8\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 10,\\ \\sigma_2 = 5",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 100,\\ \\sigma_2 = 25",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{73},\\ \\sigma_2 = 2 \\sqrt{13}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 10,\\ \\sigma_2 = 6",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{10},\\ \\sigma_2 = \\sqrt{5}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 15,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#10",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}8 & 6 \\\\ -3 & 4\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 10,\\ \\sigma_2 = 5",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 100,\\ \\sigma_2 = 25",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{73},\\ \\sigma_2 = 2 \\sqrt{13}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 10,\\ \\sigma_2 = 6",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{10},\\ \\sigma_2 = \\sqrt{5}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 15,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#11",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & 10 \\\\ -5 & 0\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 10,\\ \\sigma_2 = 5",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 100,\\ \\sigma_2 = 25",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 10,\\ \\sigma_2 = 6",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{10},\\ \\sigma_2 = \\sqrt{5}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 15,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#12",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & -1 \\\\ 10 & 0\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 10,\\ \\sigma_2 = 1",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 100,\\ \\sigma_2 = 1",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 10,\\ \\sigma_2 = 2",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{10},\\ \\sigma_2 = 1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 9",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#13",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}4 & 6 \\\\ -3 & 8\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 10,\\ \\sigma_2 = 5",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 100,\\ \\sigma_2 = 25",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 10,\\ \\sigma_2 = 6",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{10},\\ \\sigma_2 = \\sqrt{5}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 15,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#14",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}8 & -3 \\\\ 6 & 4\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 10,\\ \\sigma_2 = 5",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 100,\\ \\sigma_2 = 25",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 10,\\ \\sigma_2 = 6",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{10},\\ \\sigma_2 = \\sqrt{5}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 15,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#15",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & 3 \\\\ -1 & 0\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 3,\\ \\sigma_2 = 1",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 9,\\ \\sigma_2 = 1",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 4,\\ \\sigma_2 = 1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 3,\\ \\sigma_2 = 2",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{3},\\ \\sigma_2 = 1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 4,\\ \\sigma_2 = 2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#16",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & 2 \\\\ -1 & 0\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 2,\\ \\sigma_2 = 1",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 4,\\ \\sigma_2 = 1",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 3,\\ \\sigma_2 = 1",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 2,\\ \\sigma_2 = 2",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{2},\\ \\sigma_2 = 1",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#17",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & 10 \\\\ -3 & 0\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 10,\\ \\sigma_2 = 3",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 100,\\ \\sigma_2 = 9",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 3",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 10,\\ \\sigma_2 = 4",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{10},\\ \\sigma_2 = \\sqrt{3}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 13,\\ \\sigma_2 = 7",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#18",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}0 & 5 \\\\ -3 & 0\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 5,\\ \\sigma_2 = 3",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 25,\\ \\sigma_2 = 9",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = 6,\\ \\sigma_2 = 3",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 5,\\ \\sigma_2 = 4",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{5},\\ \\sigma_2 = \\sqrt{3}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 8,\\ \\sigma_2 = 2",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.sv#19",
+   "unit": "la.sv",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A = \\begin{pmatrix}-6 & 8 \\\\ -4 & -3\\end{pmatrix}\\ \\text{의 특이값은?}",
+   "answer": "\\sigma_1 = 10,\\ \\sigma_2 = 5",
+   "wrong": [
+    {
+     "tex": "\\sigma_1 = 100,\\ \\sigma_2 = 25",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{73},\\ \\sigma_2 = 2 \\sqrt{13}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 11,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 10,\\ \\sigma_2 = 6",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = \\sqrt{10},\\ \\sigma_2 = \\sqrt{5}",
+     "error": "algebra"
+    },
+    {
+     "tex": "\\sigma_1 = 15,\\ \\sigma_2 = 5",
+     "error": "algebra"
+    }
+   ]
+  },
+  {
+   "id": "la.svd#0",
+   "unit": "la.svd",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = \\;?\\ \\ (\\text{특이값 분해})",
+   "answer": "U\\Sigma V^{T}",
+   "wrong": [
+    {
+     "tex": "U\\Sigma U^{T}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "V\\Sigma U^{T}",
+     "error": "algebra"
+    },
+    {
+     "tex": "P D P^{-1}",
+     "error": "wrong_pair"
+    }
+   ],
+   "verified": "hand"
+  },
+  {
+   "id": "la.normaleq#0",
+   "unit": "la.normaleq",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A\\mathbf{x} \\approx \\mathbf{b}\\ \\text{의 최소제곱해 } \\hat{\\mathbf{x}}\\text{는?}",
+   "answer": "A^{T}A\\,\\hat{\\mathbf{x}} = A^{T}\\mathbf{b}",
+   "wrong": [
+    {
+     "tex": "AA^{T}\\,\\hat{\\mathbf{x}} = A\\mathbf{b}",
+     "error": "algebra"
+    },
+    {
+     "tex": "A\\,\\hat{\\mathbf{x}} = \\mathbf{b}",
+     "error": "theorem_condition"
+    },
+    {
+     "tex": "A^{T}A\\,\\hat{\\mathbf{x}} = \\mathbf{b}",
+     "error": "missing_factor"
+    }
+   ],
+   "verified": "hand"
+  },
+  {
+   "id": "la.projmat#0",
+   "unit": "la.projmat",
+   "type": "mcq",
+   "tier": 2,
+   "dir": "fwd",
+   "prompt": "A\\text{의 열공간으로의 사영행렬 } P = \\;?",
+   "answer": "A(A^{T}A)^{-1}A^{T}",
+   "wrong": [
+    {
+     "tex": "(A^{T}A)^{-1}A^{T}",
+     "error": "missing_factor"
+    },
+    {
+     "tex": "A^{T}(AA^{T})^{-1}A",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "AA^{T}",
+     "error": "normalization"
+    }
+   ],
+   "verified": "hand"
+  },
+  {
+   "id": "la.qr#0",
+   "unit": "la.qr",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "A = QR\\text{에서 } Q, R\\text{은?}",
+   "answer": "Q^{T}Q = I,\\ R\\ \\text{은 위삼각}",
+   "wrong": [
+    {
+     "tex": "Q\\ \\text{은 하삼각},\\ R\\ \\text{은 위삼각}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "Q\\ \\text{은 대각},\\ R\\ \\text{은 직교}",
+     "error": "wrong_pair"
+    },
+    {
+     "tex": "QQ^{T} = 0,\\ R\\ \\text{은 대칭}",
+     "error": "algebra"
+    }
+   ],
+   "verified": "hand"
+  },
+  {
+   "id": "la.orthmat#0",
+   "unit": "la.orthmat",
+   "type": "mcq",
+   "tier": 1,
+   "dir": "fwd",
+   "prompt": "Q^{T}Q = I\\text{이면 } Q^{-1} = \\;?",
+   "answer": "Q^{T}",
+   "wrong": [
+    {
+     "tex": "Q",
+     "error": "algebra"
+    },
+    {
+     "tex": "-Q",
+     "error": "sign"
+    },
+    {
+     "tex": "Q^{2}",
+     "error": "algebra"
+    }
+   ],
+   "verified": "hand"
+  },
+  {
+   "id": "la.lsq#0",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (0,\\ -1),\\ (1,\\ 5),\\ (3,\\ 3)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & 0 \\\\ 1 & 1 \\\\ 1 & 3\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}-1 \\\\ 5 \\\\ 3\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 4 \\\\ 4 & 10\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ 14\\end{pmatrix}",
+    "(c_0, c_1) = \\left(1,\\ 1\\right)",
+    "y = 1 + x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}10 & 4 \\\\ 4 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ 14\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 4 \\\\ 4 & 10\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ 14\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(2,\\ 1\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#1",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (-2,\\ 6),\\ (0,\\ -1),\\ (4,\\ -1)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 0 \\\\ 1 & 4\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}6 \\\\ -1 \\\\ -1\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 2 \\\\ 2 & 20\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ -16\\end{pmatrix}",
+    "(c_0, c_1) = \\left(2,\\ -1\\right)",
+    "y = 2 - x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}20 & 2 \\\\ 2 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ -16\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 2 \\\\ 2 & 20\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ -16\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -1 + 2x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(3,\\ -1\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#2",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (-2,\\ 6),\\ (1,\\ -2),\\ (2,\\ 4)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}6 \\\\ -2 \\\\ 4\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 1 \\\\ 1 & 9\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ -6\\end{pmatrix}",
+    "(c_0, c_1) = \\left(3,\\ -1\\right)",
+    "y = 3 - x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}9 & 1 \\\\ 1 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ -6\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 1 \\\\ 1 & 9\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ -6\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -1 + 3x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(4,\\ -1\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#3",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (-1,\\ 3),\\ (0,\\ 0),\\ (1,\\ 3),\\ (3,\\ 2)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -1 \\\\ 1 & 0 \\\\ 1 & 1 \\\\ 1 & 3\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}3 \\\\ 0 \\\\ 3 \\\\ 2\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}4 & 3 \\\\ 3 & 11\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ 6\\end{pmatrix}",
+    "(c_0, c_1) = \\left(2,\\ 0\\right)",
+    "y = 2"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}11 & 3 \\\\ 3 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ 6\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}4 & 3 \\\\ 3 & 11\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 6\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = 2x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(3,\\ 0\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#4",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (-2,\\ 5),\\ (-1,\\ 0),\\ (0,\\ 1)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}5 \\\\ 0 \\\\ 1\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & -3 \\\\ -3 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ -10\\end{pmatrix}",
+    "(c_0, c_1) = \\left(0,\\ -2\\right)",
+    "y = -2x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}5 & -3 \\\\ -3 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ -10\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & -3 \\\\ -3 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ -10\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -2",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(1,\\ -2\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#5",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (-2,\\ 0),\\ (-1,\\ 2),\\ (0,\\ -2)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}0 \\\\ 2 \\\\ -2\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & -3 \\\\ -3 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}0 \\\\ -2\\end{pmatrix}",
+    "(c_0, c_1) = \\left(-1,\\ -1\\right)",
+    "y = -1 - x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}5 & -3 \\\\ -3 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}0 \\\\ -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & -3 \\\\ -3 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}1 \\\\ -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(0,\\ -1\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#6",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (-2,\\ 5),\\ (0,\\ -2),\\ (1,\\ 0),\\ (4,\\ -2)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 0 \\\\ 1 & 1 \\\\ 1 & 4\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}5 \\\\ -2 \\\\ 0 \\\\ -2\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}4 & 3 \\\\ 3 & 21\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}1 \\\\ -18\\end{pmatrix}",
+    "(c_0, c_1) = \\left(1,\\ -1\\right)",
+    "y = 1 - x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}21 & 3 \\\\ 3 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}1 \\\\ -18\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}4 & 3 \\\\ 3 & 21\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}2 \\\\ -18\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -1 + x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(2,\\ -1\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#7",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (-2,\\ 5),\\ (-1,\\ -1),\\ (0,\\ 5)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & -1 \\\\ 1 & 0\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}5 \\\\ -1 \\\\ 5\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & -3 \\\\ -3 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ -9\\end{pmatrix}",
+    "(c_0, c_1) = \\left(3,\\ 0\\right)",
+    "y = 3"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}5 & -3 \\\\ -3 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ -9\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & -3 \\\\ -3 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ -9\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = 3x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(4,\\ 0\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#8",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (-2,\\ 6),\\ (0,\\ 1),\\ (2,\\ 2),\\ (3,\\ 0)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 0 \\\\ 1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}6 \\\\ 1 \\\\ 2 \\\\ 0\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}4 & 3 \\\\ 3 & 17\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ -8\\end{pmatrix}",
+    "(c_0, c_1) = \\left(3,\\ -1\\right)",
+    "y = 3 - x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}17 & 3 \\\\ 3 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ -8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}4 & 3 \\\\ 3 & 17\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ -8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -1 + 3x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(4,\\ -1\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#9",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (1,\\ 1),\\ (2,\\ -1),\\ (3,\\ 3)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & 1 \\\\ 1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}1 \\\\ -1 \\\\ 3\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}3 \\\\ 8\\end{pmatrix}",
+    "(c_0, c_1) = \\left(-1,\\ 1\\right)",
+    "y = -1 + x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}14 & 6 \\\\ 6 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}3 \\\\ 8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ 8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = 1 - x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(0,\\ 1\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#10",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (-1,\\ 5),\\ (0,\\ 1),\\ (1,\\ 3)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -1 \\\\ 1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}5 \\\\ 1 \\\\ 3\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ -2\\end{pmatrix}",
+    "(c_0, c_1) = \\left(3,\\ -1\\right)",
+    "y = 3 - x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}2 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -1 + 3x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(4,\\ -1\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#11",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (-2,\\ 1),\\ (0,\\ 4),\\ (1,\\ 2),\\ (2,\\ 1)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 0 \\\\ 1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}1 \\\\ 4 \\\\ 2 \\\\ 1\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}4 & 1 \\\\ 1 & 9\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ 2\\end{pmatrix}",
+    "(c_0, c_1) = \\left(2,\\ 0\\right)",
+    "y = 2"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}9 & 1 \\\\ 1 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}4 & 1 \\\\ 1 & 9\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = 2x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(3,\\ 0\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#12",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (-2,\\ 2),\\ (0,\\ 5),\\ (1,\\ 3),\\ (2,\\ 2)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 0 \\\\ 1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}2 \\\\ 5 \\\\ 3 \\\\ 2\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}4 & 1 \\\\ 1 & 9\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}12 \\\\ 3\\end{pmatrix}",
+    "(c_0, c_1) = \\left(3,\\ 0\\right)",
+    "y = 3"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}9 & 1 \\\\ 1 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}12 \\\\ 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}4 & 1 \\\\ 1 & 9\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}13 \\\\ 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = 3x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(4,\\ 0\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#13",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (-1,\\ 0),\\ (0,\\ 6),\\ (1,\\ 0)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -1 \\\\ 1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}0 \\\\ 6 \\\\ 0\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ 0\\end{pmatrix}",
+    "(c_0, c_1) = \\left(2,\\ 0\\right)",
+    "y = 2"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}2 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = 2x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(3,\\ 0\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#14",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (-1,\\ 4),\\ (0,\\ 0),\\ (1,\\ 2)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -1 \\\\ 1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}4 \\\\ 0 \\\\ 2\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ -2\\end{pmatrix}",
+    "(c_0, c_1) = \\left(2,\\ -1\\right)",
+    "y = 2 - x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}2 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -1 + 2x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(3,\\ -1\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#15",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 2,
+   "problem": "\\text{점}\\ (2,\\ 5),\\ (3,\\ 5),\\ (4,\\ -1)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & 2 \\\\ 1 & 3 \\\\ 1 & 4\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}5 \\\\ 5 \\\\ -1\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 9 \\\\ 9 & 29\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 21\\end{pmatrix}",
+    "(c_0, c_1) = \\left(12,\\ -3\\right)",
+    "y = 12 - 3x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}29 & 9 \\\\ 9 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 21\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 9 \\\\ 9 & 29\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 21\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -3 + 12x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(13,\\ -3\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#16",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (2,\\ 2),\\ (3,\\ 2),\\ (4,\\ 4)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & 2 \\\\ 1 & 3 \\\\ 1 & 4\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}2 \\\\ 2 \\\\ 4\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 9 \\\\ 9 & 29\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ 26\\end{pmatrix}",
+    "(c_0, c_1) = \\left(- \\frac{1}{3},\\ 1\\right)",
+    "y = -\\frac{1}{3} + x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}29 & 9 \\\\ 9 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ 26\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 9 \\\\ 9 & 29\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 26\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = 1 - \\frac{1}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{2}{3},\\ 1\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#17",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-1,\\ 2),\\ (0,\\ 4),\\ (1,\\ 4)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -1 \\\\ 1 & 0 \\\\ 1 & 1\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}2 \\\\ 4 \\\\ 4\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 2\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{10}{3},\\ 1\\right)",
+    "y = \\frac{10}{3} + x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}2 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 2\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}11 \\\\ 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = 1 + \\frac{10}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{13}{3},\\ 1\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#18",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ 3),\\ (-1,\\ -2),\\ (3,\\ -1)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & -1 \\\\ 1 & 3\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}3 \\\\ -2 \\\\ -1\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}0 \\\\ -7\\end{pmatrix}",
+    "(c_0, c_1) = \\left(0,\\ - \\frac{1}{2}\\right)",
+    "y = -\\frac{1}{2}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}14 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}0 \\\\ -7\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}1 \\\\ -7\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -\\frac{1}{2}",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(1,\\ - \\frac{1}{2}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#19",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ 4),\\ (0,\\ 0),\\ (2,\\ 5)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 0 \\\\ 1 & 2\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}4 \\\\ 0 \\\\ 5\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 2\\end{pmatrix}",
+    "(c_0, c_1) = \\left(3,\\ \\frac{1}{4}\\right)",
+    "y = 3 + \\frac{1}{4}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}8 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = \\frac{1}{4} + 3x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(4,\\ \\frac{1}{4}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#20",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-1,\\ 3),\\ (0,\\ 4),\\ (2,\\ 1),\\ (3,\\ 2)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -1 \\\\ 1 & 0 \\\\ 1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}3 \\\\ 4 \\\\ 1 \\\\ 2\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}4 & 4 \\\\ 4 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 5\\end{pmatrix}",
+    "(c_0, c_1) = \\left(3,\\ - \\frac{1}{2}\\right)",
+    "y = 3 - \\frac{1}{2}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}14 & 4 \\\\ 4 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 5\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}4 & 4 \\\\ 4 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}11 \\\\ 5\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -\\frac{1}{2} + 3x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(4,\\ - \\frac{1}{2}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#21",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (1,\\ 1),\\ (2,\\ 5),\\ (3,\\ -1)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & 1 \\\\ 1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}1 \\\\ 5 \\\\ -1\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ 8\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{11}{3},\\ -1\\right)",
+    "y = \\frac{11}{3} - x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}14 & 6 \\\\ 6 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ 8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ 8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -1 + \\frac{11}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{14}{3},\\ -1\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#22",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (1,\\ 1),\\ (2,\\ 2),\\ (3,\\ 1)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & 1 \\\\ 1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}1 \\\\ 2 \\\\ 1\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ 8\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{4}{3},\\ 0\\right)",
+    "y = \\frac{4}{3}"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}14 & 6 \\\\ 6 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ 8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ 8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = \\frac{4}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{7}{3},\\ 0\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#23",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ 2),\\ (0,\\ 3),\\ (2,\\ 6),\\ (4,\\ 6)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 0 \\\\ 1 & 2 \\\\ 1 & 4\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}2 \\\\ 3 \\\\ 6 \\\\ 6\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}4 & 4 \\\\ 4 & 24\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}17 \\\\ 32\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{7}{2},\\ \\frac{3}{4}\\right)",
+    "y = \\frac{7}{2} + \\frac{3}{4}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}24 & 4 \\\\ 4 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}17 \\\\ 32\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}4 & 4 \\\\ 4 & 24\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}18 \\\\ 32\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = \\frac{3}{4} + \\frac{7}{2}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{9}{2},\\ \\frac{3}{4}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#24",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ 0),\\ (-1,\\ 4),\\ (1,\\ 5)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & -1 \\\\ 1 & 1\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}0 \\\\ 4 \\\\ 5\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & -2 \\\\ -2 & 6\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 1\\end{pmatrix}",
+    "(c_0, c_1) = \\left(4,\\ \\frac{3}{2}\\right)",
+    "y = 4 + \\frac{3}{2}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}6 & -2 \\\\ -2 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & -2 \\\\ -2 & 6\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = \\frac{3}{2} + 4x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(5,\\ \\frac{3}{2}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#25",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-1,\\ 5),\\ (1,\\ 6),\\ (4,\\ -2)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -1 \\\\ 1 & 1 \\\\ 1 & 4\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}5 \\\\ 6 \\\\ -2\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 4 \\\\ 4 & 18\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ -7\\end{pmatrix}",
+    "(c_0, c_1) = \\left(5,\\ - \\frac{3}{2}\\right)",
+    "y = 5 - \\frac{3}{2}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}18 & 4 \\\\ 4 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}9 \\\\ -7\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 4 \\\\ 4 & 18\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ -7\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -\\frac{3}{2} + 5x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(6,\\ - \\frac{3}{2}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#26",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ 5),\\ (1,\\ -1),\\ (4,\\ 1)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 1 \\\\ 1 & 4\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}5 \\\\ -1 \\\\ 1\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 3 \\\\ 3 & 21\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ -7\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{7}{3},\\ - \\frac{2}{3}\\right)",
+    "y = \\frac{7}{3} - \\frac{2}{3}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}21 & 3 \\\\ 3 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ -7\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 3 \\\\ 3 & 21\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ -7\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -\\frac{2}{3} + \\frac{7}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{10}{3},\\ - \\frac{2}{3}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#27",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ -1),\\ (0,\\ 4),\\ (2,\\ 4)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 0 \\\\ 1 & 2\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}-1 \\\\ 4 \\\\ 4\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ 10\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{7}{3},\\ \\frac{5}{4}\\right)",
+    "y = \\frac{7}{3} + \\frac{5}{4}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}8 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ 10\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}8 \\\\ 10\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = \\frac{5}{4} + \\frac{7}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{10}{3},\\ \\frac{5}{4}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#28",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ 5),\\ (2,\\ 0),\\ (4,\\ 1)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 2 \\\\ 1 & 4\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}5 \\\\ 0 \\\\ 1\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 4 \\\\ 4 & 24\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ -6\\end{pmatrix}",
+    "(c_0, c_1) = \\left(3,\\ - \\frac{3}{4}\\right)",
+    "y = 3 - \\frac{3}{4}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}24 & 4 \\\\ 4 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ -6\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 4 \\\\ 4 & 24\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ -6\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -\\frac{3}{4} + 3x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(4,\\ - \\frac{3}{4}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#29",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ -1),\\ (-1,\\ 3),\\ (0,\\ 3),\\ (3,\\ -2)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & -1 \\\\ 1 & 0 \\\\ 1 & 3\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}-1 \\\\ 3 \\\\ 3 \\\\ -2\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}4 & 0 \\\\ 0 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}3 \\\\ -7\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{3}{4},\\ - \\frac{1}{2}\\right)",
+    "y = \\frac{3}{4} - \\frac{1}{2}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}14 & 0 \\\\ 0 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}3 \\\\ -7\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}4 & 0 \\\\ 0 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ -7\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -\\frac{1}{2} + \\frac{3}{4}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{7}{4},\\ - \\frac{1}{2}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#30",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-1,\\ -2),\\ (1,\\ 0),\\ (3,\\ 6)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -1 \\\\ 1 & 1 \\\\ 1 & 3\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}-2 \\\\ 0 \\\\ 6\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 3 \\\\ 3 & 11\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ 20\\end{pmatrix}",
+    "(c_0, c_1) = \\left(- \\frac{2}{3},\\ 2\\right)",
+    "y = -\\frac{2}{3} + 2x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}11 & 3 \\\\ 3 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ 20\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 3 \\\\ 3 & 11\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ 20\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = 2 - \\frac{2}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{1}{3},\\ 2\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#31",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ 0),\\ (0,\\ -1),\\ (2,\\ -2),\\ (4,\\ 2)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 0 \\\\ 1 & 2 \\\\ 1 & 4\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}0 \\\\ -1 \\\\ -2 \\\\ 2\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}4 & 4 \\\\ 4 & 24\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}-1 \\\\ 4\\end{pmatrix}",
+    "(c_0, c_1) = \\left(- \\frac{1}{2},\\ \\frac{1}{4}\\right)",
+    "y = -\\frac{1}{2} + \\frac{1}{4}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}24 & 4 \\\\ 4 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}-1 \\\\ 4\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}4 & 4 \\\\ 4 & 24\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}0 \\\\ 4\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = \\frac{1}{4} - \\frac{1}{2}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{1}{2},\\ \\frac{1}{4}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#32",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-1,\\ 5),\\ (0,\\ 2),\\ (2,\\ 3)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -1 \\\\ 1 & 0 \\\\ 1 & 2\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}5 \\\\ 2 \\\\ 3\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 1 \\\\ 1 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 1\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{7}{2},\\ - \\frac{1}{2}\\right)",
+    "y = \\frac{7}{2} - \\frac{1}{2}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}5 & 1 \\\\ 1 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}10 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 1 \\\\ 1 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}11 \\\\ 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -\\frac{1}{2} + \\frac{7}{2}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{9}{2},\\ - \\frac{1}{2}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#33",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ 2),\\ (1,\\ 6),\\ (4,\\ -2)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 1 \\\\ 1 & 4\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}2 \\\\ 6 \\\\ -2\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 3 \\\\ 3 & 21\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ -6\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{8}{3},\\ - \\frac{2}{3}\\right)",
+    "y = \\frac{8}{3} - \\frac{2}{3}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}21 & 3 \\\\ 3 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ -6\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 3 \\\\ 3 & 21\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ -6\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -\\frac{2}{3} + \\frac{8}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{11}{3},\\ - \\frac{2}{3}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#34",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (0,\\ 5),\\ (1,\\ -2),\\ (2,\\ 1)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & 0 \\\\ 1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}5 \\\\ -2 \\\\ 1\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 3 \\\\ 3 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ 0\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{10}{3},\\ -2\\right)",
+    "y = \\frac{10}{3} - 2x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}5 & 3 \\\\ 3 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 3 \\\\ 3 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ 0\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -2 + \\frac{10}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{13}{3},\\ -2\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#35",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (0,\\ 4),\\ (1,\\ 1),\\ (3,\\ 3),\\ (4,\\ -2)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & 0 \\\\ 1 & 1 \\\\ 1 & 3 \\\\ 1 & 4\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}4 \\\\ 1 \\\\ 3 \\\\ -2\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}4 & 8 \\\\ 8 & 26\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ 2\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{7}{2},\\ -1\\right)",
+    "y = \\frac{7}{2} - x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}26 & 8 \\\\ 8 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}6 \\\\ 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}4 & 8 \\\\ 8 & 26\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}7 \\\\ 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -1 + \\frac{7}{2}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{9}{2},\\ -1\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#36",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ 5),\\ (0,\\ -2),\\ (2,\\ 1)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 0 \\\\ 1 & 2\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}5 \\\\ -2 \\\\ 1\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ -8\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{4}{3},\\ -1\\right)",
+    "y = \\frac{4}{3} - x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}8 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ -8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ -8\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -1 + \\frac{4}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{7}{3},\\ -1\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#37",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ 2),\\ (0,\\ -2),\\ (2,\\ 1)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 0 \\\\ 1 & 2\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}2 \\\\ -2 \\\\ 1\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}1 \\\\ -2\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{1}{3},\\ - \\frac{1}{4}\\right)",
+    "y = \\frac{1}{3} - \\frac{1}{4}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}8 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}1 \\\\ -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}2 \\\\ -2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -\\frac{1}{4} + \\frac{1}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{4}{3},\\ - \\frac{1}{4}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#38",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (1,\\ -1),\\ (2,\\ -2),\\ (3,\\ 0)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & 1 \\\\ 1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}-1 \\\\ -2 \\\\ 0\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}-3 \\\\ -5\\end{pmatrix}",
+    "(c_0, c_1) = \\left(-2,\\ \\frac{1}{2}\\right)",
+    "y = -2 + \\frac{1}{2}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}14 & 6 \\\\ 6 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}-3 \\\\ -5\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}-2 \\\\ -5\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = \\frac{1}{2} - 2x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(-1,\\ \\frac{1}{2}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#39",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ -2),\\ (0,\\ 0),\\ (2,\\ 4)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 0 \\\\ 1 & 2\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}-2 \\\\ 0 \\\\ 4\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}2 \\\\ 12\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{2}{3},\\ \\frac{3}{2}\\right)",
+    "y = \\frac{2}{3} + \\frac{3}{2}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}8 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}2 \\\\ 12\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}3 \\\\ 12\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = \\frac{3}{2} + \\frac{2}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{5}{3},\\ \\frac{3}{2}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#40",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (0,\\ 3),\\ (1,\\ 5),\\ (2,\\ 3),\\ (3,\\ 2)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & 0 \\\\ 1 & 1 \\\\ 1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}3 \\\\ 5 \\\\ 3 \\\\ 2\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}4 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}13 \\\\ 17\\end{pmatrix}",
+    "(c_0, c_1) = \\left(4,\\ - \\frac{1}{2}\\right)",
+    "y = 4 - \\frac{1}{2}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}14 & 6 \\\\ 6 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}13 \\\\ 17\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}4 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}14 \\\\ 17\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -\\frac{1}{2} + 4x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(5,\\ - \\frac{1}{2}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#41",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-1,\\ 1),\\ (0,\\ 5),\\ (2,\\ 6)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -1 \\\\ 1 & 0 \\\\ 1 & 2\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}1 \\\\ 5 \\\\ 6\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 1 \\\\ 1 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}12 \\\\ 11\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{7}{2},\\ \\frac{3}{2}\\right)",
+    "y = \\frac{7}{2} + \\frac{3}{2}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}5 & 1 \\\\ 1 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}12 \\\\ 11\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 1 \\\\ 1 & 5\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}13 \\\\ 11\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = \\frac{3}{2} + \\frac{7}{2}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{9}{2},\\ \\frac{3}{2}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#42",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-1,\\ 6),\\ (0,\\ 5),\\ (1,\\ 3),\\ (2,\\ 5)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -1 \\\\ 1 & 0 \\\\ 1 & 1 \\\\ 1 & 2\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}6 \\\\ 5 \\\\ 3 \\\\ 5\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}4 & 2 \\\\ 2 & 6\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}19 \\\\ 7\\end{pmatrix}",
+    "(c_0, c_1) = \\left(5,\\ - \\frac{1}{2}\\right)",
+    "y = 5 - \\frac{1}{2}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}6 & 2 \\\\ 2 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}19 \\\\ 7\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}4 & 2 \\\\ 2 & 6\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}20 \\\\ 7\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -\\frac{1}{2} + 5x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(6,\\ - \\frac{1}{2}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#43",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (1,\\ 6),\\ (2,\\ 5),\\ (3,\\ 2)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & 1 \\\\ 1 & 2 \\\\ 1 & 3\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}6 \\\\ 5 \\\\ 2\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}13 \\\\ 22\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{25}{3},\\ -2\\right)",
+    "y = \\frac{25}{3} - 2x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}14 & 6 \\\\ 6 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}13 \\\\ 22\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 6 \\\\ 6 & 14\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}14 \\\\ 22\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -2 + \\frac{25}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{28}{3},\\ -2\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#44",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ -1),\\ (0,\\ 4),\\ (2,\\ 1)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 0 \\\\ 1 & 2\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}-1 \\\\ 4 \\\\ 1\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ 4\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{4}{3},\\ \\frac{1}{2}\\right)",
+    "y = \\frac{4}{3} + \\frac{1}{2}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}8 & 0 \\\\ 0 & 3\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}4 \\\\ 4\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}3 & 0 \\\\ 0 & 8\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}5 \\\\ 4\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = \\frac{1}{2} + \\frac{4}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{7}{3},\\ \\frac{1}{2}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lsq#45",
+   "unit": "la.lsq",
+   "type": "order",
+   "tier": 3,
+   "problem": "\\text{점}\\ (-2,\\ 1),\\ (1,\\ -1),\\ (2,\\ 3),\\ (4,\\ -2)\\ \\text{에 직선}\\ y = c_0 + c_1x\\ \\text{를 최소제곱으로}",
+   "steps": [
+    "A = \\begin{pmatrix}1 & -2 \\\\ 1 & 1 \\\\ 1 & 2 \\\\ 1 & 4\\end{pmatrix},\\ \\mathbf{b} = \\begin{pmatrix}1 \\\\ -1 \\\\ 3 \\\\ -2\\end{pmatrix}",
+    "A^{T}A = \\begin{pmatrix}4 & 5 \\\\ 5 & 25\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}1 \\\\ -5\\end{pmatrix}",
+    "(c_0, c_1) = \\left(\\frac{2}{3},\\ - \\frac{1}{3}\\right)",
+    "y = \\frac{2}{3} - \\frac{1}{3}x"
+   ],
+   "decoys": [
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}25 & 5 \\\\ 5 & 4\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}1 \\\\ -5\\end{pmatrix}",
+     "error": "algebra",
+     "why": "AᵀA의 (1,1) 성분은 Σxᵢ²이 아니라 데이터 개수 n이고, (2,2)가 Σxᵢ²입니다. (Σxᵢ)²와 혼동했습니다.",
+     "pos": 1
+    },
+    {
+     "tex": "A^{T}A = \\begin{pmatrix}4 & 5 \\\\ 5 & 25\\end{pmatrix},\\ A^{T}\\mathbf{b} = \\begin{pmatrix}2 \\\\ -5\\end{pmatrix}",
+     "error": "algebra",
+     "why": "Aᵀb 계산이 틀렸습니다: 첫 성분 Σyᵢ, 둘째 성분 Σxᵢyᵢ.",
+     "pos": 1
+    },
+    {
+     "tex": "y = -\\frac{1}{3} + \\frac{2}{3}x",
+     "error": "algebra",
+     "why": "절편과 기울기를 바꿔 적었습니다.",
+     "pos": 3
+    },
+    {
+     "tex": "(c_0, c_1) = \\left(\\frac{5}{3},\\ - \\frac{1}{3}\\right)",
+     "error": "algebra",
+     "why": "정규방정식의 해가 아닙니다.",
+     "pos": 2
+    }
+   ]
+  },
+  {
+   "id": "la.lu#0",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & -1 & -2 \\\\ -6 & 3 & 7 \\\\ -3 & -1 & -2\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -2,\\ l_{31} = -1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}3 & -1 & -2 \\\\ 0 & 1 & 3 \\\\ 0 & -2 & -4\\end{pmatrix}",
+    "l_{32} = -2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & -2 \\\\ 0 & 1 & 3 \\\\ 0 & 0 & 2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 2,\\ l_{31} = 1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & -2 \\\\ 0 & 1 & 3 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -2 & -1 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & -2 \\\\ 0 & 1 & 3 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & -2 \\\\ 0 & 1 & 4 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#1",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & 0 & 0 \\\\ -3 & -1 & 2 \\\\ 0 & 1 & 1\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -1,\\ l_{31} = 0",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}3 & 0 & 0 \\\\ 0 & -1 & 2 \\\\ 0 & 1 & 1\\end{pmatrix}",
+    "l_{32} = -1",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ 0 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 0 & 0 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 1,\\ l_{31} = 0",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 0 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 0 & 0 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 0 & 0 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ 0 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 0 & 0 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#2",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & 3 & 3 \\\\ -3 & -4 & 0 \\\\ 0 & -1 & 2\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -1,\\ l_{31} = 0",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}3 & 3 & 3 \\\\ 0 & -1 & 3 \\\\ 0 & -1 & 2\\end{pmatrix}",
+    "l_{32} = 1",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ 0 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 3 & 3 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 1,\\ l_{31} = 0",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 0 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 3 & 3 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 3 & 3 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ 0 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 3 & 3 \\\\ 0 & -1 & 4 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#3",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & 3 & -2 \\\\ -6 & -4 & 4 \\\\ 0 & 4 & 1\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -2,\\ l_{31} = 0",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}3 & 3 & -2 \\\\ 0 & 2 & 0 \\\\ 0 & 4 & 1\\end{pmatrix}",
+    "l_{32} = 2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ 0 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 3 & -2 \\\\ 0 & 2 & 0 \\\\ 0 & 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 2,\\ l_{31} = 0",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 0 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 3 & -2 \\\\ 0 & 2 & 0 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -2 & 0 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 3 & -2 \\\\ 0 & 2 & 0 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ 0 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 3 & -2 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#4",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-1 & 3 & 3 \\\\ 1 & -4 & -5 \\\\ 1 & -1 & 2\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -1,\\ l_{31} = -1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}-1 & 3 & 3 \\\\ 0 & -1 & -2 \\\\ 0 & 2 & 5\\end{pmatrix}",
+    "l_{32} = -2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & 3 & 3 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 1,\\ l_{31} = 1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & 3 & 3 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -1 & -1 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & 3 & 3 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & 3 & 3 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#5",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}1 & 1 & -1 \\\\ -1 & 1 & 4 \\\\ -2 & -6 & -2\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -1,\\ l_{31} = -2",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}1 & 1 & -1 \\\\ 0 & 2 & 3 \\\\ 0 & -4 & -4\\end{pmatrix}",
+    "l_{32} = -2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & -1 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & 2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 1,\\ l_{31} = 2",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 2 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & -1 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -1 & -2 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & -1 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & -1 \\\\ 0 & 2 & 4 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#6",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-1 & 2 & 0 \\\\ 2 & -5 & -1 \\\\ 2 & -3 & 0\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -2,\\ l_{31} = -2",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}-1 & 2 & 0 \\\\ 0 & -1 & -1 \\\\ 0 & 1 & 0\\end{pmatrix}",
+    "l_{32} = -1",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -2 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & 2 & 0 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 2,\\ l_{31} = 2",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & 2 & 0 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -2 & -2 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & 2 & 0 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -2 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & 2 & 0 \\\\ 0 & -1 & 0 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#7",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-1 & -1 & -1 \\\\ -2 & 0 & -4 \\\\ -1 & -5 & 5\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = 2,\\ l_{31} = 1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}-1 & -1 & -1 \\\\ 0 & 2 & -2 \\\\ 0 & -4 & 6\\end{pmatrix}",
+    "l_{32} = -2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -1 & -1 \\\\ 0 & 2 & -2 \\\\ 0 & 0 & 2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = -2,\\ l_{31} = -1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -1 & -1 \\\\ 0 & 2 & -2 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 2 & 1 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -1 & -1 \\\\ 0 & 2 & -2 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -1 & -1 \\\\ 0 & 2 & -1 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#8",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}2 & 2 & -2 \\\\ -4 & -3 & 3 \\\\ -4 & -5 & 4\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -2,\\ l_{31} = -2",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}2 & 2 & -2 \\\\ 0 & 1 & -1 \\\\ 0 & -1 & 0\\end{pmatrix}",
+    "l_{32} = -1",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -2 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & -2 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 2,\\ l_{31} = 2",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & -2 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -2 & -2 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & -2 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -2 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & -2 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#9",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}1 & -1 & 0 \\\\ -1 & 2 & 0 \\\\ 2 & -1 & 3\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -1,\\ l_{31} = 2",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 1 & 3\\end{pmatrix}",
+    "l_{32} = 1",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ 2 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 1,\\ l_{31} = -2",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ -2 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -1 & 2 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ 2 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#10",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & 1 & 2 \\\\ 6 & 4 & 5 \\\\ 6 & -2 & 5\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = 2,\\ l_{31} = 2",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}3 & 1 & 2 \\\\ 0 & 2 & 1 \\\\ 0 & -4 & 1\\end{pmatrix}",
+    "l_{32} = -2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 1 & 2 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = -2,\\ l_{31} = -2",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -2 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 1 & 2 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 1 & 2 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 1 & 2 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#11",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}1 & 2 & 2 \\\\ 2 & 5 & 6 \\\\ 2 & 5 & 8\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = 2,\\ l_{31} = 2",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & 2 \\\\ 0 & 1 & 4\\end{pmatrix}",
+    "l_{32} = 1",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = -2,\\ l_{31} = -2",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -2 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & 3 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#12",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & 0 & 3 \\\\ -6 & 2 & -5 \\\\ -3 & -4 & -6\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -2,\\ l_{31} = -1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}3 & 0 & 3 \\\\ 0 & 2 & 1 \\\\ 0 & -4 & -3\\end{pmatrix}",
+    "l_{32} = -2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 0 & 3 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 2,\\ l_{31} = 1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 0 & 3 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -2 & -1 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 0 & 3 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 0 & 3 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#13",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}2 & 3 & 3 \\\\ -4 & -7 & -8 \\\\ 0 & 1 & 4\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -2,\\ l_{31} = 0",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}2 & 3 & 3 \\\\ 0 & -1 & -2 \\\\ 0 & 1 & 4\\end{pmatrix}",
+    "l_{32} = -1",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ 0 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 3 & 3 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 2,\\ l_{31} = 0",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 0 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 3 & 3 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -2 & 0 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 3 & 3 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ 0 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 3 & 3 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#14",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}2 & 2 & 2 \\\\ -4 & -5 & -2 \\\\ 2 & 4 & -1\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -2,\\ l_{31} = 1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & 2 \\\\ 0 & 2 & -3\\end{pmatrix}",
+    "l_{32} = -2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ 1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 2,\\ l_{31} = -1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ -1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -2 & 1 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ 1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#15",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & 2 & 1 \\\\ 6 & 6 & 3 \\\\ 6 & 0 & -1\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = 2,\\ l_{31} = 2",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}3 & 2 & 1 \\\\ 0 & 2 & 1 \\\\ 0 & -4 & -3\\end{pmatrix}",
+    "l_{32} = -2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 2 & 1 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = -2,\\ l_{31} = -2",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -2 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 2 & 1 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 2 & 1 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 2 & 1 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#16",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & -1 & 1 \\\\ -3 & 0 & 2 \\\\ -6 & 4 & -9\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -1,\\ l_{31} = -2",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 3 \\\\ 0 & 2 & -7\\end{pmatrix}",
+    "l_{32} = -2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 1,\\ l_{31} = 2",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 2 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -1 & -2 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 4 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#17",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}2 & 2 & 2 \\\\ 2 & 1 & 0 \\\\ 4 & 5 & 7\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = 1,\\ l_{31} = 2",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & -2 \\\\ 0 & 1 & 3\\end{pmatrix}",
+    "l_{32} = -1",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 2 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = -1,\\ l_{31} = -2",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -2 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 1 & 2 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 2 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 2 & 2 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#18",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & -1 & 3 \\\\ 6 & 0 & 7 \\\\ 3 & -3 & 3\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = 2,\\ l_{31} = 1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}3 & -1 & 3 \\\\ 0 & 2 & 1 \\\\ 0 & -2 & 0\\end{pmatrix}",
+    "l_{32} = -1",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 3 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = -2,\\ l_{31} = -1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 3 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 2 & 1 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 3 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 3 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#19",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}1 & 1 & 2 \\\\ -2 & -1 & -1 \\\\ 1 & 2 & 4\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -2,\\ l_{31} = 1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}1 & 1 & 2 \\\\ 0 & 1 & 3 \\\\ 0 & 1 & 2\\end{pmatrix}",
+    "l_{32} = 1",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ 1 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 2 \\\\ 0 & 1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 2,\\ l_{31} = -1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ -1 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 2 \\\\ 0 & 1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -2 & 1 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 2 \\\\ 0 & 1 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ 1 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 2 \\\\ 0 & 1 & 4 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#20",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & -1 & 2 \\\\ 3 & 1 & 5 \\\\ -3 & -3 & -7\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = 1,\\ l_{31} = -1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}3 & -1 & 2 \\\\ 0 & 2 & 3 \\\\ 0 & -4 & -5\\end{pmatrix}",
+    "l_{32} = -2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 2 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = -1,\\ l_{31} = 1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ 1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 2 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 1 & -1 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 2 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 2 \\\\ 0 & 2 & 4 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#21",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}2 & -1 & 1 \\\\ 4 & 0 & 4 \\\\ 4 & -6 & -1\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = 2,\\ l_{31} = 2",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}2 & -1 & 1 \\\\ 0 & 2 & 2 \\\\ 0 & -4 & -3\\end{pmatrix}",
+    "l_{32} = -2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & -1 & 1 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = -2,\\ l_{31} = -2",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -2 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & -1 & 1 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 2 & 2 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & -1 & 1 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & -1 & 1 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#22",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-1 & -1 & 1 \\\\ -1 & -2 & 2 \\\\ -2 & -4 & 6\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = 1,\\ l_{31} = 2",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}-1 & -1 & 1 \\\\ 0 & -1 & 1 \\\\ 0 & -2 & 4\\end{pmatrix}",
+    "l_{32} = 2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 2 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -1 & 1 \\\\ 0 & -1 & 1 \\\\ 0 & 0 & 2\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = -1,\\ l_{31} = -2",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -2 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -1 & 1 \\\\ 0 & -1 & 1 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 1 & 2 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -1 & 1 \\\\ 0 & -1 & 1 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 2 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -1 & 1 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 2\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#23",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & -1 & 1 \\\\ 6 & -3 & 2 \\\\ 3 & -2 & 4\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = 2,\\ l_{31} = 1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 0 \\\\ 0 & -1 & 3\\end{pmatrix}",
+    "l_{32} = 1",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = -2,\\ l_{31} = -1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 2 & 1 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & -1 & 1 \\\\ 0 & -1 & 1 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#24",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}1 & 1 & 1 \\\\ -1 & 1 & 0 \\\\ -1 & 3 & 2\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -1,\\ l_{31} = -1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}1 & 1 & 1 \\\\ 0 & 2 & 1 \\\\ 0 & 4 & 3\\end{pmatrix}",
+    "l_{32} = 2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 1 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 1,\\ l_{31} = 1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 1 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -1 & -1 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 1 \\\\ 0 & 2 & 1 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 1 \\\\ 0 & 2 & 2 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#25",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}2 & 3 & -2 \\\\ 2 & 2 & -3 \\\\ 2 & 4 & 0\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = 1,\\ l_{31} = 1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}2 & 3 & -2 \\\\ 0 & -1 & -1 \\\\ 0 & 1 & 2\\end{pmatrix}",
+    "l_{32} = -1",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 1 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 3 & -2 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = -1,\\ l_{31} = -1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -1 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 3 & -2 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 1 & 1 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 3 & -2 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 1 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}2 & 3 & -2 \\\\ 0 & -1 & 0 \\\\ 0 & 0 & 1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#26",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}1 & -1 & 0 \\\\ 2 & -1 & 0 \\\\ 1 & 1 & 3\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = 2,\\ l_{31} = 1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 2 & 3\\end{pmatrix}",
+    "l_{32} = 2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = -2,\\ l_{31} = -1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 2 & 1 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & -1 & 0 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#27",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}-1 & -2 & 3 \\\\ 2 & 3 & -7 \\\\ 1 & 0 & -6\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -2,\\ l_{31} = -1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}-1 & -2 & 3 \\\\ 0 & -1 & -1 \\\\ 0 & -2 & -3\\end{pmatrix}",
+    "l_{32} = 2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -2 & 3 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 2,\\ l_{31} = 1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ 1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -2 & 3 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -2 & -1 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -2 & 3 \\\\ 0 & -1 & -1 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ -1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}-1 & -2 & 3 \\\\ 0 & -1 & 0 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#28",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}1 & 1 & 3 \\\\ -1 & -2 & -1 \\\\ -1 & 0 & -2\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = -1,\\ l_{31} = -1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}1 & 1 & 3 \\\\ 0 & -1 & 2 \\\\ 0 & 1 & 1\\end{pmatrix}",
+    "l_{32} = -1",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -1 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 3 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 3\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = 1,\\ l_{31} = 1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 1 & 1 & 0 \\\\ 1 & 1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 3 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & -1 & -1 \\\\ 0 & 1 & -1 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 3 \\\\ 0 & -1 & 2 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -1 & 1 & 0 \\\\ -1 & -1 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}1 & 1 & 3 \\\\ 0 & -1 & 3 \\\\ 0 & 0 & 3\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  },
+  {
+   "id": "la.lu#29",
+   "unit": "la.lu",
+   "type": "order",
+   "tier": 2,
+   "problem": "A = \\begin{pmatrix}3 & 2 & -2 \\\\ 6 & 6 & -1 \\\\ -3 & -6 & -5\\end{pmatrix}\\ \\text{의 LU 분해}",
+   "steps": [
+    "l_{21} = 2,\\ l_{31} = -1",
+    "\\text{1열 소거 후}\\ \\begin{pmatrix}3 & 2 & -2 \\\\ 0 & 2 & 3 \\\\ 0 & -4 & -7\\end{pmatrix}",
+    "l_{32} = -2",
+    "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 2 & -2 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}"
+   ],
+   "decoys": [
+    {
+     "tex": "l_{21} = -2,\\ l_{31} = 1",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 0
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ -2 & 1 & 0 \\\\ 1 & 2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 2 & -2 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "sign",
+     "why": "L에 들어가는 승수는 Rᵢ − lᵢⱼRⱼ의 lᵢⱼ 그대로입니다. 부호를 바꾸면 안 됩니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 2 & -1 \\\\ 0 & 1 & -2 \\\\ 0 & 0 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 2 & -2 \\\\ 0 & 2 & 3 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "승수는 L의 대각 아래(하삼각)에 들어갑니다.",
+     "pos": 3
+    },
+    {
+     "tex": "L = \\begin{pmatrix}1 & 0 & 0 \\\\ 2 & 1 & 0 \\\\ -1 & -2 & 1\\end{pmatrix},\\ U = \\begin{pmatrix}3 & 2 & -2 \\\\ 0 & 2 & 4 \\\\ 0 & 0 & -1\\end{pmatrix}",
+     "error": "algebra",
+     "why": "소거 계산이 틀렸습니다. LU ≠ A가 됩니다.",
+     "pos": 3
+    }
+   ]
+  }
+ ]
+}

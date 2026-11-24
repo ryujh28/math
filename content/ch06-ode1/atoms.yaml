@@ -1,0 +1,48 @@
+# 6장 1계 ODE · 사실 원자
+- {id: ode.mu, kind: gen, title: 적분인자, generator: "ode1:integrating_factor", hint: "y′ + p(x)y = q의 적분인자 μ = e^{∫p dx}. μ′ = pμ를 만족한다."}
+- {id: ode.sepgen, kind: gen, title: 변수분리 일반해, generator: "ode1:separable_general", hint: "y′ = f(x)y → dy/y = f dx → y = C e^{∫f dx}."}
+- {id: ode.exactk, kind: gen, title: 완전 조건, generator: "ode1:exact_k", tier: 2, hint: "M dx + N dy = 0이 완전 ⇔ ∂M/∂y = ∂N/∂x."}
+- id: ode.linformula
+  kind: formula
+  title: 1계 선형 해 공식
+  tier: 1
+  prompt: 'y^{\prime} + p(x)y = q(x),\ \mu = e^{\int p\,dx}\text{일 때 } y = \;?'
+  answer: '\dfrac{1}{\mu}\left(\int \mu q\,dx + C\right)'
+  wrong:
+    - {tex: '\mu\left(\int \dfrac{q}{\mu}\,dx + C\right)', error: algebra}
+    - {tex: '\dfrac{1}{\mu}\int \mu q\,dx', error: missing_factor}
+    - {tex: '\dfrac{1}{\mu}\left(\int q\,dx + C\right)', error: algebra}
+  hint: "양변에 μ를 곱하면 (μy)′ = μq. 적분하고 μ로 나눈다. 적분상수 C를 잊지 말 것."
+- id: ode.exactcond
+  kind: formula
+  title: 완전미분방정식
+  tier: 1
+  prompt: 'M\,dx + N\,dy = 0\ \text{이 완전할 조건}'
+  answer: '\dfrac{\partial M}{\partial y} = \dfrac{\partial N}{\partial x}'
+  wrong:
+    - {tex: '\dfrac{\partial M}{\partial x} = \dfrac{\partial N}{\partial y}', error: algebra}
+    - {tex: '\dfrac{\partial M}{\partial y} = -\dfrac{\partial N}{\partial x}', error: sign}
+    - {tex: 'M = N', error: theorem_condition}
+  hint: "F_x = M, F_y = N인 F가 있으려면 혼합 편미분이 같아야 한다: M_y = F_xy = F_yx = N_x."
+- id: ode.bernoulli
+  kind: formula
+  title: Bernoulli 방정식
+  tier: 2
+  prompt: 'y^{\prime} + p(x)y = q(x)y^{n}\ \text{을 선형으로 바꾸는 치환}'
+  answer: 'v = y^{1-n}'
+  wrong:
+    - {tex: 'v = y^{n}', error: algebra}
+    - {tex: 'v = y^{n-1}', error: sign}
+    - {tex: 'v = y/x', error: wrong_pair}
+  hint: "v = y^{1−n}이면 v′ + (1 − n)pv = (1 − n)q, 선형이 된다. v = y/x는 동차형 방정식용."
+- id: ode.existence
+  kind: formula
+  title: 존재·유일성
+  tier: 2
+  prompt: 'y^{\prime} = f(x, y),\ y(x_0) = y_0\ \text{의 해가 국소적으로 유일하려면}'
+  answer: 'f,\ \partial f/\partial y\ \text{가}\ (x_0, y_0)\ \text{근처에서 연속}'
+  wrong:
+    - {tex: 'f\ \text{만 연속}', error: theorem_condition}
+    - {tex: 'f\ \text{가 선형}', error: theorem_condition}
+    - {tex: 'y_0 \ne 0', error: theorem_condition}
+  hint: "f가 연속이면 존재(Peano), ∂f/∂y도 연속이면 유일(Picard). y′ = √y, y(0) = 0은 해가 여러 개."
