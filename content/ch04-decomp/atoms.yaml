@@ -1,7 +1,8 @@
 # 4장 행렬 분해 · 사실 원자
-- {id: la.ata, kind: gen, title: '$A^TA$ 계산', generator: "la4:ata", hint: '$(A^TA)_{ij}$는 $A$의 $i$열과 $j$열의 내적. 항상 대칭.'}
-- {id: la.sv, kind: gen, title: 특이값, generator: "la4:singular_values", tier: 2, hint: '특이값 $\sigma_i = \sqrt{\lambda_i(A^TA)}$. $A$ 자체의 고유값과는 다르다.'}
+- {id: la.ata, pace: compute, kind: gen, title: '$A^TA$ 계산', generator: "la4:ata", hint: '$(A^TA)_{ij}$는 $A$의 $i$열과 $j$열의 내적. 항상 대칭.'}
+- {id: la.sv, pace: compute, kind: gen, title: 특이값, generator: "la4:singular_values", tier: 2, hint: '특이값 $\sigma_i = \sqrt{\lambda_i(A^TA)}$. $A$ 자체의 고유값과는 다르다.'}
 - id: la.svd
+  pace: light
   generator: "fx4:svd"
   kind: formula
   title: SVD
@@ -14,6 +15,7 @@
     - {tex: 'P D P^{-1}', error: wrong_pair}
   hint: '$A = U\Sigma V^T$. $U, V$는 직교행렬(각각 $AA^T$, $A^TA$의 고유벡터), $\Sigma$는 특이값.'
 - id: la.normaleq
+  pace: heavy
   generator: "fx4:normaleq"
   kind: formula
   title: 정규방정식
@@ -26,6 +28,7 @@
     - {tex: 'A^{T}A\,\hat{\mathbf{x}} = \mathbf{b}', error: missing_factor}
   hint: '잔차 $\mathbf{b} - A\hat{\mathbf{x}}$가 $A$의 열공간에 직교 $\iff A^T(\mathbf{b} - A\hat{\mathbf{x}}) = \mathbf{0} \iff A^TA\hat{\mathbf{x}} = A^T\mathbf{b}$.'
 - id: la.projmat
+  pace: compute
   generator: "fx4:projmat"
   kind: formula
   title: 사영행렬
@@ -38,6 +41,7 @@
     - {tex: 'AA^{T}', error: normalization}
   hint: '$P = A(A^TA)^{-1}A^T$, $P^2 = P$, $P^T = P$. $(A^TA)^{-1}A^T$만 쓰면 사영이 아니라 최소제곱해(유사역행렬).'
 - id: la.qr
+  pace: heavy
   generator: "fx4:qr"
   kind: formula
   title: QR 분해
@@ -50,6 +54,7 @@
     - {tex: 'QQ^{T} = 0,\ R\ \text{은 대칭}', error: algebra}
   hint: '$Q$의 열은 정규직교(Gram–Schmidt 결과), $R$은 위삼각(계수들).'
 - id: la.orthmat
+  pace: compute
   generator: "fx4:orthmat"
   kind: formula
   title: 직교행렬

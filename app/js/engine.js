@@ -18,9 +18,9 @@ export const GRADE_NAME = { 1: 'Again', 2: 'Hard', 3: 'Good', 4: 'Easy' };
 export function gradeFor(mode, r) {
   switch (mode) {
     case 'mcq':
-      // 제한시간 안에 맞히면 Good, 4초 안이면 Easy. 느리게 맞혔다고 Hard를 주지 않는다.
+      // 제한시간 안에 맞히면 Good, Easy 기준(기본 4초, 계산 문제는 제한시간의 1/4) 안이면 Easy. 느리게 맞혔다고 Hard를 주지 않는다.
       if (!r.correct) return GRADE.again;
-      if (r.ms <= 4000) return GRADE.easy;
+      if (r.ms <= (r.easyMs || 4000)) return GRADE.easy;
       return GRADE.good;
     case 'order':
       if (r.gaveUp || r.checks >= 3) return GRADE.again;

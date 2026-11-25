@@ -117,6 +117,7 @@
   hint: '$\mathcal{L}\{\cosh bt\} = \dfrac{s}{s^2 - b^2}$. $\cosh bt = \dfrac{e^{bt} + e^{-bt}}{2}$로 직접 확인할 수 있다.'
 
 - id: lap.texp
+  pace: compute
   kind: pair
   title: '$t\,e^{at}$'
   tier: 2
@@ -136,6 +137,7 @@
   hint: '$\mathcal{L}\{te^{at}\} = \dfrac{1}{(s - a)^2}$. $\mathcal{L}\{t\} = \dfrac{1}{s^2}$에 $s$-이동을 적용한 것.'
 
 - id: lap.expsin
+  pace: light
   kind: pair
   title: 감쇠 사인
   tier: 2
@@ -155,6 +157,7 @@
   hint: '$s$-이동: $\mathcal{L}\{e^{at}f(t)\} = F(s - a)$. $\sin bt$의 결과에서 $s$를 $s - a$로 바꾼다.'
 
 - id: lap.expcos
+  pace: light
   kind: pair
   title: 감쇠 코사인
   tier: 2
@@ -174,6 +177,7 @@
   hint: '분자도 $s - a$로 이동해야 한다. 분자가 그냥 $s$면 $\cos$ 항과 $\sin$ 항이 섞인 것.'
 
 - id: lap.tsin
+  pace: light
   kind: pair
   title: '$t\sin bt$'
   tier: 3
@@ -193,6 +197,7 @@
   hint: '$\mathcal{L}\{tf(t)\} = -F^{\prime}(s)$. $\dfrac{b}{s^2 + b^2}$를 $s$로 미분하고 부호를 바꾼다.'
 
 - id: lap.step
+  pace: light
   kind: pair
   title: 계단함수
   tier: 2
@@ -212,6 +217,7 @@
   hint: '$\mathcal{L}\{u(t - c)\} = \dfrac{e^{-cs}}{s}$. $\mathcal{L}\{1\} = \dfrac{1}{s}$에 지연 인자 $e^{-cs}$가 곱해진다.'
 
 - id: lap.delta
+  pace: light
   kind: pair
   title: 델타함수
   tier: 2
@@ -230,6 +236,7 @@
   hint: '$\mathcal{L}\{\delta(t - c)\} = e^{-cs}$. 적분이 $t = c$에서의 $e^{-st}$ 값 하나만 남긴다.'
 
 - id: lap.deriv1
+  pace: compute
   generator: "fx10:deriv1"
   kind: formula
   title: 1계 도함수의 변환
@@ -243,6 +250,7 @@
   hint: '$\mathcal{L}\{y^{\prime}\} = sY - y(0)$. 부분적분의 경계항에서 $-y(0)$이 나온다.'
 
 - id: lap.deriv2
+  pace: compute
   generator: "fx10:deriv2"
   kind: formula
   title: 2계 도함수의 변환
@@ -257,6 +265,7 @@
   hint: '$\mathcal{L}\{y^{\prime\prime}\} = s^2Y - sy(0) - y^{\prime}(0)$. 1계 공식을 두 번 적용하면 $s$가 $y(0)$에 붙는다.'
 
 - id: lap.sshift
+  pace: light
   generator: "fx10:sshift"
   kind: formula
   title: '$s$-이동 정리'
@@ -270,6 +279,7 @@
   hint: '시간 영역에서 $e^{at}$를 곱하면 $s$ 영역에서는 $a$만큼 오른쪽으로 이동한다: $F(s - a)$.'
 
 - id: lap.tshift
+  pace: light
   generator: "fx10:tshift"
   kind: formula
   title: '$t$-이동 정리'
@@ -283,6 +293,7 @@
   hint: '시간 지연 $c$는 $s$ 영역에서 $e^{-cs}$ 인자로 나타난다.'
 
 - id: lap.conv
+  pace: heavy
   generator: "fx10:conv"
   kind: formula
   title: 합성곱 정리
@@ -296,6 +307,7 @@
   hint: '시간 영역의 합성곱은 $s$ 영역의 곱. 전달함수 $Y = G\,F$가 여기서 나온다.'
 
 - id: lap.tmult
+  pace: compute
   generator: "fx10:tmult"
   kind: formula
   title: t를 곱하면
@@ -309,6 +321,7 @@
   hint: '$e^{-st}$를 $s$로 미분하면 $-t$가 나온다. 그래서 $t$를 곱하는 것은 $-\dfrac{d}{ds}$.'
 
 - id: lap.integral
+  pace: compute
   generator: "fx10:integral"
   kind: formula
   title: 적분의 변환

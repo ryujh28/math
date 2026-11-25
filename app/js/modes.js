@@ -66,7 +66,7 @@ export function mcqBody(root, item) {
 
 export function playMcq(root, item, ctx) {
   return new Promise((resolve) => {
-    const limit = item.tier >= 3 || item.verified === 'hand' ? 15000 : item.tier === 2 ? 12000 : 9000;
+    const limit = ctx.limitMs || 10000;
     const { fill, opts, btns } = mcqBody(root, item);
     btns.forEach((b, i) => b.addEventListener('click', () => choose(i)));
     const fb = el('div', 'fb');
@@ -90,7 +90,7 @@ export function playMcq(root, item, ctx) {
       const correct = !!(o && o.ok);
       btns.forEach((b, k) => { b.disabled = true; if (opts[k].ok) b.classList.add('good'); });
       if (o && !o.ok) btns[i].classList.add('bad');
-      const result = { correct, ms, error: o && !o.ok ? o.error : i < 0 ? 'timeout' : null };
+      const result = { correct, ms, limitMs: limit, easyMs: ctx.easyMs, error: o && !o.ok ? o.error : i < 0 ? 'timeout' : null };
       if (correct) {
         fb.innerHTML = `<div><b class="ok">정답</b> · ${(ms / 1000).toFixed(1)}초</div>`;
         ctx.onCorrect?.(fb);

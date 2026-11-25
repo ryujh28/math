@@ -14,6 +14,9 @@ export function migrateSettings(saved = {}) {
 }
 export const EXTRA = { minutes: 5, bonusNew: 2 };
 const EST = { mcq: 10, order: 75, hunt: 40, intro: 20 }; // 초
+// 계산 문제는 실제로 걸리는 시간이 길어서 세션 계획에 그만큼 반영한다 (대략 제한시간의 40%).
+const EST_PACE = { light: 12, compute: 20, heavy: 30, epic: 50 };
+const estOf = (u, mode) => (mode === 'mcq' && EST_PACE[u.pace]) || EST[mode];
 
 const dayKey = (ts) => new Date(ts).toLocaleDateString('sv-SE'); // YYYY-MM-DD (로컬)
 
@@ -106,7 +109,7 @@ export function planSession({ index, packs, states, log, settings = DEFAULTS, no
   while (atoms.length && est < 120) {
     const m = atoms.shift();
     queue.push({ unit: m.unit.id, chapter: m.chapter, mode: 'mcq', isNew: false });
-    est += EST.mcq;
+    est += estOf(m.unit, 'mcq');
   }
   // 나머지 복습: 뼈대와 원자를 섞어서
   const rest = [];
@@ -117,7 +120,7 @@ export function planSession({ index, packs, states, log, settings = DEFAULTS, no
   }
   for (const m of rest) {
     const mode = reviewMode(m.unit, states.get(m.unit.id), log);
-    const c = EST[mode];
+    const c = estOf(m.unit, mode);
     if (est + c > budget && queue.length) break;
     queue.push({ unit: m.unit.id, chapter: m.chapter, mode, isNew: false });
     est += c;
@@ -129,10 +132,10 @@ export function planSession({ index, packs, states, log, settings = DEFAULTS, no
   const later = [];
   for (const m of fresh) {
     const mode = modeOf(m.unit);
-    if (est + EST.intro + 2 * EST[mode] > budget * 1.3 && queue.length) break;
+    if (est + EST.intro + 2 * estOf(m.unit, mode) > budget * 1.3 && queue.length) break;
     queue.push({ unit: m.unit.id, chapter: m.chapter, mode, isNew: true, intro: true });
     later.push({ unit: m.unit.id, chapter: m.chapter, mode, isNew: true });
-    est += EST.intro + 2 * EST[mode];
+    est += EST.intro + 2 * estOf(m.unit, mode);
   }
   // 새 단위의 두 번째 문제는 맨 뒤에 (다른 문제 몇 개를 사이에 두고 다시 떠올리게)
   queue.push(...later);
@@ -168,7 +171,7 @@ export function planExtra({ index, packs, states, log, settings = DEFAULTS, now 
   let est = 0;
   for (const m of mixed) {
     const mode = reviewMode(m.unit, states.get(m.unit.id), log);
-    const c = EST[mode];
+    const c = estOf(m.unit, mode);
     if (est + c > budget) continue;
     queue.push({ unit: m.unit.id, chapter: m.chapter, mode, isNew: false });
     est += c;
@@ -182,7 +185,7 @@ export function planExtra({ index, packs, states, log, settings = DEFAULTS, now 
     // 새 단위는 복습 몇 문제 뒤에 소개
     queue.splice(Math.min(2, queue.length), 0, { unit: m.unit.id, chapter: m.chapter, mode, isNew: true, intro: true });
     later.push({ unit: m.unit.id, chapter: m.chapter, mode, isNew: true });
-    est += EST.intro + 2 * EST[mode];
+    est += EST.intro + 2 * estOf(m.unit, mode);
   }
   queue.push(...later);
   return { queue, dueCount: reviewCount, newCount: later.length, estMin: Math.max(1, Math.round(est / 60)) };
@@ -199,3 +202,24 @@ export function pickItem(m, st, log, rand = Math.random) {
   const from = fresh.length ? fresh : pool;
   return from[Math.floor(rand() * from.length)];
 }
+
+// ------------------------------------------------------------------ 제한시간
+/**
+ * 객관식 제한시간 (ms). 단위의 pace로 정한다.
+ *   (없음) 기억형: 변환쌍·공식 알아보기 → 단계별 10/13/16초
+ *   light   : 한 번의 짧은 계산 (내적, 2×2 행렬식, 적분인자)      → 20초
+ *   compute : 몇 단계 계산 (3×3 행렬식, 고유벡터, 도함수 변환)     → 40초
+ *   heavy   : 긴 계산 (Wronskian, 행렬지수, 합성곱, 계수 낮추기)   → 60초
+ *   epic    : 적분까지 하는 계산 (매개변수 변환법)                  → 120초
+ * 문제·보기가 길면 읽는 시간을 더 준다 (최대 +10초).
+ */
+export const PACE_MS = { light: 20000, compute: 40000, heavy: 60000, epic: 120000 };
+export function timeLimit(unit, item) {
+  let ms = PACE_MS[unit?.pace] ?? [10000, 10000, 13000, 16000][Math.min(3, item.tier || 1)];
+  if (!unit?.pace && item.verified === 'hand') ms += 3000;
+  const len = (item.prompt || '').length + (item.answer || '').length + (item.wrong || []).reduce((a, w) => a + w.tex.length, 0);
+  ms += Math.min(10000, Math.max(0, Math.ceil((len - 160) / 40)) * 1000);
+  return ms;
+}
+/** Easy로 칠 시간: 4초 또는 제한시간의 1/4 중 긴 쪽. */
+export const easyMs = (limit) => Math.max(4000, Math.round(limit / 4));

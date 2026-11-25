@@ -1,25 +1,30 @@
 # 1장 벡터공간과 내적 · 사실 원자
 - id: la.dot
+  pace: light
   kind: gen
   title: 내적 계산
   generator: la1:dot
   hint: '$\mathbf{u}\cdot\mathbf{v} = u_1v_1 + u_2v_2 + u_3v_3$. 성분끼리 곱해서 모두 더한다.'
 - id: la.norm
+  pace: light
   kind: gen
   title: 벡터의 길이
   generator: la1:norm
   hint: '$\|\mathbf{v}\| = \sqrt{\mathbf{v}\cdot\mathbf{v}}$. 제곱합의 제곱근.'
 - id: la.orth
+  pace: light
   kind: gen
   title: 직교 조건
   generator: la1:orth_k
   hint: '$\mathbf{u} \perp \mathbf{v} \iff \mathbf{u}\cdot\mathbf{v} = 0$. 내적을 $k$에 대한 일차식으로 놓고 푼다.'
 - id: la.proj
+  pace: compute
   kind: gen
   title: 벡터 사영
   generator: la1:proj
   hint: '$\operatorname{proj}_{\mathbf{v}}\mathbf{u} = \dfrac{\mathbf{u}\cdot\mathbf{v}}{\mathbf{v}\cdot\mathbf{v}}\,\mathbf{v}$. 분모는 $\|\mathbf{v}\|$가 아니라 $\|\mathbf{v}\|^2$.'
 - id: la.cs
+  pace: light
   generator: "fx1:cs"
   kind: formula
   title: Cauchy–Schwarz 부등식
@@ -32,6 +37,7 @@
     - {tex: '|\mathbf{u}\cdot\mathbf{v}| \le \|\mathbf{u}\|^{2}\,\|\mathbf{v}\|^{2}', error: algebra}
   hint: '$|\mathbf{u}\cdot\mathbf{v}| \le \|\mathbf{u}\|\,\|\mathbf{v}\|$. 등호는 두 벡터가 평행할 때만. 그래서 $\cos\theta$가 $-1$과 $1$ 사이에 있다.'
 - id: la.angle
+  pace: compute
   generator: "fx1:angle"
   kind: formula
   title: 두 벡터 사이의 각
@@ -44,6 +50,7 @@
     - {tex: '\dfrac{\|\mathbf{u}\|\,\|\mathbf{v}\|}{\mathbf{u}\cdot\mathbf{v}}', error: algebra}
   hint: '$\mathbf{u}\cdot\mathbf{v} = \|\mathbf{u}\|\,\|\mathbf{v}\|\cos\theta$. 외적의 크기는 $\sin\theta$에 대응한다.'
 - id: la.gsformula
+  pace: compute
   generator: "fx1:gs"
   kind: formula
   title: Gram–Schmidt 공식
@@ -56,6 +63,7 @@
     - {tex: '\mathbf{v}_2 - \dfrac{\mathbf{v}_2\cdot\mathbf{u}_1}{\mathbf{v}_2\cdot\mathbf{v}_2}\,\mathbf{v}_2', error: algebra}
   hint: '앞에서 만든 $\mathbf{u}_1$ 방향 성분(사영)을 $\mathbf{v}_2$에서 빼면 $\mathbf{u}_1$에 직교하는 $\mathbf{u}_2$가 남는다.'
 - id: la.triangle
+  pace: light
   generator: "fx1:triangle"
   kind: formula
   title: 삼각부등식

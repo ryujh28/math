@@ -123,3 +123,7 @@ select { font: inherit; padding: 8px 10px; border-radius: 8px; border: 1.5px sol
 .blk.fixed-line { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 10%, var(--card)); }
 .hunt-stage .opts { margin-top: 10px; }
 .opts.types .opt { font-size: 15px; padding: 12px 8px 12px 22px; }
+
+/* 분수가 든 보기에 세로 스크롤바가 생기지 않게 (overflow-x: auto는 세로도 auto로 만든다) */
+.opt, .blk { overflow-y: hidden; }
+.opt .katex, .blk .katex { padding: 2px 0; }

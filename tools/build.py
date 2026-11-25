@@ -218,7 +218,10 @@ def build_atoms(atoms, report, tdir=None, seed="v0"):
                     tiers.add(a["inverse_tier"])
                 else:
                     report.append(f"- 제외 {tag} 역변환: 유효한 오답 {len(wr)}개")
-        units.append({"id": uid, "kind": "atom", "title": a["title"], "hint": a.get("hint", ""), "tiers": sorted(tiers)})
+        if a.get("pace") and a["pace"] not in ("light", "compute", "heavy", "epic"):
+            raise SystemExit(f"{uid}: pace는 light·compute·heavy·epic 중 하나 (없으면 기억형)")
+        units.append({"id": uid, "kind": "atom", "title": a["title"], "hint": a.get("hint", ""), "tiers": sorted(tiers),
+                      **({"pace": a["pace"]} if a.get("pace") else {})})
     return units, items
 
 

@@ -1,8 +1,9 @@
 # 7장 2계 선형 ODE · 사실 원자
-- {id: ode2.form, kind: gen, title: 동차해의 꼴, generator: "ode2:general_form", hint: '서로 다른 실근이면 $C_1e^{r_1x} + C_2e^{r_2x}$, 중근이면 $(C_1 + C_2x)e^{rx}$, 복소근 $\alpha \pm i\beta$면 $e^{\alpha x}(C_1\cos\beta x + C_2\sin\beta x)$.'}
-- {id: ode2.trial, kind: gen, title: '특수해 $y_p$의 꼴', generator: "ode2:trial_form", tier: 2, hint: '강제항과 같은 꼴로 추측한다. 동차해와 겹치면 $x$를 곱하고, $\cos$에는 $\cos$와 $\sin$을 같이 쓴다.'}
-- {id: ode2.wronskian, kind: gen, title: Wronskian, generator: "ode2:wronskian", tier: 2, hint: '$W(y_1, y_2) = y_1y_2^{\prime} - y_1^{\prime}y_2$. $e^{ax}, e^{bx}$이면 $(b - a)e^{(a+b)x}$.'}
+- {id: ode2.form, pace: light, kind: gen, title: 동차해의 꼴, generator: "ode2:general_form", hint: '서로 다른 실근이면 $C_1e^{r_1x} + C_2e^{r_2x}$, 중근이면 $(C_1 + C_2x)e^{rx}$, 복소근 $\alpha \pm i\beta$면 $e^{\alpha x}(C_1\cos\beta x + C_2\sin\beta x)$.'}
+- {id: ode2.trial, pace: light, kind: gen, title: '특수해 $y_p$의 꼴', generator: "ode2:trial_form", tier: 2, hint: '강제항과 같은 꼴로 추측한다. 동차해와 겹치면 $x$를 곱하고, $\cos$에는 $\cos$와 $\sin$을 같이 쓴다.'}
+- {id: ode2.wronskian, pace: heavy, kind: gen, title: Wronskian, generator: "ode2:wronskian", tier: 2, hint: '$W(y_1, y_2) = y_1y_2^{\prime} - y_1^{\prime}y_2$. $e^{ax}, e^{bx}$이면 $(b - a)e^{(a+b)x}$.'}
 - id: ode2.varparam
+  pace: epic
   generator: "fx7:varparam"
   kind: formula
   title: 매개변수 변환법
@@ -15,6 +16,7 @@
     - {tex: "-y_1\\int\\dfrac{y_1R}{W}\\,dx + y_2\\int\\dfrac{y_2R}{W}\\,dx", error: algebra}
   hint: '$y_p = u_1y_1 + u_2y_2$, $u_1^{\prime} = -\dfrac{y_2R}{W}$, $u_2^{\prime} = \dfrac{y_1R}{W}$. 각 적분에는 상대 해가 들어간다.'
 - id: ode2.eulerform
+  pace: light
   generator: "fx7:eulerform"
   kind: formula
   title: Euler–Cauchy 방정식
@@ -27,6 +29,7 @@
     - {tex: "r^{2} + ar\\,x + b = 0", error: algebra}
   hint: '$x^2(x^r)^{\prime\prime} = r(r-1)x^r$, $x(x^r)^{\prime} = rx^r$. 그래서 $-r$ 항이 생긴다.'
 - id: ode2.reduction
+  pace: heavy
   generator: "fx7:reduction"
   kind: formula
   title: 계수 낮추기
@@ -39,6 +42,7 @@
     - {tex: "x\\,y_1", error: theorem_condition}
   hint: '$y_2 = vy_1$로 놓으면 $v^{\prime} = \dfrac{e^{-\int p\,dx}}{y_1^2}$. 중근일 때 $v = x$가 되어 $xe^{rx}$가 나온다.'
 - id: ode2.superpos
+  pace: compute
   generator: "fx7:superpos"
   kind: formula
   title: 해의 구조

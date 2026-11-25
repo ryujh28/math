@@ -406,7 +406,9 @@ async function runSession(chapter, extra = false) {
     const ctx = {
       hint: m.unit.hint, hintHtml: hintHtml(m.unit.hint), errName, derivButton: () => derivButton(m), errorIds: chapterErrors(m.chapter),
       prefill: e.mode === 'order' && (!st || st.attempts < 2) && item.tier === 1 ? 1 : 0,
+      limitMs: S.timeLimit(m.unit, item),
     };
+    ctx.easyMs = S.easyMs(ctx.limitMs);
     const play = { mcq: playMcq, order: playOrder, hunt: playHunt }[e.mode];
     const result = await race(play(card, item, ctx));
     if (G.quit) break;
