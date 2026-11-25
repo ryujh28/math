@@ -3,9 +3,9 @@
   title: '대각화로 $e^{At}$'
   generator: la5:exp_At
   steps: [고유값과 P, "e^Dt", 공식, 결과]
-  hint: '고유값·고유벡터로 $P$와 $D$를 만들고 $e^{At} = Pe^{Dt}P^{-1}$.'
+  hint: '고유값과 고유벡터로 $P$와 $D$를 만들고 $e^{At} = Pe^{Dt}P^{-1}$를 계산한다. $e^{Dt}$는 대각성분마다 $e^{\lambda_i t}$이다.'
 - id: la.paxes
   title: 이차형식의 주축 변환
   generator: la5:principal_axes
   steps: [대칭행렬, 고유값, 주축 형태, 판정]
-  hint: '$q = \mathbf{x}^TA\mathbf{x}$. $A$의 고유값으로 $q = \lambda_1X^2 + \lambda_2Y^2$. 부호로 모양(타원·쌍곡선)과 정부호가 정해진다.'
+  hint: '이차형식 $q = \mathbf{x}^TA\mathbf{x}$를 $A$의 고유벡터 방향 좌표로 바꾸면 $q = \lambda_1X^2 + \lambda_2Y^2$가 된다. 고유값의 부호로 곡선의 모양(타원·쌍곡선)이 정해진다.'

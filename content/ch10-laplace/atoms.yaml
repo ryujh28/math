@@ -21,7 +21,7 @@
     - {f: exp(-a*t), error: sign}
     - {f: t*exp(a*t), error: wrong_pair}
     - {f: cosh(a*t), error: wrong_pair}
-  hint: '$\mathcal{L}\{e^{at}\} = \dfrac{1}{s - a}$. 분모가 0이 되는 $s = a$가 지수의 증가율이다.'
+  hint: '$\mathcal{L}\{e^{at}\} = \dfrac{1}{s - a}$이다. 분모가 $0$이 되는 극점 $s = a$가 지수의 증가율과 같다.'
 
 - id: lap.pow
   kind: pair
@@ -40,7 +40,7 @@
     - {f: t**(n + 1), error: algebra}
     - {f: t**n/factorial(n), error: missing_factor}
     - {f: t**(n - 1), error: algebra}
-  hint: '$\mathcal{L}\{t^n\} = \dfrac{n!}{s^{n+1}}$. 감마함수 $\int_0^\infty t^ne^{-t}\,dt$를 치환한 것과 같다.'
+  hint: '$\mathcal{L}\{t^n\} = \dfrac{n!}{s^{n+1}}$이다. $t$의 차수가 하나 오를 때마다 분자에 차수가, 분모에 $s$가 하나씩 더 붙는다.'
 
 - id: lap.sin
   kind: pair
@@ -59,7 +59,7 @@
     - {f: cos(b*t), error: wrong_pair}
     - {f: sinh(b*t), error: sign}
     - {f: b*sin(b*t), error: missing_factor}
-  hint: '$\mathcal{L}\{\sin bt\} = \dfrac{b}{s^2 + b^2}$. 분자에 $s$가 있으면 $\cos$, 상수 $b$가 있으면 $\sin$.'
+  hint: '$\mathcal{L}\{\sin bt\} = \dfrac{b}{s^2 + b^2}$이다. 분자가 상수 $b$이면 $\sin$, 분자가 $s$이면 $\cos$이다.'
 
 - id: lap.cos
   kind: pair
@@ -78,7 +78,7 @@
     - {f: sin(b*t), error: wrong_pair}
     - {f: cosh(b*t), error: sign}
     - {f: t*cos(b*t), error: algebra}
-  hint: '$\mathcal{L}\{\cos bt\} = \dfrac{s}{s^2 + b^2}$. $t = 0$에서 $\cos$가 1이라 분자에 $s$가 남는다.'
+  hint: '$\mathcal{L}\{\cos bt\} = \dfrac{s}{s^2 + b^2}$이다. 분자에 $s$가 있으면 $\cos$이다.'
 
 - id: lap.sinh
   kind: pair
@@ -96,7 +96,7 @@
     - {f: sin(b*t), error: sign}
     - {f: cosh(b*t), error: wrong_pair}
     - {f: exp(b*t), error: wrong_pair}
-  hint: '$\mathcal{L}\{\sinh bt\} = \dfrac{b}{s^2 - b^2}$. $\sin$과 분모 부호만 다르다.'
+  hint: '$\mathcal{L}\{\sinh bt\} = \dfrac{b}{s^2 - b^2}$이다. $\sin bt$의 변환과 비교하면 분모의 부호만 다르다.'
 
 - id: lap.cosh
   kind: pair
@@ -114,7 +114,7 @@
     - {f: cos(b*t), error: sign}
     - {f: sinh(b*t), error: wrong_pair}
     - {f: exp(b*t), error: wrong_pair}
-  hint: '$\mathcal{L}\{\cosh bt\} = \dfrac{s}{s^2 - b^2}$. $\cosh bt = \dfrac{e^{bt} + e^{-bt}}{2}$로 직접 확인할 수 있다.'
+  hint: '$\mathcal{L}\{\cosh bt\} = \dfrac{s}{s^2 - b^2}$이다. $\cosh bt = \dfrac{e^{bt} + e^{-bt}}{2}$의 두 지수를 각각 변환해 더해도 같은 결과가 나온다.'
 
 - id: lap.texp
   pace: compute
@@ -134,7 +134,7 @@
     - {f: t*exp(-a*t), error: sign}
     - {f: exp(a*t), error: wrong_pair}
     - {f: t**2*exp(a*t), error: wrong_pair}
-  hint: '$\mathcal{L}\{te^{at}\} = \dfrac{1}{(s - a)^2}$. $\mathcal{L}\{t\} = \dfrac{1}{s^2}$에 $s$-이동을 적용한 것.'
+  hint: '$\mathcal{L}\{te^{at}\} = \dfrac{1}{(s - a)^2}$이다. $\mathcal{L}\{t\} = \dfrac{1}{s^2}$에서 $s$를 $s - a$로 바꾼($s$-이동) 것이다.'
 
 - id: lap.expsin
   pace: light
@@ -154,7 +154,7 @@
     - {f: exp(-a*t)*sin(b*t), error: sign}
     - {f: exp(a*t)*cos(b*t), error: wrong_pair}
     - {f: sin(b*t), error: missing_factor}
-  hint: '$s$-이동: $\mathcal{L}\{e^{at}f(t)\} = F(s - a)$. $\sin bt$의 결과에서 $s$를 $s - a$로 바꾼다.'
+  hint: '$\mathcal{L}\{e^{at}\sin bt\} = \dfrac{b}{(s - a)^2 + b^2}$이다. $\sin bt$의 변환에서 $s$를 모두 $s - a$로 바꾼다($s$-이동).'
 
 - id: lap.expcos
   pace: light
@@ -174,7 +174,7 @@
     - {f: exp(-a*t)*cos(b*t), error: sign}
     - {f: exp(a*t)*sin(b*t), error: wrong_pair}
     - {f: cos(b*t), error: missing_factor}
-  hint: '분자도 $s - a$로 이동해야 한다. 분자가 그냥 $s$면 $\cos$ 항과 $\sin$ 항이 섞인 것.'
+  hint: '$\mathcal{L}\{e^{at}\cos bt\} = \dfrac{s - a}{(s - a)^2 + b^2}$이다. 분모뿐 아니라 분자의 $s$도 $s - a$로 바꿔야 한다.'
 
 - id: lap.tsin
   pace: light
@@ -194,7 +194,7 @@
     - {f: t*cos(b*t), error: wrong_pair}
     - {f: sin(b*t)/t, error: algebra}
     - {f: t**2*sin(b*t), error: algebra}
-  hint: '$\mathcal{L}\{tf(t)\} = -F^{\prime}(s)$. $\dfrac{b}{s^2 + b^2}$를 $s$로 미분하고 부호를 바꾼다.'
+  hint: '$t$를 곱한 함수의 변환은 원래 변환을 $s$로 미분하고 부호를 바꾼 것이다: $\mathcal{L}\{tf(t)\} = -F^{\prime}(s)$. 그래서 $\mathcal{L}\{t\sin bt\} = \dfrac{2bs}{(s^2 + b^2)^2}$이다.'
 
 - id: lap.step
   pace: light
@@ -214,7 +214,7 @@
     - {f: Heaviside(t + c), error: sign}
     - {f: DiracDelta(t - c), error: wrong_pair}
     - {f: exp(-c*t), error: wrong_pair}
-  hint: '$\mathcal{L}\{u(t - c)\} = \dfrac{e^{-cs}}{s}$. $\mathcal{L}\{1\} = \dfrac{1}{s}$에 지연 인자 $e^{-cs}$가 곱해진다.'
+  hint: '$t = c$에서 켜지는 계단함수의 변환은 $\mathcal{L}\{u(t - c)\} = \dfrac{e^{-cs}}{s}$이다. $\mathcal{L}\{1\} = \dfrac{1}{s}$에 지연 인자 $e^{-cs}$가 곱해진 것이다.'
 
 - id: lap.delta
   pace: light
@@ -233,7 +233,7 @@
     - {f: Heaviside(t - c), error: wrong_pair}
     - {f: DiracDelta(t + c), error: sign}
     - {f: exp(-c*t), error: wrong_pair}
-  hint: '$\mathcal{L}\{\delta(t - c)\} = e^{-cs}$. 적분이 $t = c$에서의 $e^{-st}$ 값 하나만 남긴다.'
+  hint: '$t = c$에서의 충격 $\delta(t - c)$의 변환은 $e^{-cs}$이다. 적분에서 $t = c$의 $e^{-st}$ 값 하나만 남기 때문이다.'
 
 - id: lap.deriv1
   pace: compute
@@ -247,7 +247,7 @@
     - {tex: 'sY(s) + y(0)', error: sign}
     - {tex: 'sY(s)', error: initial_condition}
     - {tex: 'Y(s) - y(0)', error: missing_factor}
-  hint: '$\mathcal{L}\{y^{\prime}\} = sY - y(0)$. 부분적분의 경계항에서 $-y(0)$이 나온다.'
+  hint: '도함수의 변환은 $\mathcal{L}\{y^{\prime}\} = sY - y(0)$이다. 부분적분의 경계항에서 $-y(0)$이 나온다.'
 
 - id: lap.deriv2
   pace: compute
@@ -262,7 +262,7 @@
     - {tex: 's^{2}Y(s) + s\,y(0) + y^{\prime}(0)', error: sign}
     - {tex: 's^{2}Y(s) - s\,y(0)', error: initial_condition}
     - {tex: 's^{2}Y(s) - y^{\prime}(0)', error: initial_condition}
-  hint: '$\mathcal{L}\{y^{\prime\prime}\} = s^2Y - sy(0) - y^{\prime}(0)$. 1계 공식을 두 번 적용하면 $s$가 $y(0)$에 붙는다.'
+  hint: '2계 도함수의 변환은 $\mathcal{L}\{y^{\prime\prime}\} = s^2Y - sy(0) - y^{\prime}(0)$이다. 1계 공식을 두 번 적용하면 $y(0)$ 앞에 $s$가 붙고, 초기값 항은 모두 빼기이다.'
 
 - id: lap.sshift
   pace: light
@@ -276,7 +276,7 @@
     - {tex: 'F(s + a)', error: sign}
     - {tex: 'e^{-as}F(s)', error: wrong_pair}
     - {tex: 'e^{as}F(s)', error: wrong_pair}
-  hint: '시간 영역에서 $e^{at}$를 곱하면 $s$ 영역에서는 $a$만큼 오른쪽으로 이동한다: $F(s - a)$.'
+  hint: '시간 영역에서 $e^{at}$를 곱하면 $s$ 영역에서는 $s$가 $s - a$로 바뀐다: $\mathcal{L}\{e^{at}f(t)\} = F(s - a)$.'
 
 - id: lap.tshift
   pace: light
@@ -290,7 +290,7 @@
     - {tex: 'e^{cs}F(s)', error: sign}
     - {tex: 'F(s - c)', error: wrong_pair}
     - {tex: 'e^{-cs}F(s)/s', error: algebra}
-  hint: '시간 지연 $c$는 $s$ 영역에서 $e^{-cs}$ 인자로 나타난다.'
+  hint: '함수를 $c$만큼 늦춰 $t = c$에 켜면 변환에 $e^{-cs}$가 곱해진다: $\mathcal{L}\{u(t - c)f(t - c)\} = e^{-cs}F(s)$. 함수도 $t - c$의 함수로 써야 한다.'
 
 - id: lap.conv
   pace: heavy
@@ -304,7 +304,7 @@
     - {tex: 'F(s) + G(s)', error: algebra}
     - {tex: 'F(s)\,G(s)/s', error: wrong_pair}
     - {tex: 'F(s)/G(s)', error: algebra}
-  hint: '시간 영역의 합성곱은 $s$ 영역의 곱. 전달함수 $Y = G\,F$가 여기서 나온다.'
+  hint: '두 함수의 합성곱 $(f * g)(t) = \int_0^t f(\tau)g(t - \tau)\,d\tau$의 변환은 각 변환의 곱 $F(s)G(s)$이다.'
 
 - id: lap.tmult
   pace: compute
@@ -318,7 +318,7 @@
     - {tex: 'F^{\prime}(s)', error: sign}
     - {tex: 'F(s)/s^{2}', error: wrong_pair}
     - {tex: 's\,F(s)', error: wrong_pair}
-  hint: '$e^{-st}$를 $s$로 미분하면 $-t$가 나온다. 그래서 $t$를 곱하는 것은 $-\dfrac{d}{ds}$.'
+  hint: '$t$를 곱한 함수의 변환은 $\mathcal{L}\{tf(t)\} = -F^{\prime}(s)$이다. 정의식 안의 $e^{-st}$를 $s$로 미분하면 $-t$가 나오기 때문이다.'
 
 - id: lap.integral
   pace: compute
@@ -332,4 +332,4 @@
     - {tex: 's\,F(s)', error: wrong_pair}
     - {tex: 'F(s)/s - f(0)', error: initial_condition}
     - {tex: 'F(s)/s^{2}', error: algebra}
-  hint: '적분은 $1$과의 합성곱이므로 $F(s)\cdot\dfrac{1}{s}$.'
+  hint: '$f$를 $0$부터 $t$까지 적분한 함수의 변환은 $F(s)/s$이다. 적분은 $1$과의 합성곱이고 $\mathcal{L}\{1\} = 1/s$이기 때문이다.'

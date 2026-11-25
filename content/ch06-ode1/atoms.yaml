@@ -1,7 +1,7 @@
 # 6장 1계 ODE · 사실 원자
-- {id: ode.mu, pace: light, kind: gen, title: '적분인자 $\mu(x)$', generator: "ode1:integrating_factor", hint: '$y^{\prime} + p(x)y = q$의 적분인자 $\mu = e^{\int p\,dx}$. $\mu^{\prime} = p\mu$를 만족한다.'}
-- {id: ode.sepgen, pace: light, kind: gen, title: 변수분리 일반해, generator: "ode1:separable_general", hint: '$y^{\prime} = f(x)\,y \Rightarrow \dfrac{dy}{y} = f\,dx \Rightarrow y = Ce^{\int f\,dx}$.'}
-- {id: ode.exactk, pace: compute, kind: gen, title: 완전 조건, generator: "ode1:exact_k", tier: 2, hint: '$M\,dx + N\,dy = 0$이 완전 $\iff \dfrac{\partial M}{\partial y} = \dfrac{\partial N}{\partial x}$.'}
+- {id: ode.mu, pace: light, kind: gen, title: '적분인자 $\mu(x)$', generator: "ode1:integrating_factor", hint: '$y^{\prime} + p(x)y = q(x)$에 적분인자 $\mu = e^{\int p\,dx}$를 곱하면 좌변이 $(\mu y)^{\prime}$ 한 덩어리가 된다. $\mu$가 $\mu^{\prime} = p\mu$를 만족하기 때문이다.'}
+- {id: ode.sepgen, pace: light, kind: gen, title: 변수분리 일반해, generator: "ode1:separable_general", hint: '$y^{\prime} = f(x)\,y$는 $\dfrac{dy}{y} = f(x)\,dx$로 변수를 나눠 양변을 적분한다. 그러면 일반해는 $y = Ce^{\int f\,dx}$이다.'}
+- {id: ode.exactk, pace: compute, kind: gen, title: 완전 조건, generator: "ode1:exact_k", tier: 2, hint: '$M\,dx + N\,dy = 0$이 완전하려면 $\dfrac{\partial M}{\partial y} = \dfrac{\partial N}{\partial x}$이어야 한다. 양변을 계산해 같은 항의 계수를 맞추면 $k$가 정해진다.'}
 - id: ode.linformula
   pace: compute
   generator: "fx6:linformula"
@@ -14,7 +14,7 @@
     - {tex: '\mu\left(\int \dfrac{q}{\mu}\,dx + C\right)', error: algebra}
     - {tex: '\dfrac{1}{\mu}\int \mu q\,dx', error: missing_factor}
     - {tex: '\dfrac{1}{\mu}\left(\int q\,dx + C\right)', error: algebra}
-  hint: '양변에 $\mu$를 곱하면 $(\mu y)^{\prime} = \mu q$. 적분하고 $\mu$로 나눈다. 적분상수 $C$를 잊지 말 것.'
+  hint: '$y^{\prime} + p(x)y = q(x)$에 $\mu = e^{\int p\,dx}$를 곱하면 $(\mu y)^{\prime} = \mu q$가 된다. 양변을 적분하고 $\mu$로 나누면 $y = \dfrac{1}{\mu}\left(\int\mu q\,dx + C\right)$이다.'
 - id: ode.exactcond
   pace: light
   generator: "fx6:exactcond"
@@ -27,7 +27,7 @@
     - {tex: '\dfrac{\partial M}{\partial x} = \dfrac{\partial N}{\partial y}', error: algebra}
     - {tex: '\dfrac{\partial M}{\partial y} = -\dfrac{\partial N}{\partial x}', error: sign}
     - {tex: 'M = N', error: theorem_condition}
-  hint: '$F_x = M$, $F_y = N$인 $F$가 있으려면 혼합 편미분이 같아야 한다: $M_y = F_{xy} = F_{yx} = N_x$.'
+  hint: '$M\,dx + N\,dy = 0$이 어떤 함수 $F$의 전미분이려면 $M_y = N_x$이어야 한다. $M = F_x$, $N = F_y$라면 $M_y = F_{xy} = F_{yx} = N_x$이기 때문이다.'
 - id: ode.bernoulli
   pace: light
   generator: "fx6:bernoulli"
@@ -40,7 +40,7 @@
     - {tex: 'v = y^{n}', error: algebra}
     - {tex: 'v = y^{n-1}', error: sign}
     - {tex: 'v = y/x', error: wrong_pair}
-  hint: '$v = y^{1-n}$이면 $v^{\prime} + (1-n)pv = (1-n)q$로 선형이 된다. $v = y/x$는 동차형 방정식용.'
+  hint: 'Bernoulli 방정식 $y^{\prime} + py = qy^{n}$은 $v = y^{1-n}$으로 치환하면 선형방정식 $v^{\prime} + (1-n)pv = (1-n)q$가 된다.'
 - id: ode.existence
   pace: compute
   generator: "fx6:existence"
@@ -53,4 +53,4 @@
     - {tex: 'f\ \text{만 연속}', error: theorem_condition}
     - {tex: 'f\ \text{가 선형}', error: theorem_condition}
     - {tex: 'y_0 \ne 0', error: theorem_condition}
-  hint: '$f$가 연속이면 해가 존재(Peano), $\partial f/\partial y$도 연속이면 유일(Picard). $y^{\prime} = \sqrt{y}$, $y(0) = 0$은 해가 여러 개.'
+  hint: '$y^{\prime} = f(x, y)$에서 $f$와 $\partial f/\partial y$가 초기점 근처에서 연속이면 해가 존재하고 하나뿐이다(Picard). 이 조건이 깨지는 점에서는 해가 여러 개일 수 있다.'

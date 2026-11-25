@@ -37,6 +37,8 @@ for (const c of index.chapters.filter((x) => x.file)) {
     tryRich(u.title, `${u.id} 제목`);
     tryRich(u.hint, `${u.id} 힌트`);
     if (!u.derivation || !u.derivation.length) bad.push(`${u.id}: 유도 없음`);
+    // 문장 규칙: 핵심(hint)은 완결된 문장이어야 한다 (수식만 나열하거나 수식 끝에 바로 다른 수식을 붙이지 않는다)
+    if (u.hint && !/다[.:]/.test(u.hint)) bad.push(`${u.id}: 핵심이 문장이 아님 (…다. 로 맺는 서술이 없음)`);
     if (u.table) u.table.forEach((t) => tryTex(t, `${u.id} 변환표`));
     if (!u.derivation_goal) bad.push(`${u.id}: 유도의 문제 상황(goal) 없음`);
     else tryRich(u.derivation_goal, `${u.id} 문제 상황`);
@@ -51,7 +53,7 @@ for (const c of index.chapters.filter((x) => x.file)) {
     else {
       [it.problem, ...it.steps, ...it.decoys.map((d) => d.tex)].forEach((t) => tryTex(t, it.id));
       if (it.graph) { tryTex('y = ' + it.graph.sol, it.id + ' 그래프 해'); it.graph.wrong.forEach((w) => { if (!whys.has(w.why)) { whys.add(w.why); tryRich(w.why, `${it.unit} 그래프 오답 설명`); } }); }
-      it.decoys.forEach((d) => { if (!whys.has(d.why)) { whys.add(d.why); tryRich(d.why, `${it.unit} 오답 설명`); } });
+      it.decoys.forEach((d) => { if (!whys.has(d.why)) { whys.add(d.why); tryRich(d.why, `${it.unit} 오답 설명`); if (!/다[.:]/.test(d.why)) bad.push(`${it.unit}: 오답 설명이 문장이 아님: ${d.why}`); } });
     }
   }
 }

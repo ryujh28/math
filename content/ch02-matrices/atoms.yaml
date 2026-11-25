@@ -1,9 +1,9 @@
 # 2장 행렬과 선형변환 · 사실 원자
-- {id: la.det2, pace: light, kind: gen, title: '$2\times 2$ 행렬식', generator: "la2:det2", hint: '$\det\begin{pmatrix}a & b\\ c & d\end{pmatrix} = ad - bc$. 주대각 곱에서 반대각 곱을 뺀다.'}
-- {id: la.inv2, pace: compute, kind: gen, title: '$2\times 2$ 역행렬', generator: "la2:inv2", hint: '$A^{-1} = \dfrac{1}{ad - bc}\begin{pmatrix}d & -b\\ -c & a\end{pmatrix}$. $a$와 $d$는 자리를 바꾸고, $b$와 $c$는 부호만 바꾼다.'}
-- {id: la.matmul, pace: compute, kind: gen, title: 행렬곱, generator: "la2:matmul2", hint: '$(AB)_{ij}$는 $A$의 $i$행과 $B$의 $j$열의 내적. 일반적으로 $AB \ne BA$.'}
-- {id: la.rank, pace: compute, kind: gen, title: '계수 $\operatorname{rank}$', generator: "la2:rank3", hint: '$\operatorname{rank}A$는 일차독립인 행(또는 열)의 최대 개수, 곧 소거 후 남는 피벗 개수.'}
-- {id: la.det3, pace: compute, kind: gen, title: '$3\times 3$ 행렬식', generator: "la2:det3", tier: 2, hint: '1행 전개: $a_{11}M_{11} - a_{12}M_{12} + a_{13}M_{13}$. 부호는 $+,\,-,\,+$.'}
+- {id: la.det2, pace: light, kind: gen, title: '$2\times 2$ 행렬식', generator: "la2:det2", hint: '$2\times 2$ 행렬 $\begin{pmatrix}a & b\\ c & d\end{pmatrix}$의 행렬식은 주대각 곱에서 반대각 곱을 뺀 $ad - bc$이다.'}
+- {id: la.inv2, pace: compute, kind: gen, title: '$2\times 2$ 역행렬', generator: "la2:inv2", hint: '$2\times 2$ 행렬의 역행렬은 $a$와 $d$의 자리를 바꾸고 $b$와 $c$의 부호를 바꾼 뒤 행렬식으로 나눈 것이다: $A^{-1} = \dfrac{1}{ad - bc}\begin{pmatrix}d & -b\\ -c & a\end{pmatrix}$.'}
+- {id: la.matmul, pace: compute, kind: gen, title: 행렬곱, generator: "la2:matmul2", hint: '$AB$의 $(i, j)$ 성분은 $A$의 $i$행과 $B$의 $j$열의 내적이다. 순서를 바꾸면 보통 결과가 달라진다($AB \ne BA$).'}
+- {id: la.rank, pace: compute, kind: gen, title: '계수 $\operatorname{rank}$', generator: "la2:rank3", hint: '계수 $\operatorname{rank}A$는 일차독립인 행(또는 열)의 최대 개수이다. 행 소거로 사다리꼴을 만든 뒤 남는 피벗의 개수를 세면 된다.'}
+- {id: la.det3, pace: compute, kind: gen, title: '$3\times 3$ 행렬식', generator: "la2:det3", tier: 2, hint: '$3\times 3$ 행렬식은 1행을 따라 전개한다: $a_{11}M_{11} - a_{12}M_{12} + a_{13}M_{13}$. 여기서 $M_{1j}$는 1행과 $j$열을 지운 $2\times 2$ 행렬식이고, 부호는 $+,\,-,\,+$ 순서이다.'}
 - id: la.detprod
   pace: light
   generator: "fx2:detprod"
@@ -16,7 +16,7 @@
     - {tex: '\det A + \det B', error: algebra}
     - {tex: '\det(BA)^{-1}', error: algebra}
     - {tex: '\det A\,\det B^{-1}', error: algebra}
-  hint: '$\det(AB) = \det A\,\det B$. 부피 배율은 곱해진다.'
+  hint: '곱의 행렬식은 행렬식의 곱이다: $\det(AB) = \det A\,\det B$. 그래서 $\det(A^{-1}) = 1/\det A$, $\det(A^{k}) = (\det A)^{k}$이고, 전치는 행렬식을 바꾸지 않는다.'
 - id: la.invprod
   pace: compute
   generator: "fx2:invprod"
@@ -29,7 +29,7 @@
     - {tex: 'A^{-1}B^{-1}', error: algebra}
     - {tex: 'B^{-1}+A^{-1}', error: algebra}
     - {tex: '(BA)^{-1}', error: algebra}
-  hint: '$(AB)^{-1} = B^{-1}A^{-1}$. 양말을 신고 신발을 신었으면 신발부터 벗는다.'
+  hint: '곱의 역행렬은 순서를 뒤집어 각 역행렬을 곱한 것이다: $(AB)^{-1} = B^{-1}A^{-1}$. 마지막에 적용한 변환을 먼저 되돌려야 하기 때문이다.'
 - id: la.transprod
   pace: compute
   generator: "fx2:transprod"
@@ -42,7 +42,7 @@
     - {tex: 'A^{T}B^{T}', error: algebra}
     - {tex: 'BA', error: algebra}
     - {tex: '(BA)^{-1}', error: wrong_pair}
-  hint: '$(AB)^{T} = B^{T}A^{T}$. 역행렬과 같은 순서 뒤집기.'
+  hint: '곱의 전치도 순서가 뒤집힌다: $(AB)^{T} = B^{T}A^{T}$.'
 - id: la.detscale
   pace: light
   generator: "fx2:detscale"
@@ -55,7 +55,7 @@
     - {tex: 'k\det A', error: missing_factor}
     - {tex: 'nk\det A', error: algebra}
     - {tex: 'k^{2}\det A', error: algebra}
-  hint: '$\det(kA) = k^{n}\det A$. $n$개 행 각각에서 $k$가 하나씩 나온다.'
+  hint: '$n\times n$ 행렬 전체에 $k$를 곱하면 행렬식은 $k^{n}$배가 된다: $\det(kA) = k^{n}\det A$. $n$개의 행마다 $k$가 하나씩 밖으로 나오기 때문이다.'
 - id: la.invertible
   pace: compute
   generator: "fx2:invertible"
@@ -68,4 +68,4 @@
     - {tex: '\det A = 0', error: sign}
     - {tex: '\operatorname{rank} A < n', error: theorem_condition}
     - {tex: 'A = A^{T}', error: theorem_condition}
-  hint: '가역 $\iff \det A \ne 0 \iff \operatorname{rank}A = n \iff A\mathbf{x} = \mathbf{0}$의 해가 $\mathbf{0}$뿐.'
+  hint: '정사각행렬 $A$는 $\det A \ne 0$일 때, 그리고 그때만 역행렬을 가진다. 한 행이 다른 행의 배수이면 행렬식이 $0$이 되어 역행렬이 없다.'

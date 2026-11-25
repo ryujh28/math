@@ -1,6 +1,6 @@
 # 4장 행렬 분해 · 사실 원자
-- {id: la.ata, pace: compute, kind: gen, title: '$A^TA$ 계산', generator: "la4:ata", hint: '$(A^TA)_{ij}$는 $A$의 $i$열과 $j$열의 내적. 항상 대칭.'}
-- {id: la.sv, pace: compute, kind: gen, title: 특이값, generator: "la4:singular_values", tier: 2, hint: '특이값 $\sigma_i = \sqrt{\lambda_i(A^TA)}$. $A$ 자체의 고유값과는 다르다.'}
+- {id: la.ata, pace: compute, kind: gen, title: '$A^TA$ 계산', generator: "la4:ata", hint: '$A^TA$의 $(i, j)$ 성분은 $A$의 $i$열과 $j$열의 내적이다. 그래서 $A^TA$는 항상 대칭행렬이다.'}
+- {id: la.sv, pace: compute, kind: gen, title: 특이값, generator: "la4:singular_values", tier: 2, hint: '$A$의 특이값은 $A^TA$의 고유값에 제곱근을 씌운 값이다: $\sigma_i = \sqrt{\lambda_i(A^TA)}$. $A$ 자체의 고유값과는 다르다.'}
 - id: la.svd
   pace: light
   generator: "fx4:svd"
@@ -13,7 +13,7 @@
     - {tex: 'U\Sigma U^{T}', error: wrong_pair}
     - {tex: 'V\Sigma U^{T}', error: algebra}
     - {tex: 'P D P^{-1}', error: wrong_pair}
-  hint: '$A = U\Sigma V^T$. $U, V$는 직교행렬(각각 $AA^T$, $A^TA$의 고유벡터), $\Sigma$는 특이값.'
+  hint: 'SVD $A = U\Sigma V^T$에서 $U$와 $V$는 직교행렬이라 길이를 바꾸지 않는다. 그래서 $\|A\|_2$, $|\det A|$, $A^TA$의 고유값 같은 크기 정보는 특이값 $\Sigma$에서 바로 읽는다.'
 - id: la.normaleq
   pace: heavy
   generator: "fx4:normaleq"
@@ -26,7 +26,7 @@
     - {tex: 'AA^{T}\,\hat{\mathbf{x}} = A\mathbf{b}', error: algebra}
     - {tex: 'A\,\hat{\mathbf{x}} = \mathbf{b}', error: theorem_condition}
     - {tex: 'A^{T}A\,\hat{\mathbf{x}} = \mathbf{b}', error: missing_factor}
-  hint: '잔차 $\mathbf{b} - A\hat{\mathbf{x}}$가 $A$의 열공간에 직교 $\iff A^T(\mathbf{b} - A\hat{\mathbf{x}}) = \mathbf{0} \iff A^TA\hat{\mathbf{x}} = A^T\mathbf{b}$.'
+  hint: '$A\mathbf{x} = \mathbf{b}$에 해가 없을 때, 오차 $\|A\mathbf{x} - \mathbf{b}\|$를 가장 작게 하는 $\hat{\mathbf{x}}$는 정규방정식 $A^TA\hat{\mathbf{x}} = A^T\mathbf{b}$의 해이다. 남는 오차가 $A$의 열들과 직교하는 조건이다.'
 - id: la.projmat
   pace: compute
   generator: "fx4:projmat"
@@ -39,7 +39,7 @@
     - {tex: '(A^{T}A)^{-1}A^{T}', error: missing_factor}
     - {tex: 'A^{T}(AA^{T})^{-1}A', error: wrong_pair}
     - {tex: 'AA^{T}', error: normalization}
-  hint: '$P = A(A^TA)^{-1}A^T$, $P^2 = P$, $P^T = P$. $(A^TA)^{-1}A^T$만 쓰면 사영이 아니라 최소제곱해(유사역행렬).'
+  hint: '$A$의 열공간으로 사영하는 행렬은 $P = A(A^TA)^{-1}A^T$이다. 열이 하나 $\mathbf{a}$뿐이면 $P = \dfrac{\mathbf{a}\mathbf{a}^T}{\mathbf{a}^T\mathbf{a}}$이고, 사영이므로 $P^2 = P$이다.'
 - id: la.qr
   pace: heavy
   generator: "fx4:qr"
@@ -52,7 +52,7 @@
     - {tex: 'Q\ \text{은 하삼각},\ R\ \text{은 위삼각}', error: wrong_pair}
     - {tex: 'Q\ \text{은 대각},\ R\ \text{은 직교}', error: wrong_pair}
     - {tex: 'QQ^{T} = 0,\ R\ \text{은 대칭}', error: algebra}
-  hint: '$Q$의 열은 정규직교(Gram–Schmidt 결과), $R$은 위삼각(계수들).'
+  hint: '$A = QR$에서 $Q$의 열은 정규직교(Gram–Schmidt 결과)이고 $R$은 위삼각행렬이다. $Q^TQ = I$이므로 $Q$를 알면 $R = Q^TA$로 바로 구한다.'
 - id: la.orthmat
   pace: compute
   generator: "fx4:orthmat"
@@ -65,4 +65,4 @@
     - {tex: 'Q', error: algebra}
     - {tex: '-Q', error: sign}
     - {tex: 'Q^{2}', error: algebra}
-  hint: '직교행렬의 역행렬은 전치. 길이와 각도를 보존한다 ($\det Q = \pm 1$).'
+  hint: '직교행렬 $Q$는 $Q^TQ = I$를 만족하므로 역행렬이 전치이다: $Q^{-1} = Q^T$. 회전과 반사가 여기에 속하고, 길이와 각도를 보존한다.'

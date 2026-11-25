@@ -3,9 +3,9 @@
   title: 최소제곱 직선 맞춤
   generator: la4:lsq_line
   steps: [A와 b, 정규방정식, 해, 직선]
-  hint: '$A$의 행은 $(1,\ x_i)$, $\mathbf{b}$는 $y_i$. $A^TA = \begin{pmatrix}n & \sum x\\ \sum x & \sum x^2\end{pmatrix}$, $A^T\mathbf{b} = \begin{pmatrix}\sum y\\ \sum xy\end{pmatrix}$를 풀면 $(c_0, c_1)$.'
+  hint: '점들에 가장 잘 맞는 직선 $y = c_0 + c_1x$를 구할 때, $A$의 각 행은 $(1,\ x_i)$, $\mathbf{b}$는 $y_i$로 놓고 정규방정식 $A^TA\mathbf{c} = A^T\mathbf{b}$를 푼다.'
 - id: la.lu
   title: '$3\times 3$ LU 분해'
   generator: la4:lu3
   steps: [1열 승수, 1열 소거, 2열 승수, L과 U]
-  hint: 'Gauss 소거의 승수 $l_{ij}$를 $L$의 $(i, j)$ 자리에, 소거 결과를 $U$에.'
+  hint: '$A = LU$에서 $U$는 Gauss 소거가 끝난 위삼각행렬이고, $L$은 소거에 쓴 승수 $l_{ij}$를 대각 아래 $(i, j)$ 자리에 적은 하삼각행렬이다.'

@@ -3,14 +3,14 @@
   title: 적분인자로 1계 선형
   generator: ode1:linear
   steps: [적분인자, 곱의 미분, 적분, 초기조건, 해]
-  hint: '$\mu = e^{\int p\,dx}$를 곱하면 좌변이 $(\mu y)^{\prime}$. 적분 → 상수 $C$ → $\mu$로 나눈다.'
+  hint: '$\mu = e^{\int p\,dx}$를 곱해 좌변을 $(\mu y)^{\prime}$로 만들고, 양변을 적분한 뒤 $\mu$로 나눈다. 마지막에 초기조건으로 상수 $C$를 정한다.'
 - id: ode.separable
   title: 변수분리
   generator: ode1:separable
   steps: [분리, 적분, 초기조건, 해]
-  hint: '$\dfrac{dy}{g(y)} = f(x)\,dx$로 나누고 양변 적분, 초기조건으로 $C$를 정하고 $y$로 정리.'
+  hint: '$y^{\prime} = f(x)g(y)$는 $\dfrac{dy}{g(y)} = f(x)\,dx$로 나눈 뒤 양변을 적분한다. 초기조건으로 상수를 정하고 $y$에 대해 정리한다.'
 - id: ode.exact
   title: 완전미분방정식
   generator: ode1:exact
   steps: [완전 확인, x로 적분, h(y) 결정, 초기조건]
-  hint: '$M_y = N_x$ 확인 → $F = \int M\,dx + h(y)$ → $F_y = N$으로 $h$ 결정 → $F(x, y) = F(x_0, y_0)$.'
+  hint: '$M_y = N_x$를 확인한 뒤, $F = \int M\,dx + h(y)$로 놓고 $F_y = N$에서 $h(y)$를 정한다. 해는 $F(x, y) = F(x_0, y_0)$이다.'

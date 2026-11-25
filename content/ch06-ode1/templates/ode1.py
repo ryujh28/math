@@ -91,7 +91,7 @@ WHY = {
     "sep": r"변수를 분리할 때 $g(y)$를 분모로 보내야 합니다.",
     "sep_int": r"적분 결과가 틀렸습니다. 양변을 미분해서 확인해 보세요.",
     "sep_half": r"$\int x\,dx = \dfrac{x^2}{2}$입니다. $\dfrac{1}{2}$이 빠졌습니다.",
-    "ex_int": r"$\int M\,dx$는 $x$에 대해서만 적분합니다. $2cxy$를 $x$로 적분하면 $cx^2y$.",
+    "ex_int": r"$\int M\,dx$는 $x$에 대해서만 적분합니다. $2cxy$를 $x$로 적분하면 $cx^2y$입니다.",
     "ex_h": r"$h^{\prime}(y)$를 구한 뒤 $y$로 적분해야 $h(y)$가 됩니다.",
     "ex_c": r"초기조건 $(x_0, y_0)$를 $F$에 대입해 상수를 정합니다.",
     "ex_my": r"$M_y = \partial M/\partial y$, $N_x = \partial N/\partial x$ 계산이 틀렸습니다.",

@@ -1,7 +1,7 @@
 # 7장 2계 선형 ODE · 사실 원자
-- {id: ode2.form, pace: light, kind: gen, title: 동차해의 꼴, generator: "ode2:general_form", hint: '서로 다른 실근이면 $C_1e^{r_1x} + C_2e^{r_2x}$, 중근이면 $(C_1 + C_2x)e^{rx}$, 복소근 $\alpha \pm i\beta$면 $e^{\alpha x}(C_1\cos\beta x + C_2\sin\beta x)$.'}
-- {id: ode2.trial, pace: light, kind: gen, title: '특수해 $y_p$의 꼴', generator: "ode2:trial_form", tier: 2, hint: '강제항과 같은 꼴로 추측한다. 동차해와 겹치면 $x$를 곱하고, $\cos$에는 $\cos$와 $\sin$을 같이 쓴다.'}
-- {id: ode2.wronskian, pace: heavy, kind: gen, title: Wronskian, generator: "ode2:wronskian", tier: 2, hint: '$W(y_1, y_2) = y_1y_2^{\prime} - y_1^{\prime}y_2$. $e^{ax}, e^{bx}$이면 $(b - a)e^{(a+b)x}$.'}
+- {id: ode2.form, pace: light, kind: gen, title: 동차해의 꼴, generator: "ode2:general_form", hint: '$y^{\prime\prime} + py^{\prime} + qy = 0$의 일반해는 특성방정식 $r^2 + pr + q = 0$의 근으로 정해진다. 서로 다른 실근이면 $C_1e^{r_1x} + C_2e^{r_2x}$, 중근이면 $(C_1 + C_2x)e^{rx}$, 복소근 $\alpha \pm i\beta$이면 $e^{\alpha x}(C_1\cos\beta x + C_2\sin\beta x)$이다.'}
+- {id: ode2.trial, pace: light, kind: gen, title: '특수해 $y_p$의 꼴', generator: "ode2:trial_form", tier: 2, hint: '특수해는 강제항과 같은 꼴로 추측한다($e^{ax}$이면 $Ae^{ax}$, $\cos bx$이면 $A\cos bx + B\sin bx$). 추측한 꼴이 동차해와 겹치면 $x$를 한 번 더 곱한다.'}
+- {id: ode2.wronskian, pace: heavy, kind: gen, title: Wronskian, generator: "ode2:wronskian", tier: 2, hint: '두 해 $y_1, y_2$의 Wronskian은 $W = y_1y_2^{\prime} - y_1^{\prime}y_2$이고, $W \ne 0$이면 두 해가 독립이다. 예를 들어 $y_1 = e^{ax}$, $y_2 = e^{bx}$이면 $W = (b - a)e^{(a+b)x}$이다.'}
 - id: ode2.varparam
   pace: epic
   generator: "fx7:varparam"
@@ -14,7 +14,7 @@
     - {tex: "y_1\\int\\dfrac{y_2R}{W}\\,dx - y_2\\int\\dfrac{y_1R}{W}\\,dx", error: sign}
     - {tex: "-y_1\\int y_2R\\,dx + y_2\\int y_1R\\,dx", error: missing_factor}
     - {tex: "-y_1\\int\\dfrac{y_1R}{W}\\,dx + y_2\\int\\dfrac{y_2R}{W}\\,dx", error: algebra}
-  hint: '$y_p = u_1y_1 + u_2y_2$, $u_1^{\prime} = -\dfrac{y_2R}{W}$, $u_2^{\prime} = \dfrac{y_1R}{W}$. 각 적분에는 상대 해가 들어간다.'
+  hint: '동차해 $y_1, y_2$를 알 때 특수해를 $y_p = u_1y_1 + u_2y_2$로 놓으면 $u_1^{\prime} = -\dfrac{y_2R}{W}$, $u_2^{\prime} = \dfrac{y_1R}{W}$이다($R$은 우변, $W$는 Wronskian). 이것을 적분해 $u_1, u_2$를 구한다.'
 - id: ode2.eulerform
   pace: compute
   generator: "fx7:eulerform"
@@ -27,7 +27,7 @@
     - {tex: "r^{2} + ar + b = 0", error: algebra}
     - {tex: "r(r + 1) + ar + b = 0", error: sign}
     - {tex: "r^{2} + ar\\,x + b = 0", error: algebra}
-  hint: '$x^2(x^r)^{\prime\prime} = r(r-1)x^r$, $x(x^r)^{\prime} = rx^r$. 그래서 $-r$ 항이 생긴다.'
+  hint: 'Euler–Cauchy 방정식 $x^2y^{\prime\prime} + axy^{\prime} + by = 0$에 $y = x^r$을 넣으면 $x^2(x^r)^{\prime\prime} = r(r-1)x^r$, $x(x^r)^{\prime} = rx^r$이라 $r(r-1) + ar + b = 0$을 얻는다. $r^2$이 아니라 $r(r-1)$인 것에 주의한다.'
 - id: ode2.reduction
   pace: heavy
   generator: "fx7:reduction"
@@ -40,7 +40,7 @@
     - {tex: "y_1\\int\\dfrac{e^{\\int p\\,dx}}{y_1^{2}}\\,dx", error: sign}
     - {tex: "y_1\\int\\dfrac{e^{-\\int p\\,dx}}{y_1}\\,dx", error: algebra}
     - {tex: "x\\,y_1", error: theorem_condition}
-  hint: '$y_2 = vy_1$로 놓으면 $v^{\prime} = \dfrac{e^{-\int p\,dx}}{y_1^2}$. 중근일 때 $v = x$가 되어 $xe^{rx}$가 나온다.'
+  hint: '해 하나 $y_1$을 알 때 두 번째 해를 $y_2 = vy_1$로 놓으면 $v^{\prime} = \dfrac{e^{-\int p\,dx}}{y_1^2}$이다. 상수계수 중근이면 $v = x$가 되어 $y_2 = xe^{rx}$를 얻는다.'
 - id: ode2.superpos
   pace: compute
   generator: "fx7:superpos"
@@ -53,4 +53,4 @@
     - {tex: "y = y_h\\,y_p", error: algebra}
     - {tex: "y = y_p", error: missing_factor}
     - {tex: "y = y_h - y_p", error: sign}
-  hint: '동차해 전체(상수 2개) + 특수해 하나. 상수는 초기조건으로 정한다.'
+  hint: '비동차방정식의 일반해는 동차해 전체(상수 두 개)에 특수해 하나를 더한 것이다: $y = C_1y_1 + C_2y_2 + y_p$. 상수 두 개는 초기조건으로 정한다.'

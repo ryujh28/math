@@ -4,25 +4,25 @@
   kind: gen
   title: 내적 계산
   generator: la1:dot
-  hint: '$\mathbf{u}\cdot\mathbf{v} = u_1v_1 + u_2v_2 + u_3v_3$. 성분끼리 곱해서 모두 더한다.'
+  hint: '두 벡터의 내적은 같은 자리 성분끼리 곱해서 모두 더한 값이다: $\mathbf{u}\cdot\mathbf{v} = u_1v_1 + u_2v_2 + u_3v_3$.'
 - id: la.norm
   pace: light
   kind: gen
   title: 벡터의 길이
   generator: la1:norm
-  hint: '$\|\mathbf{v}\| = \sqrt{\mathbf{v}\cdot\mathbf{v}}$. 제곱합의 제곱근.'
+  hint: '벡터의 길이는 성분 제곱의 합에 제곱근을 씌운 값이고, 자기 자신과의 내적의 제곱근과 같다: $\|\mathbf{v}\| = \sqrt{\mathbf{v}\cdot\mathbf{v}}$.'
 - id: la.orth
   pace: light
   kind: gen
   title: 직교 조건
   generator: la1:orth_k
-  hint: '$\mathbf{u} \perp \mathbf{v} \iff \mathbf{u}\cdot\mathbf{v} = 0$. 내적을 $k$에 대한 일차식으로 놓고 푼다.'
+  hint: '두 벡터가 직교하는 것은 내적이 $0$인 것과 같다. 그래서 내적을 $k$에 대한 일차식으로 쓰고 $0$으로 놓아 $k$를 구한다.'
 - id: la.proj
   pace: compute
   kind: gen
   title: 벡터 사영
   generator: la1:proj
-  hint: '$\operatorname{proj}_{\mathbf{v}}\mathbf{u} = \dfrac{\mathbf{u}\cdot\mathbf{v}}{\mathbf{v}\cdot\mathbf{v}}\,\mathbf{v}$. 분모는 $\|\mathbf{v}\|$가 아니라 $\|\mathbf{v}\|^2$.'
+  hint: '$\mathbf{u}$를 $\mathbf{v}$ 방향으로 사영한 벡터는 $\dfrac{\mathbf{u}\cdot\mathbf{v}}{\mathbf{v}\cdot\mathbf{v}}\,\mathbf{v}$이다. 분모가 $\|\mathbf{v}\|$가 아니라 $\|\mathbf{v}\|^2$인 것에 주의한다.'
 - id: la.cs
   pace: light
   generator: "fx1:cs"
@@ -35,7 +35,7 @@
     - {tex: '|\mathbf{u}\cdot\mathbf{v}| \ge \|\mathbf{u}\|\,\|\mathbf{v}\|', error: sign}
     - {tex: '\|\mathbf{u}+\mathbf{v}\| = \|\mathbf{u}\| + \|\mathbf{v}\|', error: theorem_condition}
     - {tex: '|\mathbf{u}\cdot\mathbf{v}| \le \|\mathbf{u}\|^{2}\,\|\mathbf{v}\|^{2}', error: algebra}
-  hint: '$|\mathbf{u}\cdot\mathbf{v}| \le \|\mathbf{u}\|\,\|\mathbf{v}\|$. 등호는 두 벡터가 평행할 때만. 그래서 $\cos\theta$가 $-1$과 $1$ 사이에 있다.'
+  hint: '내적의 크기는 두 길이의 곱을 넘지 못한다: $|\mathbf{u}\cdot\mathbf{v}| \le \|\mathbf{u}\|\,\|\mathbf{v}\|$. 등호는 두 벡터가 평행할 때만 성립하고, 이 덕분에 $\cos\theta$가 $-1$과 $1$ 사이에 있다.'
 - id: la.angle
   pace: compute
   generator: "fx1:angle"
@@ -48,7 +48,7 @@
     - {tex: '\dfrac{\mathbf{u}\cdot\mathbf{v}}{\|\mathbf{u}\|^{2}\,\|\mathbf{v}\|^{2}}', error: normalization}
     - {tex: '\dfrac{\|\mathbf{u}\times\mathbf{v}\|}{\|\mathbf{u}\|\,\|\mathbf{v}\|}', error: wrong_pair}
     - {tex: '\dfrac{\|\mathbf{u}\|\,\|\mathbf{v}\|}{\mathbf{u}\cdot\mathbf{v}}', error: algebra}
-  hint: '$\mathbf{u}\cdot\mathbf{v} = \|\mathbf{u}\|\,\|\mathbf{v}\|\cos\theta$. 외적의 크기는 $\sin\theta$에 대응한다.'
+  hint: '두 벡터 사이의 각 $\theta$는 내적을 두 길이의 곱으로 나눠 구한다: $\cos\theta = \dfrac{\mathbf{u}\cdot\mathbf{v}}{\|\mathbf{u}\|\,\|\mathbf{v}\|}$.'
 - id: la.gsformula
   pace: compute
   generator: "fx1:gs"
@@ -61,7 +61,7 @@
     - {tex: '\mathbf{v}_2 + \dfrac{\mathbf{v}_2\cdot\mathbf{u}_1}{\mathbf{u}_1\cdot\mathbf{u}_1}\,\mathbf{u}_1', error: sign}
     - {tex: '\mathbf{v}_2 - \dfrac{\mathbf{v}_2\cdot\mathbf{u}_1}{\|\mathbf{u}_1\|}\,\mathbf{u}_1', error: normalization}
     - {tex: '\mathbf{v}_2 - \dfrac{\mathbf{v}_2\cdot\mathbf{u}_1}{\mathbf{v}_2\cdot\mathbf{v}_2}\,\mathbf{v}_2', error: algebra}
-  hint: '앞에서 만든 $\mathbf{u}_1$ 방향 성분(사영)을 $\mathbf{v}_2$에서 빼면 $\mathbf{u}_1$에 직교하는 $\mathbf{u}_2$가 남는다.'
+  hint: '$\mathbf{v}_2$에서 $\mathbf{u}_1$ 방향 성분(사영)을 빼면 $\mathbf{u}_1$에 직교하는 $\mathbf{u}_2$가 남는다: $\mathbf{u}_2 = \mathbf{v}_2 - \dfrac{\mathbf{v}_2\cdot\mathbf{u}_1}{\mathbf{u}_1\cdot\mathbf{u}_1}\mathbf{u}_1$.'
 - id: la.triangle
   pace: light
   generator: "fx1:triangle"
@@ -74,4 +74,4 @@
     - {tex: '\ge', error: sign}
     - {tex: '=', error: theorem_condition}
     - {tex: '<', error: theorem_condition}
-  hint: '$\|\mathbf{u}+\mathbf{v}\| \le \|\mathbf{u}\| + \|\mathbf{v}\|$. 같은 방향일 때만 등호.'
+  hint: '두 벡터를 더한 길이는 각 길이의 합보다 클 수 없고, 길이의 차보다 작을 수 없다: $\big|\|\mathbf{u}\| - \|\mathbf{v}\|\big| \le \|\mathbf{u}+\mathbf{v}\| \le \|\mathbf{u}\| + \|\mathbf{v}\|$.'

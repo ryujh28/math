@@ -3,14 +3,14 @@
   title: 상수계수 동차 초기값 문제
   generator: ode2:const_coeff
   steps: [특성방정식, 근, 일반해, 상수, 해]
-  hint: '$r^2 + pr + q = 0$ → 근의 종류로 일반해의 꼴 → $y(0)$, $y^{\prime}(0)$으로 $C_1, C_2$.'
+  hint: '특성방정식 $r^2 + pr + q = 0$을 풀어 근의 종류에 맞는 일반해를 쓰고, $y(0)$, $y^{\prime}(0)$을 넣어 $C_1, C_2$를 구한다.'
 - id: ode2.undet
   title: 미정계수법
   generator: ode2:undetermined
   steps: [동차해, 특수해 꼴, 계수, 일반해]
-  hint: '$y_h$를 먼저 구하고, 강제항 꼴로 $y_p$를 추측해 대입한 뒤 계수를 비교한다. $y = y_h + y_p$.'
+  hint: '먼저 동차해 $y_h$를 구하고, 강제항의 꼴로 특수해 $y_p$를 추측해 방정식에 넣어 계수를 맞춘다. 일반해는 $y = y_h + y_p$이다.'
 - id: ode2.euler
   title: Euler–Cauchy 방정식
   generator: ode2:euler_cauchy
   steps: [특성방정식, 근, 일반해, 상수, 해]
-  hint: '$y = x^r$ 대입 → $r(r-1) + ar + b = 0$ → $y = C_1x^{r_1} + C_2x^{r_2}$.'
+  hint: '$y = x^r$을 넣어 $r(r-1) + ar + b = 0$을 풀고 $y = C_1x^{r_1} + C_2x^{r_2}$로 쓴 뒤, $x = 1$에서의 초기조건으로 $C_1, C_2$를 정한다.'

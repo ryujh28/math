@@ -1,8 +1,8 @@
 # 5장 행렬함수와 이차형식 · 사실 원자
-- {id: la.qmat, pace: light, kind: gen, title: 이차형식의 행렬, generator: "la5:qform_matrix", hint: '$ax^2 + bxy + cy^2 \to \begin{pmatrix}a & b/2\\ b/2 & c\end{pmatrix}$. $xy$ 계수는 반씩 나눠 대칭으로.'}
-- {id: la.definite, pace: light, kind: gen, title: 정부호 판정, generator: "la5:definiteness", tier: 2, hint: '대칭행렬의 고유값이 모두 양수면 양의 정부호, 모두 음수면 음의 정부호, 섞이면 부정부호. $2\times 2$에서는 $a > 0$, $\det A > 0$이면 양의 정부호.'}
-- {id: la.expdiag, pace: light, kind: gen, title: 대각행렬의 지수, generator: "la5:exp_diag", hint: '$e^{Dt} = \operatorname{diag}(e^{\lambda_1 t}, e^{\lambda_2 t})$. 대각성분마다 따로 지수.'}
-- {id: la.expjordan, pace: compute, kind: gen, title: Jordan 블록의 지수, generator: "la5:exp_jordan", tier: 2, hint: '$A = aI + N$ ($N^2 = 0$)이면 $e^{At} = e^{at}(I + Nt)$. 대각 위에 $te^{at}$가 붙는다.'}
+- {id: la.qmat, pace: light, kind: gen, title: 이차형식의 행렬, generator: "la5:qform_matrix", hint: '이차식 $ax^2 + bxy + cy^2$를 $\mathbf{x}^TA\mathbf{x}$로 쓰면 대칭행렬 $A = \begin{pmatrix}a & b/2\\ b/2 & c\end{pmatrix}$이다. $xy$ 계수는 반으로 나눠 두 비대각 자리에 넣는다.'}
+- {id: la.definite, pace: light, kind: gen, title: 정부호 판정, generator: "la5:definiteness", tier: 2, hint: '대칭행렬의 고유값이 모두 양수면 양의 정부호, 모두 음수면 음의 정부호, 부호가 섞이면 부정부호이다. $2\times 2$에서는 $\det A > 0$이고 $a_{11} > 0$이면 양의 정부호로 빠르게 판정할 수 있다.'}
+- {id: la.expdiag, pace: light, kind: gen, title: 대각행렬의 지수, generator: "la5:exp_diag", hint: '대각행렬의 행렬지수는 대각성분마다 따로 지수를 취한 것이다: $e^{Dt} = \operatorname{diag}(e^{\lambda_1 t}, e^{\lambda_2 t})$.'}
+- {id: la.expjordan, pace: compute, kind: gen, title: Jordan 블록의 지수, generator: "la5:exp_jordan", tier: 2, hint: '$A = \begin{pmatrix}a & c\\ 0 & a\end{pmatrix}$처럼 대각화가 안 되는 행렬은 $A = aI + N$ ($N^2 = 0$)으로 나눈다. 그러면 $e^{At} = e^{at}(I + Nt)$가 되어 대각 위에 $c\,te^{at}$가 생긴다.'}
 - id: la.expdiagform
   pace: heavy
   generator: "fx5:expdiagform"
@@ -15,7 +15,7 @@
     - {tex: 'P^{-1}e^{Dt}P', error: algebra}
     - {tex: 'e^{Pt}e^{Dt}e^{-Pt}', error: algebra}
     - {tex: 'P\,e^{D}P^{-1}t', error: algebra}
-  hint: '$A^k = PD^kP^{-1}$이므로 급수 전체가 $e^{At} = Pe^{Dt}P^{-1}$.'
+  hint: '$A = PDP^{-1}$이면 모든 거듭제곱이 $A^{k} = PD^{k}P^{-1}$이라 지수 급수 전체도 $e^{At} = Pe^{Dt}P^{-1}$가 된다.'
 - id: la.expderiv
   pace: heavy
   generator: "fx5:expderiv"
@@ -28,7 +28,7 @@
     - {tex: 'te^{At}', error: wrong_pair}
     - {tex: 'e^{At}', error: missing_factor}
     - {tex: 'A^{-1}e^{At}', error: algebra}
-  hint: '$\dfrac{d}{dt}e^{At} = Ae^{At} = e^{At}A$. 그래서 $\mathbf{x}(t) = e^{At}\mathbf{x}_0$가 $\mathbf{x}^{\prime} = A\mathbf{x}$의 해.'
+  hint: '행렬지수를 미분하면 $\dfrac{d}{dt}e^{At} = Ae^{At}$이다. 그래서 $\mathbf{x}(t) = e^{At}\mathbf{x}_0$가 $\mathbf{x}^{\prime} = A\mathbf{x}$의 해이고, $t = 0$에서 미분하면 $A$가 나온다.'
 - id: la.expcommute
   pace: compute
   generator: "fx5:expcommute"
@@ -41,7 +41,7 @@
     - {tex: '\det A = \det B', error: theorem_condition}
     - {tex: 'A = B^{T}', error: theorem_condition}
     - {tex: '\text{항상 성립}', error: theorem_condition}
-  hint: '교환하면 이항전개가 스칼라처럼 되어 성립한다. 교환하지 않으면 일반적으로 $e^{A+B} \ne e^Ae^B$.'
+  hint: '$e^{A+B} = e^{A}e^{B}$는 $AB = BA$일 때 보장된다. 교환하지 않으면 지수 급수를 전개했을 때 항의 순서가 맞지 않아 일반적으로 성립하지 않는다.'
 - id: la.sylvester
   pace: compute
   generator: "fx5:sylvester"
@@ -54,4 +54,4 @@
     - {tex: '\det A > 0', error: theorem_condition}
     - {tex: '\text{모든 대각성분} > 0', error: theorem_condition}
     - {tex: '\operatorname{tr} A > 0', error: theorem_condition}
-  hint: '$a_{11} > 0$, $2\times 2$ 선행 소행렬식 $> 0$, …, $\det A > 0$이 모두 성립해야 한다. $\det A$만으로는 부족.'
+  hint: '대칭행렬이 양의 정부호인지는 왼쪽 위부터의 소행렬식($a_{11}$, 왼쪽 위 $2\times 2$ 행렬식, …, $\det A$)이 모두 양수인지로 판정한다. $\det A > 0$ 하나만으로는 부족하다.'
