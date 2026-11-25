@@ -372,3 +372,109 @@ export function playHunt(root, item, ctx) {
     onKey((e) => { const k = +e.key - 1; if (phase === 'line' && k >= 0 && k < lines.length) tapLine(k); });
   });
 }
+
+// ------------------------------------------------------------------ 그래프 예측
+export const LIM = { zero: '0으로 수렴', const: '0이 아닌 값으로 수렴', osc: '진동이 계속됨', grow: '커짐 (발산)' };
+
+/** 정규화한 표본(-1000…1000)을 작은 SVG 그래프로. */
+export function graphSvg(g, ys, { w = 200, h = 120 } = {}) {
+  const v = ys.map((q) => q / 1000);
+  let lo = Math.min(0, ...v), hi = Math.max(0, ...v);
+  if (hi - lo < 1e-6) { lo -= 1; hi += 1; }
+  const pad = (hi - lo) * 0.08;
+  lo -= pad; hi += pad;
+  const X = (i) => 14 + (i / (v.length - 1)) * (w - 22);
+  const Y = (q) => 6 + (1 - (q - lo) / (hi - lo)) * (h - 18);
+  const pts = v.map((q, i) => `${X(i).toFixed(1)},${Y(q).toFixed(1)}`).join(' ');
+  const zy = Y(0).toFixed(1);
+  const lab = g.var === 'x' ? 'x' : 't';
+  return `<svg viewBox="0 0 ${w} ${h}" class="gplot" aria-hidden="true">` +
+    `<line x1="14" y1="4" x2="14" y2="${h - 12}" class="ax"/>` +
+    `<line x1="14" y1="${zy}" x2="${w - 6}" y2="${zy}" class="ax"/>` +
+    `<text x="${w - 8}" y="${Math.min(h - 2, +zy + 11)}" class="axl" text-anchor="end">${lab}</text>` +
+    `<text x="11" y="${zy}" class="axl" text-anchor="end" dominant-baseline="middle">0</text>` +
+    `<polyline points="${pts}" class="crv"/></svg>`;
+}
+
+export function playGraph(root, item, ctx) {
+  return new Promise((resolve) => {
+    root.textContent = '';
+    const g = item.graph;
+    const pr = el('div', 'prompt small');
+    renderProblem(pr, item.problem);
+    root.appendChild(pr);
+    const lab = el('div', 'lab hunt-lab', '그래프를 보기 전에 해의 모양을 예측하세요.');
+    root.appendChild(lab);
+    const t0 = performance.now();
+    const far = g.var === 'x' ? 'x \\to \\infty' : 't \\to \\infty';
+    const pick = { lim: null, osc: null };
+    const feat = el('div', 'feat');
+    const grpL = el('div', 'chips');
+    const grpO = el('div', 'chips');
+    feat.appendChild(el('div', 'note', ''));
+    feat.firstChild.innerHTML = `장기 거동 (${html(far)})`;
+    feat.appendChild(grpL);
+    feat.appendChild(el('div', 'note', '진동'));
+    feat.appendChild(grpO);
+    root.appendChild(feat);
+    const chip = (box, key, val, label) => {
+      const b = el('button', 'chip', label);
+      b.addEventListener('click', () => {
+        if (phase !== 'feat') return;
+        pick[key] = val;
+        box.querySelectorAll('.chip').forEach((c) => c.classList.toggle('on', c === b));
+        if (pick.lim != null && pick.osc != null) showPlots();
+      });
+      box.appendChild(b);
+      return b;
+    };
+    const limBtns = Object.entries(LIM).map(([k, v]) => chip(grpL, 'lim', k, v));
+    const oscBtns = [[true, '진동함'], [false, '진동 안 함']].map(([k, v]) => chip(grpO, 'osc', k, v));
+    const stage = el('div', 'gstage');
+    root.appendChild(stage);
+    const fb = el('div', 'fb');
+    root.appendChild(fb);
+    let phase = 'feat';
+    let opts = [];
+
+    function showPlots() {
+      phase = 'graph';
+      lab.textContent = '이 문제의 해는 어느 그래프인가요?';
+      opts = shuffle([{ y: g.y, ok: true }, ...g.wrong.map((w) => ({ ...w, ok: false }))]);
+      const grid = el('div', 'gplots');
+      opts.forEach((o, i) => {
+        const b = el('button', 'gopt');
+        b.innerHTML = `<small>${i + 1}</small>` + graphSvg(g, o.y);
+        b.addEventListener('click', () => choose(i));
+        grid.appendChild(b);
+        o.btn = b;
+      });
+      stage.appendChild(grid);
+      onKey((e) => { const i = +e.key - 1; if (phase === 'graph' && i >= 0 && i < opts.length) choose(i); });
+      grid.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    async function choose(i) {
+      if (phase !== 'graph') return;
+      phase = 'done';
+      onKey(null);
+      const ms = Math.round(performance.now() - t0);
+      const o = opts[i];
+      const limOk = pick.lim === g.lim, oscOk = pick.osc === g.osc;
+      opts.forEach((p, j) => { p.btn.disabled = true; if (p.ok) p.btn.classList.add('good'); else if (j === i) p.btn.classList.add('bad'); });
+      limBtns.forEach((b) => { b.disabled = true; if (b.textContent === LIM[g.lim]) b.classList.add('right'); });
+      oscBtns.forEach((b, k) => { b.disabled = true; if ([true, false][k] === g.osc) b.classList.add('right'); });
+      const featOk = limOk && oscOk;
+      const head = o.ok ? (featOk ? '<b class="ok">정확히 예측</b>' : '<b class="ok">그래프 맞음</b> · <span class="no">특징 예측은 틀림</span>') : '<b class="no">그래프 틀림</b>';
+      const feats = `장기 거동: ${LIM[g.lim]}${limOk ? ' ✓' : ' (예측: ' + LIM[pick.lim] + ')'} · 진동: ${g.osc ? '함' : '안 함'}${oscOk ? ' ✓' : ''}`;
+      fb.innerHTML = `<div>${head} · ${(ms / 1000).toFixed(0)}초</div><p class="note">${feats}</p>` +
+        (o.ok ? '' : `<p>${escapeHtml(ctx.errName(o.error))} — ${rich(o.why)}</p>`) +
+        `<div class="explain"><p>해: ${html('y = ' + g.sol)}</p></div>`;
+      fit(fb);
+      if (o.ok && featOk) ctx.onCorrect?.(fb);
+      await nextButton(fb, '다음', ctx.derivButton);
+      resolve({ graphOk: o.ok, featOk, fast: o.ok && featOk && ms < 20000, ms, error: o.ok ? (featOk ? null : 'feature') : o.error,
+        graph: { lim: pick.lim, osc: pick.osc, chosen: o.ok ? -1 : g.wrong.indexOf(g.wrong.find((w) => w.y === o.y)) } });
+    }
+  });
+}

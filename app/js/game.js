@@ -4,7 +4,7 @@ import * as store from './store.js';
 import { makeSync } from './sync.js';
 import * as E from './engine.js';
 import * as S from './session.js';
-import { playMcq, playOrder, playHunt, clearKeys, escapeHtml, shuffle, explainHtml } from './modes.js';
+import { playMcq, playOrder, playHunt, playGraph, graphSvg, LIM, clearKeys, escapeHtml, shuffle, explainHtml } from './modes.js';
 import { rich, setRich, html, renderPrompt, renderProblem, fit, shrink } from './tex.js';
 
 const $ = (s) => document.querySelector(s);
@@ -149,7 +149,7 @@ function reviewList(box, list) {
       if (x.item.type === 'mcq') renderPrompt(q, x.item.prompt); else renderProblem(q, x.item.problem);
       mid.appendChild(q);
       b.appendChild(mid);
-      b.appendChild(el('span', 'tm', x.mode === 'mcq' ? `${(x.result.ms / 1000).toFixed(1)}초` : x.mode === 'hunt' ? '오류 사냥' : '순서'));
+      b.appendChild(el('span', 'tm', x.mode === 'mcq' ? `${(x.result.ms / 1000).toFixed(1)}초` : { hunt: '오류 사냥', graph: '그래프', order: '순서' }[x.mode]));
       b.addEventListener('click', () => showReview(x, i));
       ul.appendChild(b);
     });
@@ -183,6 +183,14 @@ function showReview(x, i) {
     ex.innerHTML = explainHtml(item, { hint: m.unit.hint, hintHtml: hintHtml(m.unit.hint) });
     body.appendChild(ex);
   } else {
+    if (x.mode === 'graph' && item.graph) {
+      const gr = el('div', 'rv-ans');
+      const gg = item.graph;
+      gr.innerHTML = `<div class="gplots one">${graphSvg(gg, gg.y)}</div>` +
+        `<div class="note">장기 거동: ${LIM[gg.lim]}${result.graph && result.graph.lim !== gg.lim ? ' (내 예측: ' + LIM[result.graph.lim] + ')' : ''} · 진동: ${gg.osc ? '함' : '안 함'}</div>` +
+        `<div>${html('y = ' + gg.sol)}</div>`;
+      body.appendChild(gr);
+    }
     if (x.mode === 'hunt' && result.hunt) {
       const h = el('div', 'rv-ans');
       h.innerHTML = `<div><b class="no">숨은 실수</b> ${result.hunt.pos + 1}번째 줄 ${html(result.hunt.tex)}</div>` +
@@ -386,6 +394,60 @@ function dueText(st) {
   return `${Math.round(m / 1440)}일 후`;
 }
 
+/**
+ * 장 요약 페이지: 변환표 · 핵심 정리 · 풀이 뼈대 모음. 팩의 단위 정보로 자동으로 만든다.
+ * 한때 배운 것을 빠르게 되짚는 참고용이라 숙련도에는 영향이 없다.
+ */
+function chapterSummary(p) {
+  const box = $('#ch-sum');
+  box.textContent = '';
+  box.appendChild(el('h2', null, '장 요약'));
+  const table = p.units.filter((u) => u.table);
+  const facts = p.units.filter((u) => u.kind === 'atom' && !u.table && u.hint);
+  const schemas = p.units.filter((u) => u.kind !== 'atom');
+  const sec = (title, open = true) => {
+    const d = el('details', 'sumsec');
+    d.open = open;
+    d.appendChild(el('summary', null, title));
+    box.appendChild(d);
+    return d;
+  };
+  if (table.length) {
+    const d = sec(`변환표 (${table.length})`);
+    const t = el('table', 'ttable');
+    t.innerHTML = '<thead><tr><th>' + html('f(t)') + '</th><th>' + html('F(s) = \\mathcal{L}\\{f\\}') + '</th></tr></thead>';
+    const tbd = el('tbody');
+    for (const u of table) {
+      const tr = el('tr');
+      tr.innerHTML = `<td>${html(u.table[0])}</td><td>${html(u.table[1])}</td>`;
+      tr.title = u.title;
+      tbd.appendChild(tr);
+    }
+    t.appendChild(tbd);
+    d.appendChild(t);
+  }
+  if (facts.length) {
+    const d = sec(`핵심 정리 (${facts.length})`);
+    for (const u of facts) {
+      const it = el('div', 'sumitem');
+      it.appendChild(setRich(el('div', 'sumt'), u.title));
+      it.appendChild(setRich(el('div', 'sumb'), u.hint));
+      d.appendChild(it);
+    }
+  }
+  if (schemas.length) {
+    const d = sec(`풀이 뼈대 (${schemas.length})`);
+    for (const u of schemas) {
+      const it = el('div', 'sumitem');
+      it.appendChild(setRich(el('div', 'sumt'), u.title));
+      if (u.steps?.length) it.appendChild(el('div', 'sumsteps', u.steps.map((s, i) => `${i + 1}. ${s}`).join('  →  ')));
+      if (u.hint) it.appendChild(setRich(el('div', 'sumb'), u.hint));
+      d.appendChild(it);
+    }
+  }
+  fit(box);
+}
+
 function renderChapter(cid) {
   const p = G.packs.get(cid);
   const c = G.index.chapters.find((x) => x.id === cid);
@@ -405,6 +467,7 @@ function renderChapter(cid) {
     const need = c.prereqs.length ? c.prereqs.map((q) => `${q}장 숙련 ${Math.round((mm.get(q) || 0) * 100)}%`).join(', ') : '시작 장(6·7·10장) 중 하나가 숙련 70%';
     act.appendChild(el('p', 'note', `잠김: 선수 장이 모두 숙련 70% 이상이면 열립니다 (${need}). 설정의 테스트 모드로 바로 열 수 있습니다.`));
   }
+  chapterSummary(p);
   const tb = $('#ch-units');
   tb.textContent = '';
   for (const u of p.units) {
@@ -412,7 +475,7 @@ function renderChapter(cid) {
     const tr = el('tr');
     const n = p.items.filter((it) => it.unit === u.id).length;
     tr.appendChild(setRich(el('td'), u.title));
-    tr.appendChild(el('td', null, u.kind === 'atom' ? '미니멀 훈련' : st && st.correct >= S.HUNT_AFTER ? '순서·오류 사냥' : '순서 맞추기'));
+    tr.appendChild(el('td', null, u.kind === 'atom' ? '미니멀 훈련' : st && st.correct >= S.HUNT_AFTER ? (u.graph ? '순서·사냥·그래프' : '순서·오류 사냥') : '순서 맞추기'));
     tr.appendChild(el('td', 'num', String(n)));
     tr.appendChild(el('td', null, !st ? '새 단위' : st.relearn ? '다시 배움' : E.isMastered(st) ? '숙련' : E.isDue(st) ? '복습 필요' : '학습 중'));
     const td = el('td');
@@ -677,14 +740,14 @@ async function runSession(chapter, extra = false, custom = null) {
     }
     if (G.quit) break;
     const st = G.states.get(e.unit);
-    const item = S.pickItem(m, st, G.log);
+    const item = S.pickItem(m, st, G.log, Math.random, e.mode);
     const ctx = {
       hint: m.unit.hint, hintHtml: hintHtml(m.unit.hint), errName, derivButton: () => derivButton(m), errorIds: chapterErrors(m.chapter),
       prefill: e.mode === 'order' && (!st || st.attempts < 2) && item.tier === 1 ? 1 : 0,
       limitMs: S.timeLimit(m.unit, item),
     };
     ctx.easyMs = S.easyMs(ctx.limitMs);
-    const play = { mcq: playMcq, order: playOrder, hunt: playHunt }[e.mode];
+    const play = { mcq: playMcq, order: playOrder, hunt: playHunt, graph: playGraph }[e.mode];
     const result = await race(play(card, item, ctx));
     if (G.quit) break;
     const grade = E.gradeFor(e.mode, result);

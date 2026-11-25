@@ -154,3 +154,38 @@ select { font: inherit; padding: 8px 10px; border-radius: 8px; border: 1.5px sol
 .rv-ans b { margin-right: 6px; font-size: 14px; }
 .rv-ans .ok { color: var(--ok); } .rv-ans .no { color: var(--red); }
 .opts.col { grid-template-columns: minmax(0, 1fr); }
+
+/* 그래프 예측 */
+.feat { margin: 4px 0 8px; }
+.feat .note { margin: 8px 0 4px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1.5px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 8px 12px; font: inherit; font-size: 14px; cursor: pointer; min-height: 40px; }
+.chip.on { border-color: var(--blue); background: color-mix(in srgb, var(--blue) 12%, var(--card)); font-weight: 600; }
+.chip.right { border-color: var(--ok); }
+.chip:disabled { cursor: default; }
+.gplots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
+.gplots.one { grid-template-columns: minmax(0, 1fr); max-width: 360px; }
+.gopt { position: relative; border: 1.5px solid var(--line); border-radius: 12px; background: var(--bg); padding: 6px; cursor: pointer; }
+.gopt small { position: absolute; left: 8px; top: 5px; font-size: 11px; color: var(--mute); }
+.gopt.good { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 12%, var(--bg)); }
+.gopt.bad { border-color: var(--red); background: color-mix(in srgb, var(--red) 10%, var(--bg)); }
+.gplot { width: 100%; height: auto; display: block; }
+.gplot .ax { stroke: var(--mute); stroke-width: 1; opacity: .6; }
+.gplot .axl { fill: var(--mute); font-size: 9px; font-family: inherit; }
+.gplot .crv { fill: none; stroke: var(--blue); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+.gopt.good .crv { stroke: var(--ok); }
+.gopt.bad .crv { stroke: var(--red); }
+
+/* 장 요약 */
+.chsum h2 { margin-top: 0; }
+.sumsec { border-top: 1px solid var(--line); padding: 8px 0; }
+.sumsec > summary { cursor: pointer; font-weight: 600; font-size: 15px; padding: 4px 0; }
+.ttable { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 15px; }
+.ttable th, .ttable td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; }
+.ttable th { color: var(--mute); font-weight: 600; font-size: 13px; }
+.sumitem { padding: 8px 0; border-bottom: 1px dashed var(--line); }
+.sumitem:last-child { border-bottom: 0; }
+.sumt { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+.sumb { font-size: 15px; overflow-x: auto; overflow-y: hidden; }
+.sumsteps { font-size: 13px; color: var(--mute); margin: 2px 0 4px; }
+.gplots { max-width: 560px; }

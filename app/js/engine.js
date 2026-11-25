@@ -31,6 +31,10 @@ export function gradeFor(mode, r) {
       if (!r.lineOk) return GRADE.again;
       if (!r.typeOk) return GRADE.hard;
       return r.fast ? GRADE.easy : GRADE.good;
+    case 'graph':
+      if (!r.graphOk) return GRADE.again;
+      if (!r.featOk) return GRADE.hard;
+      return r.fast ? GRADE.easy : GRADE.good;
     case 'draw':
       return [GRADE.again, GRADE.hard, GRADE.good, GRADE.easy][Math.max(0, Math.min(3, r.stars))];
     default:

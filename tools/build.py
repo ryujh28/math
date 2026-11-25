@@ -119,7 +119,8 @@ def _gtex(e):
     t_ = tex(e)
     for v in "abcn":
         t_ = (t_.replace(f"- {v}^{{2}} + s^{{2}}", f"s^{{2}} - {v}^{{2}}").replace(f"{v}^{{2}} + s^{{2}}", f"s^{{2}} + {v}^{{2}}")
-              .replace(f"- {v} + s", f"s - {v}").replace(f"{{{v} + s}}", f"{{s + {v}}}"))
+              .replace(f"- {v} + s", f"s - {v}").replace(f"{{{v} + s}}", f"{{s + {v}}}")
+              .replace(f"- {v} + t", f"t - {v}"))
     return t_
 
 
@@ -183,6 +184,7 @@ def build_atoms(atoms, report, tdir=None, seed="v0"):
         uid = a["id"]
         tiers = set()
         n = 0
+        table = None  # 변환쌍이면 [f 일반형, F 일반형] (장 요약의 변환표용)
         if a["kind"] == "gen":
             got, tiers_g = _gen_items(a, uid, a["generator"], report, seed, 0)
             items += got
@@ -206,6 +208,7 @@ def build_atoms(atoms, report, tdir=None, seed="v0"):
             gsym = {k: sp.Symbol(k) for k in keys}
             f_gen = _gtex(sp.sympify(a["f"], locals=dict(NS, **gsym)))
             F_gen = _gtex(sp.sympify(a["F"], locals=dict(NS, **gsym)))
+            table = [f_gen, F_gen]
             for combo in itertools.product(*[a["params"][k] for k in keys]):
                 sub = ",\\ ".join(f"{k} = {v}" for k, v in zip(keys, combo))
                 env = dict(NS, **{k: sp.Integer(v) for k, v in zip(keys, combo)})
@@ -251,7 +254,7 @@ def build_atoms(atoms, report, tdir=None, seed="v0"):
         if a.get("pace") and a["pace"] not in ("light", "compute", "heavy", "epic"):
             raise SystemExit(f"{uid}: pace는 light·compute·heavy·epic 중 하나 (없으면 기억형)")
         units.append({"id": uid, "kind": "atom", "title": a["title"], "hint": a.get("hint", ""), "tiers": sorted(tiers),
-                      **({"pace": a["pace"]} if a.get("pace") else {})})
+                      **({"pace": a["pace"]} if a.get("pace") else {}), **({"table": table} if table else {})})
     return units, items
 
 
@@ -322,7 +325,8 @@ def build_schemas(schemas, tdir, report, seed):
                 if "ok" in c["steps"][0]:
                     it = _generic_schema_item(c, tag, report)
                     if it:
-                        items.append({"id": f"{sc['id']}#{n}", "unit": sc["id"], "type": "order", "tier": tier, **it})
+                        items.append({"id": f"{sc['id']}#{n}", "unit": sc["id"], "type": "order", "tier": tier, **it,
+                                      "params": _jp(c.get("params", {}))})
                         n += 1
                         kept += 1
                         tiers.add(tier)
@@ -360,7 +364,8 @@ def build_schemas(schemas, tdir, report, seed):
                     report.append(f"- 제외 {tag}: 유효한 오답 블록 {len(dec)}개")
                     continue
                 items.append({"id": f"{sc['id']}#{n}", "unit": sc["id"], "type": "order", "tier": tier,
-                              "problem": c["problem"], "steps": texs, "decoys": dec})
+                              "problem": c["problem"], "steps": texs, "decoys": dec, "params": _jp(c.get("params", {})),
+                              **({"sol": str(c["verify"]["y"])} if isinstance(c.get("verify"), dict) and "y" in c["verify"] else {})})
                 n += 1
                 kept += 1
                 tiers.add(tier)
@@ -480,6 +485,8 @@ def main():
             build_chapter(d, catalog)
             import explain  # 문제별 해설 붙이기 (templates/exN.py)
             explain.apply(cid)
+            import graphs  # 초기값 문제의 그래프 예측 데이터
+            graphs.apply(cid)
     built = {int(p.stem[2:]): json.loads(p.read_text()) for p in (ROOT / "packs").glob("ch*.json")}
     index = {"format": FORMAT, "game": "Isn't she lovely", "errors": errors, "chapters": []}
     for c in catalog:

@@ -37,6 +37,7 @@ for (const c of index.chapters.filter((x) => x.file)) {
     tryRich(u.title, `${u.id} 제목`);
     tryRich(u.hint, `${u.id} 힌트`);
     if (!u.derivation || !u.derivation.length) bad.push(`${u.id}: 유도 없음`);
+    if (u.table) u.table.forEach((t) => tryTex(t, `${u.id} 변환표`));
     if (!u.derivation_goal) bad.push(`${u.id}: 유도의 문제 상황(goal) 없음`);
     else tryRich(u.derivation_goal, `${u.id} 문제 상황`);
     (u.derivation || []).forEach((line, i) => tryRich(line, `${u.id} 유도${i + 1}`));
@@ -49,6 +50,7 @@ for (const c of index.chapters.filter((x) => x.file)) {
     }
     else {
       [it.problem, ...it.steps, ...it.decoys.map((d) => d.tex)].forEach((t) => tryTex(t, it.id));
+      if (it.graph) { tryTex('y = ' + it.graph.sol, it.id + ' 그래프 해'); it.graph.wrong.forEach((w) => { if (!whys.has(w.why)) { whys.add(w.why); tryRich(w.why, `${it.unit} 그래프 오답 설명`); } }); }
       it.decoys.forEach((d) => { if (!whys.has(d.why)) { whys.add(d.why); tryRich(d.why, `${it.unit} 오답 설명`); } });
     }
   }
