@@ -25,6 +25,14 @@ function onKey(fn) {
 }
 export const clearKeys = () => onKey(null);
 
+/** 문제별 해설 (없으면 단위의 핵심 한 줄). */
+export function explainHtml(item, ctx) {
+  if (item.explain?.length) {
+    return '<div class="explain">' + item.explain.map((l) => (l.startsWith('$$') ? `<div>${rich(l)}</div>` : `<p>${rich(l)}</p>`)).join('') + '</div>';
+  }
+  return ctx.hint ? `<p class="hint">${ctx.hintHtml || escapeHtml(ctx.hint)}</p>` : '';
+}
+
 /** 다음으로 넘어가는 버튼 (Enter로도). */
 function nextButton(box, label = '다음', extra = null) {
   return new Promise((resolve) => {
@@ -90,14 +98,14 @@ export function playMcq(root, item, ctx) {
       const correct = !!(o && o.ok);
       btns.forEach((b, k) => { b.disabled = true; if (opts[k].ok) b.classList.add('good'); });
       if (o && !o.ok) btns[i].classList.add('bad');
-      const result = { correct, ms, limitMs: limit, easyMs: ctx.easyMs, error: o && !o.ok ? o.error : i < 0 ? 'timeout' : null };
+      const result = { correct, ms, limitMs: limit, easyMs: ctx.easyMs, chosen: o ? o.tex : null, error: o && !o.ok ? o.error : i < 0 ? 'timeout' : null };
       if (correct) {
         fb.innerHTML = `<div><b class="ok">정답</b> · ${(ms / 1000).toFixed(1)}초</div>`;
         ctx.onCorrect?.(fb);
         setTimeout(() => resolve(result), ctx.extraPause ? 1600 : 650);
       } else {
         fb.innerHTML = `<div><b class="no">${i < 0 ? '시간 초과' : '오답'}</b>` +
-          (o ? ` · ${ctx.errName(o.error)}` : '') + '</div>' + (ctx.hint ? `<p class="hint">${ctx.hintHtml || escapeHtml(ctx.hint)}</p>` : '');
+          (o ? ` · ${ctx.errName(o.error)}` : '') + '</div>' + explainHtml(item, ctx);
         await nextButton(fb, '다음', ctx.derivButton);
         resolve(result);
       }
@@ -358,7 +366,7 @@ export function playHunt(root, item, ctx) {
       fb.innerHTML = `<div>${head} · ${escapeHtml(ctx.errName(d.error))} — ${rich(d.why)}</div>`;
       if (good) ctx.onCorrect?.(fb);
       await nextButton(fb, '다음', ctx.derivButton);
-      resolve({ lineOk, typeOk, fixOk, fast, taps, ms, error: good ? null : d.error });
+      resolve({ lineOk, typeOk, fixOk, fast, taps, ms, error: good ? null : d.error, hunt: { pos: d.pos, tex: d.tex, why: d.why, error: d.error } });
     }
 
     onKey((e) => { const k = +e.key - 1; if (phase === 'line' && k >= 0 && k < lines.length) tapLine(k); });

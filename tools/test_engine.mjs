@@ -57,3 +57,21 @@ const good = replay(Array.from({ length: 10 }, (_, i) => row('c', 3, t0 + i * da
 assert.ok(tierFor(unit, good.get('c')) >= 2);
 
 console.log('engine: all tests passed', { stabilityA: a.card.stability.toFixed(1), rNow: rNow.toFixed(3), r120d: rLater.toFixed(3) });
+
+// 미니 튜토리얼 기록: 배운 단위면 '다시 배움' + 복습을 지금으로 당김, 맞히면 표시가 풀린다
+{
+  const t0 = Date.UTC(2026, 10, 1, 12);
+  const base = [{ id: 'a1', ts: t0, unit: 'u', grade: 3 }, { id: 'a2', ts: t0 + 864e5, unit: 'u', grade: 3 }];
+  const before = replay(base).get('u');
+  assert.ok(before.card.due.getTime() > t0 + 2 * 864e5);
+  const tut = { id: 't1', ts: t0 + 2 * 864e5, unit: 'u', kind: 'tutorial' };
+  const after = replay([...base, tut]).get('u');
+  assert.equal(after.relearn, true);
+  assert.equal(after.card.due.getTime(), tut.ts);
+  assert.equal(after.attempts, 2, '튜토리얼은 시도로 세지 않음');
+  assert.equal(after.card.stability, before.card.stability, '숙련도는 그대로');
+  const fixed = replay([...base, tut, { id: 'a3', ts: tut.ts + 6e4, unit: 'u', grade: 3 }]).get('u');
+  assert.equal(fixed.relearn, false);
+  assert.equal(replay([tut]).size, 0, '안 배운 단위의 튜토리얼은 상태를 만들지 않음');
+  console.log('engine: tutorial rows ok');
+}

@@ -13,7 +13,7 @@ export function migrateSettings(saved = {}) {
   return s;
 }
 export const EXTRA = { minutes: 5, bonusNew: 2 };
-const EST = { mcq: 10, order: 75, hunt: 40, intro: 20 }; // 초
+const EST = { mcq: 10, order: 75, hunt: 40, intro: 45 }; // 초 (intro = 미니 튜토리얼)
 // 계산 문제는 실제로 걸리는 시간이 길어서 세션 계획에 그만큼 반영한다 (대략 제한시간의 40%).
 const EST_PACE = { light: 12, compute: 20, heavy: 30, epic: 50 };
 const estOf = (u, mode) => (mode === 'mcq' && EST_PACE[u.pace]) || EST[mode];

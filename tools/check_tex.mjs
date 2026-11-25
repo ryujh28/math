@@ -43,7 +43,10 @@ for (const c of index.chapters.filter((x) => x.file)) {
   }
   const whys = new Set();
   for (const it of p.items) {
-    if (it.type === 'mcq') [it.prompt, it.answer, ...it.wrong.map((w) => w.tex)].forEach((t) => tryTex(t, it.id));
+    if (it.type === 'mcq') {
+      [it.prompt, it.answer, ...it.wrong.map((w) => w.tex)].forEach((t) => tryTex(t, it.id));
+      (it.explain || []).forEach((line, i) => tryRich(line, `${it.id} 해설${i + 1}`));
+    }
     else {
       [it.problem, ...it.steps, ...it.decoys.map((d) => d.tex)].forEach((t) => tryTex(t, it.id));
       it.decoys.forEach((d) => { if (!whys.has(d.why)) { whys.add(d.why); tryRich(d.why, `${it.unit} 오답 설명`); } });

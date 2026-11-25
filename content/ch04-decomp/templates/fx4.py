@@ -119,7 +119,7 @@ def qr():
             cand = [(Q * A, "algebra"), (Rm.T, "algebra"), (A * Q.T, "algebra"), (-Rm, "sign")]
             ok = lambda X, A=A, Q=Q: same(Q * sp.Matrix(X), A) and sp.Matrix(X)[1, 0] == 0
             out.append(_case(rf"A = {mat(A)},\ Q = {mat(Q)},\ A = QR\text{{일 때 }} R = \;?", mat(Rm), lambda X=Rm, ok=ok: ok(X),
-                             [(mat(X), lambda X=X, ok=ok: ok(X), e) for X, e in cand], tier=2, params={"A": list(A)}))
+                             [(mat(X), lambda X=X, ok=ok: ok(X), e) for X, e in cand], tier=2, params={"A": list(A), "Q": list(Q)}))
     return out
 
 

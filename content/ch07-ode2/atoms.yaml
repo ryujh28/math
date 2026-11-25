@@ -16,7 +16,7 @@
     - {tex: "-y_1\\int\\dfrac{y_1R}{W}\\,dx + y_2\\int\\dfrac{y_2R}{W}\\,dx", error: algebra}
   hint: '$y_p = u_1y_1 + u_2y_2$, $u_1^{\prime} = -\dfrac{y_2R}{W}$, $u_2^{\prime} = \dfrac{y_1R}{W}$. 각 적분에는 상대 해가 들어간다.'
 - id: ode2.eulerform
-  pace: light
+  pace: compute
   generator: "fx7:eulerform"
   kind: formula
   title: Euler–Cauchy 방정식

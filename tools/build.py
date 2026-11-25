@@ -114,6 +114,26 @@ def _safe(fn):
         return None
 
 
+def _gtex(e):
+    """변환표용 일반형 TeX: SymPy가 'a'를 's' 앞에 두는 것을 교과서 순서로."""
+    t_ = tex(e)
+    for v in "abcn":
+        t_ = (t_.replace(f"- {v}^{{2}} + s^{{2}}", f"s^{{2}} - {v}^{{2}}").replace(f"{v}^{{2}} + s^{{2}}", f"s^{{2}} + {v}^{{2}}")
+              .replace(f"- {v} + s", f"s - {v}").replace(f"{{{v} + s}}", f"{{s + {v}}}"))
+    return t_
+
+
+def _jp(v):
+    """params를 JSON으로: SymPy 수·식은 문자열로."""
+    if isinstance(v, dict):
+        return {str(k): _jp(x) for k, x in v.items()}
+    if isinstance(v, (list, tuple)):
+        return [_jp(x) for x in v]
+    if isinstance(v, (bool, int, str)) or v is None:
+        return v
+    return str(v)
+
+
 def _gen_items(a, uid, gen_ref, report, seed, start):
     """생성기 사례들을 검증해 객관식 문제로. 정답 ok() == True, 오답 ok() == False만 남긴다."""
     mod_name, fn = gen_ref.split(":")
@@ -147,7 +167,8 @@ def _gen_items(a, uid, gen_ref, report, seed, start):
         if any(it["prompt"] == c["prompt"] and it["answer"] == c["answer"]["tex"] for it in items):
             continue  # 같은 문제·같은 정답이면 중복
         items.append({"id": f"{uid}#{n}", "unit": uid, "type": "mcq", "tier": tr, "dir": c.get("dir", "fwd"),
-                      "prompt": c["prompt"], "answer": c["answer"]["tex"], "wrong": wr})
+                      "prompt": c["prompt"], "answer": c["answer"]["tex"], "wrong": wr, "params": _jp(c.get("params", {})),
+                      **({"gen": gen_ref} if gen_ref else {})})
         n += 1
         tiers.add(tr)
         per_tier[tr] = per_tier.get(tr, 0) + 1
@@ -182,7 +203,11 @@ def build_atoms(atoms, report, tdir=None, seed="v0"):
                 n += len(got)
         else:
             keys = list(a["params"])
+            gsym = {k: sp.Symbol(k) for k in keys}
+            f_gen = _gtex(sp.sympify(a["f"], locals=dict(NS, **gsym)))
+            F_gen = _gtex(sp.sympify(a["F"], locals=dict(NS, **gsym)))
             for combo in itertools.product(*[a["params"][k] for k in keys]):
+                sub = ",\\ ".join(f"{k} = {v}" for k, v in zip(keys, combo))
                 env = dict(NS, **{k: sp.Integer(v) for k, v in zip(keys, combo)})
                 f = sp.sympify(a["f"], locals=env)
                 F = sp.sympify(a["F"], locals=env)
@@ -199,7 +224,9 @@ def build_atoms(atoms, report, tdir=None, seed="v0"):
                     wr.append({"tex": tex(Fw), "error": w["error"]})
                 if len(wr) >= 3:
                     items.append({"id": f"{uid}#{n}", "unit": uid, "type": "mcq", "tier": a["tier"], "dir": "fwd",
-                                  "prompt": r"\mathcal{L}\left\{" + tex(f) + r"\right\}", "answer": tex(F), "wrong": wr})
+                                  "prompt": r"\mathcal{L}\left\{" + tex(f) + r"\right\}", "answer": tex(F), "wrong": wr,
+                                  "params": _jp(dict(zip(keys, combo))),
+                                  "explain": [f"변환표: $\\mathcal{{L}}\\{{{f_gen}\\}} = {F_gen}$", f"${sub}$ 대입: $\\mathcal{{L}}\\{{{tex(f)}\\}} = {tex(F)}$"]})
                     n += 1
                     tiers.add(a["tier"])
                 else:
@@ -213,7 +240,10 @@ def build_atoms(atoms, report, tdir=None, seed="v0"):
                     wr.append({"tex": tex(fw), "error": w["error"]})
                 if len(wr) >= 3:
                     items.append({"id": f"{uid}#{n}", "unit": uid, "type": "mcq", "tier": a["inverse_tier"], "dir": "inv",
-                                  "prompt": r"\mathcal{L}^{-1}\left\{" + tex(F) + r"\right\}", "answer": tex(f), "wrong": wr})
+                                  "prompt": r"\mathcal{L}^{-1}\left\{" + tex(F) + r"\right\}", "answer": tex(f), "wrong": wr,
+                                  "params": _jp(dict(zip(keys, combo))),
+                                  "explain": [f"${tex(F)}$ → 변환표의 ${F_gen}$ 꼴: ${sub}$",
+                                              f"그래서 $\\mathcal{{L}}^{{-1}}\\left\\{{{tex(F)}\\right\\}} = {tex(f)}$ (표: ${f_gen} \\leftrightarrow {F_gen}$)"]})
                     n += 1
                     tiers.add(a["inverse_tier"])
                 else:
@@ -448,6 +478,8 @@ def main():
         cid = int(d.name[2:4])
         if not want or cid in want:
             build_chapter(d, catalog)
+            import explain  # 문제별 해설 붙이기 (templates/exN.py)
+            explain.apply(cid)
     built = {int(p.stem[2:]): json.loads(p.read_text()) for p in (ROOT / "packs").glob("ch*.json")}
     index = {"format": FORMAT, "game": "Isn't she lovely", "errors": errors, "chapters": []}
     for c in catalog:

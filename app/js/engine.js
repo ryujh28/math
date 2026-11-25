@@ -41,12 +41,20 @@ export function gradeFor(mode, r) {
 /** 로그를 시간순으로 다시 재생해 단위별 상태를 만든다. */
 export function replay(log) {
   const rows = [...new Map(log.map((r) => [r.id, r])).values()]
-    .filter((r) => r.unit && r.grade >= 1 && r.grade <= 4)
+    .filter((r) => r.unit && ((r.grade >= 1 && r.grade <= 4) || r.kind === 'tutorial'))
     .sort((a, b) => a.ts - b.ts || (a.id < b.id ? -1 : 1));
   const states = new Map();
   for (const r of rows) {
     const now = new Date(r.ts);
     let st = states.get(r.unit);
+    if (r.kind === 'tutorial') {
+      // 배운 단위에서 미니 튜토리얼을 열면 '다시 배움': 숙련도는 그대로, 다음 복습은 지금으로 당긴다
+      if (st) {
+        st.relearn = true;
+        if (st.card.due.getTime() > r.ts) st.card = { ...st.card, due: new Date(r.ts) };
+      }
+      continue;
+    }
     if (!st) {
       st = { card: createEmptyCard(now), attempts: 0, correct: 0, recent: [], days: new Set(), firstTs: r.ts, lastTs: r.ts, relearn: false };
       states.set(r.unit, st);
@@ -60,7 +68,7 @@ export function replay(log) {
     st.recent.push(r.grade >= 2 ? 1 : 0);
     if (st.recent.length > 10) st.recent.shift();
     st.lastTs = r.ts;
-    st.relearn = false;
+    if (r.grade >= 2) st.relearn = false;
   }
   return states;
 }
