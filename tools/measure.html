@@ -1,0 +1,40 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../app/vendor/katex/katex.min.css"><link rel="stylesheet" href="../app/css/style.css"><link rel="stylesheet" href="../app/css/game.css">
+<script src="../app/vendor/katex/katex.min.js"></script></head><body class="game">
+<section id="session" class="view"><main><section class="card play" id="card"></section></main></section>
+<script type="module">
+import { mcqBody } from '../app/js/modes.js';
+import { renderProblem, html, fit } from '../app/js/tex.js';
+function orderBody(card, it) {
+  const pr = document.createElement('div'); pr.className = 'prompt small'; renderProblem(pr, it.problem); card.appendChild(pr);
+  const cols = document.createElement('div'); cols.className = 'cols';
+  const pool = document.createElement('div'); pool.className = 'pool';
+  for (const t of [...it.steps, ...it.decoys.map((d) => d.tex)]) { const b = document.createElement('button'); b.className = 'blk'; b.innerHTML = html(t); pool.appendChild(b); }
+  cols.append(document.createElement('div'), pool); card.appendChild(cols); fit(card);
+}
+const idx = await (await fetch('../packs/index.json')).json();
+const bad = []; let n = 0;
+const want = new URLSearchParams(location.search).get('id');
+const card = document.getElementById('card');
+const over = (e) => e.scrollWidth > e.clientWidth + 1;
+for (const c of idx.chapters) {
+  if (!c.file) continue;
+  const p = await (await fetch('../packs/' + c.file)).json();
+  for (const it of p.items) {
+    if (want && it.id !== want) continue;
+    if (want) { card.textContent = ''; }
+    if (!want || true) card.textContent = '';
+    if (it.type === 'mcq') mcqBody(card, it); else if (orderBody) orderBody(card, it); else continue;
+    if (window.fitAll) window.fitAll(card);
+    n++;
+    const els = [...card.querySelectorAll('.prompt, .opt, .blk, .step, .katex-display, .mline')];
+    const o = els.filter(over);
+    const sc = [...card.querySelectorAll('.katex')].map((k) => k.style.fontSize ? parseFloat(k.style.fontSize) / 1.21 : 1);
+    const mn = Math.min(1, ...sc); window.SC = window.SC || []; window.SC.push([it.id, mn]);
+    const page = document.documentElement.scrollWidth > window.innerWidth + 1;
+    if (o.length || page) bad.push({ id: it.id, type: it.type, page, el: o.map((e) => e.className.split(' ')[0] + ':' + (e.scrollWidth - e.clientWidth)).slice(0, 4) });
+  }
+}
+window.RESULT = { n, bad, sc: window.SC };
+document.body.dataset.done = '1';
+</script></body></html>

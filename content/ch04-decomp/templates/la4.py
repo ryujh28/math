@@ -49,7 +49,7 @@ def singular_values():
 def ata():
     out = []
     rng = random.Random(2)
-    for _ in range(18):
+    for _ in range(30):
         A = sp.Matrix(3, 2, [rng.randint(-2, 3) for _ in range(6)])
         truth = A.T * A
         G = A.T * A

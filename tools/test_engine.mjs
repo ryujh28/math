@@ -9,9 +9,10 @@ const row = (unit, grade, ts) => ({ id: `r${n++}`, unit, grade, ts, mode: 'mcq' 
 
 // 1. 등급 변환
 assert.equal(gradeFor('mcq', { correct: false, ms: 1000 }), GRADE.again);
-assert.equal(gradeFor('mcq', { correct: true, ms: 1500 }), GRADE.easy);
-assert.equal(gradeFor('mcq', { correct: true, ms: 4000 }), GRADE.good);
-assert.equal(gradeFor('mcq', { correct: true, ms: 7000 }), GRADE.hard);
+assert.equal(gradeFor('mcq', { correct: true, ms: 3800 }), GRADE.easy);
+assert.equal(gradeFor('mcq', { correct: true, ms: 4500 }), GRADE.good);
+assert.equal(gradeFor('mcq', { correct: true, ms: 5500 }), GRADE.good);
+assert.equal(gradeFor('mcq', { correct: true, ms: 8900 }), GRADE.good);
 assert.equal(gradeFor('order', { checks: 1, ms: 20000, refMs: 30000 }), GRADE.good);
 assert.equal(gradeFor('order', { checks: 1, ms: 10000, refMs: 30000 }), GRADE.easy);
 assert.equal(gradeFor('order', { checks: 2 }), GRADE.hard);

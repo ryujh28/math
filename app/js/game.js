@@ -4,7 +4,7 @@ import * as store from './store.js';
 import * as E from './engine.js';
 import * as S from './session.js';
 import { playMcq, playOrder, clearKeys, escapeHtml, shuffle } from './modes.js';
-import { rich, setRich } from './tex.js';
+import { rich, setRich, html, renderPrompt, renderProblem, fit, shrink } from './tex.js';
 
 const $ = (s) => document.querySelector(s);
 const el = (tag, cls, text) => {
@@ -38,11 +38,39 @@ function showDerivation(m) {
   setRich($('#deriv-title'), m.unit.title);
   const body = $('#deriv-body');
   body.textContent = '';
+  // 1) 문제 상황: 무엇이 주어지고 무엇을 구하나
+  if (m.unit.derivation_goal) {
+    const g = el('div', 'goal');
+    g.appendChild(el('div', 'lab', '문제 상황'));
+    g.appendChild(setRich(el('p'), m.unit.derivation_goal));
+    body.appendChild(g);
+  }
+  // 2) 이 단위의 실제 문제 하나 (가장 쉬운 단계)
+  const ex = exampleItem(m);
+  if (ex) {
+    const box = el('details', 'example');
+    const sum = el('summary');
+    sum.appendChild(el('span', 'lab', '예시 문제 · 눌러서 답 보기'));
+    const q = el('div', 'ex-q');
+    if (ex.type === 'mcq') renderPrompt(q, ex.prompt); else renderProblem(q, ex.problem);
+    sum.appendChild(q);
+    box.appendChild(sum);
+    const a = el('div', 'ex-a');
+    if (ex.type === 'mcq') a.innerHTML = '답: ' + html(ex.answer);
+    else a.innerHTML = ex.steps.map((t, i) => `<div class="mline"><small>${i + 1}</small> ${html(t)}</div>`).join('');
+    box.appendChild(a);
+    box.addEventListener('toggle', () => fit(box));
+    body.appendChild(box);
+  }
+  // 3) 유도
+  body.appendChild(el('div', 'lab deriv-lab', '유도'));
   for (const line of m.unit.derivation || ['아직 유도가 없습니다.']) {
     const isBlock = line.startsWith('$$') && line.endsWith('$$');
     body.appendChild(setRich(el(isBlock ? 'div' : 'p'), line));
   }
   $('#deriv').hidden = false;
+  fit(body);
+  body.querySelectorAll('.katex-display').forEach((d) => shrink(d, 0.7));
   $('#deriv-close').focus({ preventScroll: true });
   derivKey = (e) => {
     if (e.key === 'Escape' || e.key === 'Enter') {
@@ -52,6 +80,13 @@ function showDerivation(m) {
     } else if ('1234'.includes(e.key) && e.key) e.stopImmediatePropagation();
   };
   addEventListener('keydown', derivKey, true);
+}
+/** 유도 창에 보여 줄 이 단위의 예시 문제: 가장 낮은 단계에서, 열 때마다 같은 것. */
+function exampleItem(m) {
+  const items = (G.packs.get(m.chapter)?.items || []).filter((it) => it.unit === m.unit.id);
+  if (!items.length) return null;
+  const low = Math.min(...items.map((it) => it.tier || 1));
+  return items.find((it) => (it.tier || 1) === low);
 }
 function closeDerivation() {
   $('#deriv').hidden = true;
@@ -244,8 +279,9 @@ function waitNext(box, label = '계속') {
   });
 }
 
-async function runSession(chapter) {
-  const plan = S.planSession({ index: G.index, packs: G.packs, states: G.states, log: G.log, settings: G.settings, chapter });
+async function runSession(chapter, extra = false) {
+  const args = { index: G.index, packs: G.packs, states: G.states, log: G.log, settings: G.settings, chapter };
+  const plan = extra ? S.planExtra(args) : S.planSession(args);
   if (!plan.queue.length) {
     alertBox('지금 낼 문제가 없습니다.');
     return;
@@ -313,9 +349,9 @@ async function runSession(chapter) {
   clearInterval(timer);
   clearKeys();
   const minutes = Math.round((Date.now() - t0) / 6e4 * 10) / 10;
-  if (done > 0) G.log.push(await store.addAttempt({ kind: 'session', sid, n: done, correct, minutes, chapter }));
+  if (done > 0) G.log.push(await store.addAttempt({ kind: 'session', sid, n: done, correct, minutes, chapter, extra }));
   const masteredNow = [...G.states].filter(([u, st]) => E.isMastered(st) && !masteredBefore.has(u)).map(([u]) => u);
-  await renderSummary({ done, correct, best, minutes, newUnits: [...newUnits], masteredNow, chapters: [...chaptersSeen] });
+  await renderSummary({ done, correct, best, minutes, newUnits: [...newUnits], masteredNow, chapters: [...chaptersSeen], chapter, round: G.round = (extra ? (G.round || 1) + 1 : 1) });
 }
 
 async function renderSummary(r) {
@@ -335,6 +371,16 @@ async function renderSummary(r) {
   if (r.newUnits.length) box.appendChild(setRich(el('p'), `새로 배운 단위: ${r.newUnits.map(name).join(', ')}`));
   if (r.masteredNow.length) box.appendChild(setRich(el('p'), `숙련된 단위: ${r.masteredNow.map(name).join(', ')}`));
   if (r.chapters.length) await connectionCard(box, r.chapters);
+  // 한 판 더
+  const more = $('#sum-more');
+  const next = S.planExtra({ index: G.index, packs: G.packs, states: G.states, log: G.log, settings: G.settings, chapter: r.chapter });
+  more.hidden = !next.queue.length;
+  if (next.queue.length) {
+    const bonus = next.newCount ? ` · 새 단위 +${next.newCount}` : '';
+    more.textContent = `한 판 더 (약 ${next.estMin}분${bonus})`;
+    more.onclick = () => runSession(r.chapter, true);
+  }
+  if (r.round > 1) box.prepend(el('div', 'kicker', `${r.round}판째`));
   show('summary');
 }
 
@@ -371,7 +417,7 @@ async function main() {
   }
   G.meta = S.unitMeta(G.packs);
   G.errName = Object.fromEntries(G.index.errors.map((x) => [x.id, x.name]));
-  G.settings = { ...S.DEFAULTS, ...(await store.kvGet('settings', {})) };
+  G.settings = S.migrateSettings(await store.kvGet('settings', {}));
   await reload();
   await bindSettings();
   $('#ch-back').addEventListener('click', renderHome);

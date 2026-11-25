@@ -28,7 +28,7 @@ def _o(val, truth):
 # ---------------------------------------------------------------- 사실 원자
 def det2():
     out = []
-    for A in _mats(2, 16, seed=1):
+    for A in _mats(2, 30, seed=1):
         a, b, c, d = A
         truth = A.det()
         cand = [(a * d + b * c, "sign"), (b * c - a * d, "sign"), (a * b - c * d, "algebra"), (a * c - b * d, "algebra"),
@@ -56,7 +56,7 @@ def inv2():
 
 def matmul2():
     out = []
-    As, Bs = _mats(2, 10, -2, 3, seed=3), _mats(2, 10, -2, 3, seed=4)
+    As, Bs = _mats(2, 30, -2, 3, seed=3), _mats(2, 30, -2, 3, seed=4)
     for A, Bm in zip(As, Bs):
         truth = A * Bm
         cand = [(Bm * A, "algebra"), (A.multiply_elementwise(Bm), "wrong_pair"), (A.T * Bm, "algebra"), (A * Bm.T, "algebra")]
@@ -87,7 +87,7 @@ def rank3():
 
 def det3():
     out = []
-    for A in _mats(3, 16, -2, 3, seed=6):
+    for A in _mats(3, 30, -2, 3, seed=6):
         truth = A.det()
         m = [A.minor(0, j) for j in range(3)]
         allplus = A[0, 0] * m[0] + A[0, 1] * m[1] + A[0, 2] * m[2]

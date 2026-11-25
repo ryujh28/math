@@ -20,6 +20,7 @@
   generator: la1:proj
   hint: '$\operatorname{proj}_{\mathbf{v}}\mathbf{u} = \dfrac{\mathbf{u}\cdot\mathbf{v}}{\mathbf{v}\cdot\mathbf{v}}\,\mathbf{v}$. 분모는 $\|\mathbf{v}\|$가 아니라 $\|\mathbf{v}\|^2$.'
 - id: la.cs
+  generator: "fx1:cs"
   kind: formula
   title: Cauchy–Schwarz 부등식
   tier: 1
@@ -31,6 +32,7 @@
     - {tex: '|\mathbf{u}\cdot\mathbf{v}| \le \|\mathbf{u}\|^{2}\,\|\mathbf{v}\|^{2}', error: algebra}
   hint: '$|\mathbf{u}\cdot\mathbf{v}| \le \|\mathbf{u}\|\,\|\mathbf{v}\|$. 등호는 두 벡터가 평행할 때만. 그래서 $\cos\theta$가 $-1$과 $1$ 사이에 있다.'
 - id: la.angle
+  generator: "fx1:angle"
   kind: formula
   title: 두 벡터 사이의 각
   tier: 1
@@ -42,6 +44,7 @@
     - {tex: '\dfrac{\|\mathbf{u}\|\,\|\mathbf{v}\|}{\mathbf{u}\cdot\mathbf{v}}', error: algebra}
   hint: '$\mathbf{u}\cdot\mathbf{v} = \|\mathbf{u}\|\,\|\mathbf{v}\|\cos\theta$. 외적의 크기는 $\sin\theta$에 대응한다.'
 - id: la.gsformula
+  generator: "fx1:gs"
   kind: formula
   title: Gram–Schmidt 공식
   tier: 2
@@ -53,6 +56,7 @@
     - {tex: '\mathbf{v}_2 - \dfrac{\mathbf{v}_2\cdot\mathbf{u}_1}{\mathbf{v}_2\cdot\mathbf{v}_2}\,\mathbf{v}_2', error: algebra}
   hint: '앞에서 만든 $\mathbf{u}_1$ 방향 성분(사영)을 $\mathbf{v}_2$에서 빼면 $\mathbf{u}_1$에 직교하는 $\mathbf{u}_2$가 남는다.'
 - id: la.triangle
+  generator: "fx1:triangle"
   kind: formula
   title: 삼각부등식
   tier: 1

@@ -5,6 +5,7 @@
 - {id: la.rank, kind: gen, title: '계수 $\operatorname{rank}$', generator: "la2:rank3", hint: '$\operatorname{rank}A$는 일차독립인 행(또는 열)의 최대 개수, 곧 소거 후 남는 피벗 개수.'}
 - {id: la.det3, kind: gen, title: '$3\times 3$ 행렬식', generator: "la2:det3", tier: 2, hint: '1행 전개: $a_{11}M_{11} - a_{12}M_{12} + a_{13}M_{13}$. 부호는 $+,\,-,\,+$.'}
 - id: la.detprod
+  generator: "fx2:detprod"
   kind: formula
   title: 행렬식의 곱셈 성질
   tier: 1
@@ -16,6 +17,7 @@
     - {tex: '\det A\,\det B^{-1}', error: algebra}
   hint: '$\det(AB) = \det A\,\det B$. 부피 배율은 곱해진다.'
 - id: la.invprod
+  generator: "fx2:invprod"
   kind: formula
   title: 곱의 역행렬
   tier: 1
@@ -27,6 +29,7 @@
     - {tex: '(BA)^{-1}', error: algebra}
   hint: '$(AB)^{-1} = B^{-1}A^{-1}$. 양말을 신고 신발을 신었으면 신발부터 벗는다.'
 - id: la.transprod
+  generator: "fx2:transprod"
   kind: formula
   title: 곱의 전치
   tier: 1
@@ -38,6 +41,7 @@
     - {tex: '(BA)^{-1}', error: wrong_pair}
   hint: '$(AB)^{T} = B^{T}A^{T}$. 역행렬과 같은 순서 뒤집기.'
 - id: la.detscale
+  generator: "fx2:detscale"
   kind: formula
   title: 상수배의 행렬식
   tier: 2
@@ -49,6 +53,7 @@
     - {tex: 'k^{2}\det A', error: algebra}
   hint: '$\det(kA) = k^{n}\det A$. $n$개 행 각각에서 $k$가 하나씩 나온다.'
 - id: la.invertible
+  generator: "fx2:invertible"
   kind: formula
   title: 가역 조건
   tier: 1

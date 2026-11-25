@@ -1,43 +1,69 @@
-# 단위별 짧은 유도. 한 줄 = 문장($…$ 안은 TeX) 또는 수식 블록($$…$$).
+# 단위별 짧은 유도.
+# goal: 무엇이 주어지고 무엇을 구하거나 보이는지 (문제 상황). 모든 단위에 필수.
+# steps: 한 줄 = 문장($…$ 안은 TeX) 또는 수식 블록($$…$$).
 la.det2:
-- $A\mathbf{x} = \mathbf{b}$를 소거로 풀면 $(ad - bc)\,x_1 = db_1 - bb_2$가 된다. 해가 유일할 조건이 $ad - bc \ne 0$이고, 이 값을 $\det A$라 부른다.
-- 기하학적으로 $|ad - bc|$는 열벡터 $(a, c)$, $(b, d)$가 만드는 평행사변형의 넓이다.
+  goal: '$2\times 2$ 연립방정식 $A\mathbf{x} = \mathbf{b}$가 해를 하나만 가질 조건을 찾고, 그 조건에 나오는 수 $ad - bc$가 무엇인지 본다.'
+  steps:
+  - $A\mathbf{x} = \mathbf{b}$를 소거로 풀면 $(ad - bc)\,x_1 = db_1 - bb_2$가 된다. 해가 유일할 조건이 $ad - bc \ne 0$이고, 이 값을 $\det A$라 부른다.
+  - 기하학적으로 $|ad - bc|$는 열벡터 $(a, c)$, $(b, d)$가 만드는 평행사변형의 넓이다.
 la.inv2:
-- $$\begin{pmatrix}a & b\\ c & d\end{pmatrix}\begin{pmatrix}d & -b\\ -c & a\end{pmatrix} = \begin{pmatrix}ad - bc & 0\\ 0 & ad - bc\end{pmatrix} = (\det A)\,I$$
-- 양변을 $\det A$로 나누면 $A^{-1} = \dfrac{1}{ad - bc}\begin{pmatrix}d & -b\\ -c & a\end{pmatrix}$.
+  goal: '$A = \begin{pmatrix}a & b\\ c & d\end{pmatrix}$의 역행렬을 원소로 직접 쓴다: $A^{-1} = \dfrac{1}{ad - bc}\begin{pmatrix}d & -b\\ -c & a\end{pmatrix}$.'
+  steps:
+  - $$\begin{pmatrix}a & b\\ c & d\end{pmatrix}\begin{pmatrix}d & -b\\ -c & a\end{pmatrix} = \begin{pmatrix}ad - bc & 0\\ 0 & ad - bc\end{pmatrix} = (\det A)\,I$$
+  - 양변을 $\det A$로 나누면 $A^{-1} = \dfrac{1}{ad - bc}\begin{pmatrix}d & -b\\ -c & a\end{pmatrix}$.
 la.matmul:
-- '행렬은 선형변환이고 행렬곱은 합성이다: $(AB)\mathbf{x} = A(B\mathbf{x})$.'
-- $B$의 $j$열 $B\mathbf{e}_j$를 $A$에 보낸 것이 $AB$의 $j$열이다. 그 $i$번째 성분이
-- $$(AB)_{ij} = \sum_k a_{ik}b_{kj}$$
+  goal: '행렬곱 $AB$의 $(i, j)$ 원소가 왜 ''$A$의 $i$행 · $B$의 $j$열''인지, 선형변환의 합성으로 설명한다.'
+  steps:
+  - '행렬은 선형변환이고 행렬곱은 합성이다: $(AB)\mathbf{x} = A(B\mathbf{x})$.'
+  - $B$의 $j$열 $B\mathbf{e}_j$를 $A$에 보낸 것이 $AB$의 $j$열이다. 그 $i$번째 성분이
+  - $$(AB)_{ij} = \sum_k a_{ik}b_{kj}$$
 la.rank:
-- 행 연산은 행공간을 바꾸지 않으므로 계수도 바꾸지 않는다.
-- 사다리꼴로 만들면 피벗이 있는 행들은 일차독립이고, 그 개수가 $\operatorname{rank}A$이다.
-- 행 계수와 열 계수는 같으므로 열로 세어도 된다.
+  goal: '행렬 $A$의 계수(독립인 행·열의 최대 개수)를 소거로 어떻게 세는지 정당화한다.'
+  steps:
+  - 행 연산은 행공간을 바꾸지 않으므로 계수도 바꾸지 않는다.
+  - 사다리꼴로 만들면 피벗이 있는 행들은 일차독립이고, 그 개수가 $\operatorname{rank}A$이다.
+  - 행 계수와 열 계수는 같으므로 열로 세어도 된다.
 la.det3:
-- 행렬식은 각 행에 대해 선형이고, 두 행을 바꾸면 부호가 바뀌며, $\det I = 1$인 유일한 함수다.
-- 1행을 $a_{11}\mathbf{e}_1 + a_{12}\mathbf{e}_2 + a_{13}\mathbf{e}_3$로 쪼개 선형성을 쓰면
-- $$\det A = \sum_j (-1)^{1+j}a_{1j}M_{1j} = a_{11}M_{11} - a_{12}M_{12} + a_{13}M_{13}$$
-- 부호 $(-1)^{1+j}$는 $j$열을 맨 앞으로 옮길 때의 열 교환 횟수에서 나온다.
+  goal: '$3\times 3$ 행렬의 행렬식을 계산하는 공식(1행 여인수 전개)이 행렬식의 기본 성질에서 어떻게 나오는지 본다.'
+  steps:
+  - 행렬식은 각 행에 대해 선형이고, 두 행을 바꾸면 부호가 바뀌며, $\det I = 1$인 유일한 함수다.
+  - 1행을 $a_{11}\mathbf{e}_1 + a_{12}\mathbf{e}_2 + a_{13}\mathbf{e}_3$로 쪼개 선형성을 쓰면
+  - $$\det A = \sum_j (-1)^{1+j}a_{1j}M_{1j} = a_{11}M_{11} - a_{12}M_{12} + a_{13}M_{13}$$
+  - 부호 $(-1)^{1+j}$는 $j$열을 맨 앞으로 옮길 때의 열 교환 횟수에서 나온다.
 la.detprod:
-- $\det B \ne 0$이면 $f(A) = \det(AB)/\det B$는 행렬식의 세 성질(행마다 선형, 행 교환 시 부호 반전, $f(I) = 1$)을 모두 만족한다.
-- 그런 함수는 $\det$뿐이므로 $\det(AB) = \det A\,\det B$. $\det B = 0$이면 양변이 모두 $0$이다.
+  goal: '두 행렬을 곱한 것의 행렬식이 각 행렬식의 곱, 곧 $\det(AB) = \det A\,\det B$임을 보인다. 여기서 $\det(A^{-1}) = 1/\det A$, $\det(A^k) = (\det A)^k$도 따라 나온다.'
+  steps:
+  - $\det B \ne 0$이면 $f(A) = \det(AB)/\det B$는 행렬식의 세 성질(행마다 선형, 행 교환 시 부호 반전, $f(I) = 1$)을 모두 만족한다.
+  - 그런 함수는 $\det$뿐이므로 $\det(AB) = \det A\,\det B$. $\det B = 0$이면 양변이 모두 $0$이다.
 la.invprod:
-- $$(AB)(B^{-1}A^{-1}) = A(BB^{-1})A^{-1} = AA^{-1} = I$$
-- 역행렬은 유일하므로 $(AB)^{-1} = B^{-1}A^{-1}$.
+  goal: '$A$, $B$가 가역일 때 곱 $AB$의 역행렬을 $A^{-1}$, $B^{-1}$로 나타낸다. 순서가 뒤집힌다: $(AB)^{-1} = B^{-1}A^{-1}$.'
+  steps:
+  - $$(AB)(B^{-1}A^{-1}) = A(BB^{-1})A^{-1} = AA^{-1} = I$$
+  - 역행렬은 유일하므로 $(AB)^{-1} = B^{-1}A^{-1}$.
 la.transprod:
-- $$\big((AB)^T\big)_{ij} = (AB)_{ji} = \sum_k a_{jk}b_{ki} = \sum_k (B^T)_{ik}(A^T)_{kj} = (B^TA^T)_{ij}$$
+  goal: '곱의 전치 $(AB)^T$를 $A^T$, $B^T$로 나타낸다. 역시 순서가 뒤집힌다: $(AB)^T = B^TA^T$.'
+  steps:
+  - $$\big((AB)^T\big)_{ij} = (AB)_{ji} = \sum_k a_{jk}b_{ki} = \sum_k (B^T)_{ik}(A^T)_{kj} = (B^TA^T)_{ij}$$
 la.detscale:
-- $kA$는 $n$개의 행 각각에 $k$를 곱한 것이다.
-- '행렬식은 행마다 선형이므로 행 하나마다 $k$가 하나씩 밖으로 나온다: $\det(kA) = k^n\det A$.'
+  goal: '$n\times n$ 행렬 $A$ 전체에 상수 $k$를 곱하면 행렬식이 몇 배가 되는지 구한다: $\det(kA) = k^n\det A$.'
+  steps:
+  - $kA$는 $n$개의 행 각각에 $k$를 곱한 것이다.
+  - '행렬식은 행마다 선형이므로 행 하나마다 $k$가 하나씩 밖으로 나온다: $\det(kA) = k^n\det A$.'
 la.invertible:
-- 소거로 $A$를 위삼각 $U$로 만들면 $\det A = \pm(\text{피벗들의 곱})$이다.
-- 피벗이 $n$개 $\iff \operatorname{rank}A = n \iff$ 피벗의 곱 $\ne 0 \iff \det A \ne 0$.
-- 이때 뒤에서부터 대입하면 $A\mathbf{x} = \mathbf{b}$가 항상 유일한 해를 가지므로 $A^{-1}$가 존재한다.
+  goal: '정사각행렬 $A$가 역행렬을 가질 조건이 $\det A \ne 0$임을, 소거와 피벗으로 보인다.'
+  steps:
+  - 소거로 $A$를 위삼각 $U$로 만들면 $\det A = \pm(\text{피벗들의 곱})$이다.
+  - 피벗이 $n$개 $\iff \operatorname{rank}A = n \iff$ 피벗의 곱 $\ne 0 \iff \det A \ne 0$.
+  - 이때 뒤에서부터 대입하면 $A\mathbf{x} = \mathbf{b}$가 항상 유일한 해를 가지므로 $A^{-1}$가 존재한다.
 la.gauss:
-- $R_i \leftarrow R_i - l\,R_j$는 한 방정식에서 다른 방정식의 배수를 빼는 것이라 해를 바꾸지 않는다.
-- 피벗 아래를 $0$으로 만드는 승수는 $l_{ij} = a_{ij}/a_{jj}$이다.
-- 위삼각 $U\mathbf{x} = \mathbf{c}$가 되면 $x_n = c_n/u_{nn}$부터 구하고, 위 식에 차례로 대입한다.
+  goal: '연립방정식 $A\mathbf{x} = \mathbf{b}$를 행 연산으로 위삼각 꼴로 바꾼 뒤 뒤에서부터 푸는 절차다. 왜 행 연산이 해를 바꾸지 않는지가 핵심이다.'
+  steps:
+  - $R_i \leftarrow R_i - l\,R_j$는 한 방정식에서 다른 방정식의 배수를 빼는 것이라 해를 바꾸지 않는다.
+  - 피벗 아래를 $0$으로 만드는 승수는 $l_{ij} = a_{ij}/a_{jj}$이다.
+  - 위삼각 $U\mathbf{x} = \mathbf{c}$가 되면 $x_n = c_n/u_{nn}$부터 구하고, 위 식에 차례로 대입한다.
 la.cofactor:
-- 1행을 $a_{11}\mathbf{e}_1 + a_{12}\mathbf{e}_2 + a_{13}\mathbf{e}_3$로 쪼개 행렬식의 선형성을 쓴다.
-- $$\det A = a_{11}M_{11} - a_{12}M_{12} + a_{13}M_{13}$$
-- $M_{1j}$는 1행과 $j$열을 지운 $2\times 2$ 행렬식이고, 부호 $(-1)^{1+j}$는 열 교환 횟수에서 나온다.
+  goal: '$3\times 3$ 행렬식을 1행을 따라 $2\times 2$ 행렬식 세 개로 쪼개 계산하는 절차다.'
+  steps:
+  - 1행을 $a_{11}\mathbf{e}_1 + a_{12}\mathbf{e}_2 + a_{13}\mathbf{e}_3$로 쪼개 행렬식의 선형성을 쓴다.
+  - $$\det A = a_{11}M_{11} - a_{12}M_{12} + a_{13}M_{13}$$
+  - $M_{1j}$는 1행과 $j$열을 지운 $2\times 2$ 행렬식이고, 부호 $(-1)^{1+j}$는 열 교환 횟수에서 나온다.

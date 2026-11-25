@@ -1,37 +1,59 @@
-# 단위별 짧은 유도. 한 줄 = 문장($…$ 안은 TeX) 또는 수식 블록($$…$$).
+# 단위별 짧은 유도.
+# goal: 무엇이 주어지고 무엇을 구하거나 보이는지 (문제 상황). 모든 단위에 필수.
+# steps: 한 줄 = 문장($…$ 안은 TeX) 또는 수식 블록($$…$$).
 ode2.form:
-- $y = e^{rx}$를 넣으면 $(r^2 + pr + q)e^{rx} = 0$이므로 특성방정식은 $r^2 + pr + q = 0$.
-- 중근이면 $(D - r)^2\big(xe^{rx}\big) = 0$이라 $xe^{rx}$도 해다.
-- 복소근 $\alpha \pm i\beta$이면 $e^{(\alpha \pm i\beta)x} = e^{\alpha x}(\cos\beta x \pm i\sin\beta x)$의 실수부와 허수부가 실수해다.
+  goal: '상수계수 2계 동차방정식 $y'''' + py'' + qy = 0$의 일반해가 특성방정식의 근(서로 다른 실근·중근·복소근)에 따라 어떤 꼴인지 정리한다.'
+  steps:
+  - $y = e^{rx}$를 넣으면 $(r^2 + pr + q)e^{rx} = 0$이므로 특성방정식은 $r^2 + pr + q = 0$.
+  - 중근이면 $(D - r)^2\big(xe^{rx}\big) = 0$이라 $xe^{rx}$도 해다.
+  - 복소근 $\alpha \pm i\beta$이면 $e^{(\alpha \pm i\beta)x} = e^{\alpha x}(\cos\beta x \pm i\sin\beta x)$의 실수부와 허수부가 실수해다.
 ode2.trial:
-- $L = D^2 + pD + q$는 $e^{ax}$를 $e^{ax}$의 배수로, 다항식을 같은 차수 다항식으로, $\cos bx$를 $\cos$와 $\sin$의 조합으로 보낸다. 그래서 같은 꼴로 추측한다.
-- $a$가 특성근이면 $L[e^{ax}] = 0$이라 맞출 수 없다. $L[xe^{ax}] = (2a + p)e^{ax} \ne 0$이므로 $x$를 곱한다.
+  goal: '비동차방정식 $y'''' + py'' + qy = R(x)$의 특수해 $y_p$를 미정계수법으로 구할 때, $R$의 꼴에 따라 어떤 꼴로 추측해야 하는지 정한다.'
+  steps:
+  - $L = D^2 + pD + q$는 $e^{ax}$를 $e^{ax}$의 배수로, 다항식을 같은 차수 다항식으로, $\cos bx$를 $\cos$와 $\sin$의 조합으로 보낸다. 그래서 같은 꼴로 추측한다.
+  - $a$가 특성근이면 $L[e^{ax}] = 0$이라 맞출 수 없다. $L[xe^{ax}] = (2a + p)e^{ax} \ne 0$이므로 $x$를 곱한다.
 ode2.wronskian:
-- $$W = \begin{vmatrix}y_1 & y_2\\ y_1^{\prime} & y_2^{\prime}\end{vmatrix} = y_1y_2^{\prime} - y_1^{\prime}y_2$$
-- '$y_1 = e^{ax}$, $y_2 = e^{bx}$: $W = e^{ax}\cdot be^{bx} - ae^{ax}\cdot e^{bx} = (b - a)e^{(a+b)x}$.'
+  goal: '두 해 $y_1$, $y_2$가 독립인지(일반해의 기저가 되는지) 판정하는 행렬식 $W = y_1y_2'' - y_1''y_2$를 계산한다.'
+  steps:
+  - $$W = \begin{vmatrix}y_1 & y_2\\ y_1^{\prime} & y_2^{\prime}\end{vmatrix} = y_1y_2^{\prime} - y_1^{\prime}y_2$$
+  - '$y_1 = e^{ax}$, $y_2 = e^{bx}$: $W = e^{ax}\cdot be^{bx} - ae^{ax}\cdot e^{bx} = (b - a)e^{(a+b)x}$.'
 ode2.varparam:
-- $y_p = u_1y_1 + u_2y_2$로 놓고 추가 조건 $u_1^{\prime}y_1 + u_2^{\prime}y_2 = 0$을 둔다.
-- 방정식에 넣으면 $u_1^{\prime}y_1^{\prime} + u_2^{\prime}y_2^{\prime} = R$. 두 식을 Cramer 공식으로 풀면
-- $$u_1^{\prime} = -\frac{y_2R}{W},\qquad u_2^{\prime} = \frac{y_1R}{W}$$
+  goal: '$y'''' + p(x)y'' + q(x)y = R(x)$에서 동차해 $y_1$, $y_2$를 알 때, 미정계수법이 안 통하는 $R$(예: $\sec x$)에도 쓸 수 있는 특수해 공식을 얻는다.'
+  steps:
+  - $y_p = u_1y_1 + u_2y_2$로 놓고 추가 조건 $u_1^{\prime}y_1 + u_2^{\prime}y_2 = 0$을 둔다.
+  - 방정식에 넣으면 $u_1^{\prime}y_1^{\prime} + u_2^{\prime}y_2^{\prime} = R$. 두 식을 Cramer 공식으로 풀면
+  - $$u_1^{\prime} = -\frac{y_2R}{W},\qquad u_2^{\prime} = \frac{y_1R}{W}$$
 ode2.eulerform:
-- $y = x^r$이면 $y^{\prime} = rx^{r-1}$, $y^{\prime\prime} = r(r-1)x^{r-2}$.
-- $$x^2y^{\prime\prime} + axy^{\prime} + by = \big(r(r-1) + ar + b\big)x^r = 0$$
+  goal: '계수가 $x$의 거듭제곱인 방정식 $x^2y'''' + axy'' + by = 0$(Euler–Cauchy)에 $y = x^r$을 넣어 $r$에 대한 방정식을 얻는다.'
+  steps:
+  - $y = x^r$이면 $y^{\prime} = rx^{r-1}$, $y^{\prime\prime} = r(r-1)x^{r-2}$.
+  - $$x^2y^{\prime\prime} + axy^{\prime} + by = \big(r(r-1) + ar + b\big)x^r = 0$$
 ode2.reduction:
-- $y_2 = vy_1$을 넣고 $y_1$이 해임을 쓰면 $y_1v^{\prime\prime} + (2y_1^{\prime} + py_1)v^{\prime} = 0$, $v^{\prime}$에 대한 1계 방정식이 된다.
-- $$v^{\prime} = \frac{1}{y_1^2}e^{-\int p\,dx}$$
-- 중근 $y_1 = e^{rx}$, $p = -2r$이면 $v^{\prime} = 1$, $v = x$.
+  goal: '2계 동차방정식의 해 하나 $y_1$을 알 때, 독립인 두 번째 해 $y_2 = v\,y_1$을 구한다.'
+  steps:
+  - $y_2 = vy_1$을 넣고 $y_1$이 해임을 쓰면 $y_1v^{\prime\prime} + (2y_1^{\prime} + py_1)v^{\prime} = 0$, $v^{\prime}$에 대한 1계 방정식이 된다.
+  - $$v^{\prime} = \frac{1}{y_1^2}e^{-\int p\,dx}$$
+  - 중근 $y_1 = e^{rx}$, $p = -2r$이면 $v^{\prime} = 1$, $v = x$.
 ode2.superpos:
-- $y$와 $y_p$가 모두 $L[y] = R$의 해이면 $L[y - y_p] = R - R = 0$.
-- 그래서 $y - y_p$는 동차해이고 $y = y_h + y_p$. 동차해 전체가 상수 2개를 갖는다.
+  goal: '비동차방정식 $L[y] = R$의 모든 해가 ''동차해 전체 + 특수해 하나''임을 보인다: $y = C_1y_1 + C_2y_2 + y_p$.'
+  steps:
+  - $y$와 $y_p$가 모두 $L[y] = R$의 해이면 $L[y - y_p] = R - R = 0$.
+  - 그래서 $y - y_p$는 동차해이고 $y = y_h + y_p$. 동차해 전체가 상수 2개를 갖는다.
 ode2.const:
-- $y = e^{rx}$를 넣어 $r^2 + pr + q = 0$. 근의 종류(서로 다른 실근, 중근, 복소근)로 기저 $y_1, y_2$를 고른다.
-- '$y = C_1y_1 + C_2y_2$와 $y^{\prime}$에 $x = 0$을 넣어 연립방정식을 푼다:'
-- $$C_1y_1(0) + C_2y_2(0) = y(0),\qquad C_1y_1^{\prime}(0) + C_2y_2^{\prime}(0) = y^{\prime}(0)$$
+  goal: '상수계수 동차방정식 $y'''' + py'' + qy = 0$에 초기조건 $y(0)$, $y''(0)$이 주어졌을 때 해를 구하는 절차다.'
+  steps:
+  - $y = e^{rx}$를 넣어 $r^2 + pr + q = 0$. 근의 종류(서로 다른 실근, 중근, 복소근)로 기저 $y_1, y_2$를 고른다.
+  - '$y = C_1y_1 + C_2y_2$와 $y^{\prime}$에 $x = 0$을 넣어 연립방정식을 푼다:'
+  - $$C_1y_1(0) + C_2y_2(0) = y(0),\qquad C_1y_1^{\prime}(0) + C_2y_2^{\prime}(0) = y^{\prime}(0)$$
 ode2.undet:
-- 해는 $y = y_h + y_p$이고 $y_h$는 특성방정식으로 구한다.
-- $y_p$를 강제항과 같은 꼴(미정계수 $A, B$)로 추측해 $L[y_p] = R$에 대입하고, 같은 함수끼리 계수를 비교한다.
-- 추측한 꼴이 $y_h$와 겹치면 $x$를 곱한다.
+  goal: '$y'''' + py'' + qy = R(x)$ ($R$은 지수·다항식·삼각함수)를 미정계수법으로 푸는 절차다.'
+  steps:
+  - 해는 $y = y_h + y_p$이고 $y_h$는 특성방정식으로 구한다.
+  - $y_p$를 강제항과 같은 꼴(미정계수 $A, B$)로 추측해 $L[y_p] = R$에 대입하고, 같은 함수끼리 계수를 비교한다.
+  - 추측한 꼴이 $y_h$와 겹치면 $x$를 곱한다.
 ode2.euler:
-- $y = x^r$을 대입하면 $r(r-1) + ar + b = 0$.
-- 또는 $x = e^t$로 치환하면 $x\dfrac{d}{dx} = \dfrac{d}{dt}$라 상수계수 방정식이 되고, 그 해 $e^{rt}$가 곧 $x^r$이다.
-- $x = 1$에서의 초기조건으로 $C_1, C_2$를 정한다.
+  goal: 'Euler–Cauchy 방정식 $x^2y'''' + axy'' + by = 0$의 초기값 문제를 푸는 절차다.'
+  steps:
+  - $y = x^r$을 대입하면 $r(r-1) + ar + b = 0$.
+  - 또는 $x = e^t$로 치환하면 $x\dfrac{d}{dx} = \dfrac{d}{dt}$라 상수계수 방정식이 되고, 그 해 $e^{rt}$가 곧 $x^r$이다.
+  - $x = 1$에서의 초기조건으로 $C_1, C_2$를 정한다.

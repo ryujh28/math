@@ -37,6 +37,8 @@ for (const c of index.chapters.filter((x) => x.file)) {
     tryRich(u.title, `${u.id} 제목`);
     tryRich(u.hint, `${u.id} 힌트`);
     if (!u.derivation || !u.derivation.length) bad.push(`${u.id}: 유도 없음`);
+    if (!u.derivation_goal) bad.push(`${u.id}: 유도의 문제 상황(goal) 없음`);
+    else tryRich(u.derivation_goal, `${u.id} 문제 상황`);
     (u.derivation || []).forEach((line, i) => tryRich(line, `${u.id} 유도${i + 1}`));
   }
   const whys = new Set();

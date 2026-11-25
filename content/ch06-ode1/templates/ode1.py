@@ -32,11 +32,11 @@ def _ptex(p):
 def integrating_factor():
     out = []
     cases = []
-    for a in [1, 2, 3, -1, -2, sp.Rational(1, 2)]:
+    for a in [1, 2, 3, 4, -1, -2, -3, sp.Rational(1, 2), sp.Rational(-1, 2)]:
         cases.append((a, sp.exp(a * x), [(sp.exp(-a * x), "sign"), (a * x, "missing_factor"), (sp.exp(a), "algebra")]))
-    for a in [1, 2, 3, -1, -2]:
+    for a in [1, 2, 3, 4, -1, -2, -3]:
         cases.append((a / x, x**a, [(x**(-a), "sign"), (a * sp.log(x), "missing_factor"), (sp.exp(a / x), "algebra")]))
-    for a in [1, 2, -1, 3]:
+    for a in [1, 2, -1, 3, -2]:
         cases.append((2 * a * x, sp.exp(a * x**2), [(sp.exp(-a * x**2), "sign"), (sp.exp(2 * a * x), "algebra"), (a * x**2, "missing_factor")]))
     cases.append((sp.cos(x), sp.exp(sp.sin(x)), [(sp.exp(-sp.sin(x)), "sign"), (sp.exp(sp.cos(x)), "algebra"), (sp.sin(x), "missing_factor")]))
     for p, mu, wr in cases:
@@ -50,7 +50,7 @@ def integrating_factor():
 
 def separable_general():
     out = []
-    for a, n in itertools.product([1, 2, 3, -1, -2, -3], [0, 1, 2]):
+    for a, n in itertools.product([1, 2, 3, 4, -1, -2, -3, -4], [0, 1, 2]):
         rhs = a * x**n
         expo = a * x ** (n + 1) / (n + 1)
         resid = lambda g, rhs=rhs: sp.diff(g, x) - rhs * g

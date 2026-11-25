@@ -4,6 +4,7 @@
 - {id: la.expdiag, kind: gen, title: 대각행렬의 지수, generator: "la5:exp_diag", hint: '$e^{Dt} = \operatorname{diag}(e^{\lambda_1 t}, e^{\lambda_2 t})$. 대각성분마다 따로 지수.'}
 - {id: la.expjordan, kind: gen, title: Jordan 블록의 지수, generator: "la5:exp_jordan", tier: 2, hint: '$A = aI + N$ ($N^2 = 0$)이면 $e^{At} = e^{at}(I + Nt)$. 대각 위에 $te^{at}$가 붙는다.'}
 - id: la.expdiagform
+  generator: "fx5:expdiagform"
   kind: formula
   title: 대각화로 행렬지수
   tier: 1
@@ -15,6 +16,7 @@
     - {tex: 'P\,e^{D}P^{-1}t', error: algebra}
   hint: '$A^k = PD^kP^{-1}$이므로 급수 전체가 $e^{At} = Pe^{Dt}P^{-1}$.'
 - id: la.expderiv
+  generator: "fx5:expderiv"
   kind: formula
   title: 행렬지수의 미분
   tier: 1
@@ -26,6 +28,7 @@
     - {tex: 'A^{-1}e^{At}', error: algebra}
   hint: '$\dfrac{d}{dt}e^{At} = Ae^{At} = e^{At}A$. 그래서 $\mathbf{x}(t) = e^{At}\mathbf{x}_0$가 $\mathbf{x}^{\prime} = A\mathbf{x}$의 해.'
 - id: la.expcommute
+  generator: "fx5:expcommute"
   kind: formula
   title: 지수의 곱
   tier: 2
@@ -37,6 +40,7 @@
     - {tex: '\text{항상 성립}', error: theorem_condition}
   hint: '교환하면 이항전개가 스칼라처럼 되어 성립한다. 교환하지 않으면 일반적으로 $e^{A+B} \ne e^Ae^B$.'
 - id: la.sylvester
+  generator: "fx5:sylvester"
   kind: formula
   title: Sylvester 판정법
   tier: 2

@@ -64,3 +64,45 @@ select { font: inherit; padding: 8px 10px; border-radius: 8px; border: 1.5px sol
 .deriv-body .katex-display { margin: 6px 0 14px; overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
 .fb .row, .intro-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .units .btn.small { min-height: 32px; }
+
+/* 좁은 화면: 문제는 글자와 수식 조각 단위로 줄바꿈, 넘치는 수식은 줄여서 맞춤 */
+.prompt.flow, .mline { text-align: center; line-height: 1.9; overflow-wrap: anywhere; word-break: keep-all; }
+.prompt.flow { overflow-x: visible; }
+.mline + .mline { margin-top: 4px; }
+.mchunk { display: inline-block; max-width: 100%; vertical-align: middle; overflow-x: auto; overflow-y: hidden; padding: 2px 1px; }
+.opts.one { grid-template-columns: minmax(0, 1fr); }
+.opt, .blk, .step { max-width: 100%; }
+.mchunk .katex { white-space: nowrap; }
+.opt .katex, .blk .katex { white-space: normal; }  /* 인라인 수식은 = · + 뒤에서 줄바꿈 가능 */
+@media (max-width: 520px) {
+  .prompt { font-size: 20px; }
+  .opt { font-size: 18px; padding: 8px 6px 8px 18px; }
+  .blk { font-size: 16px; padding: 10px 8px 10px 26px; }
+  .slots .blk::before { left: 8px; }
+}
+
+/* 유도 창: 문제 상황 → 예시 문제 → 유도 */
+.deriv-body .goal { border-left: 3px solid var(--blue); background: color-mix(in srgb, var(--blue) 7%, var(--card)); border-radius: 8px;
+  padding: 10px 12px; margin: 0 0 12px; }
+.deriv-body .goal p { margin: 4px 0 0; }
+.deriv-body .example { border: 1.5px dashed var(--line); border-radius: 10px; padding: 10px 12px; margin: 0 0 14px; }
+.deriv-body .example summary { cursor: pointer; list-style: none; }
+.deriv-body .example summary::-webkit-details-marker { display: none; }
+.deriv-body .ex-q { margin-top: 6px; font-size: 17px; text-align: left; }
+.deriv-body .ex-q.flow, .deriv-body .ex-q .mline { text-align: left; }
+.deriv-body .ex-a { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 17px; }
+.deriv-body .ex-a .mline { text-align: left; }
+.deriv-body .ex-a small { color: var(--mute); margin-right: 4px; }
+.deriv-lab { margin-top: 4px; }
+.deriv-body .katex-display { max-width: 100%; }
+
+/* 좁은 화면의 장 표: 단위·상태·기억·유도만 남겨 옆으로 밀지 않게 */
+@media (max-width: 560px) {
+  .units th:nth-child(2), .units td:nth-child(2),
+  .units th:nth-child(3), .units td:nth-child(3),
+  .units th:nth-child(6), .units td:nth-child(6) { display: none; }
+  .units td, .units th { padding-left: 6px; padding-right: 6px; }
+  .units .rust { width: 40px; }
+  .units td:first-child { white-space: normal; overflow-wrap: anywhere; }
+  .units td:first-child .katex { white-space: normal; }
+}

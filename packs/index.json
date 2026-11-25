@@ -57,8 +57,8 @@
    "start_open": false,
    "file": "ch01.json",
    "units": 10,
-   "items": 162,
-   "built": "2026-11-24"
+   "items": 260,
+   "built": "2026-11-25"
   },
   {
    "id": 2,
@@ -71,8 +71,8 @@
    "start_open": false,
    "file": "ch02.json",
    "units": 12,
-   "items": 152,
-   "built": "2026-11-24"
+   "items": 331,
+   "built": "2026-11-25"
   },
   {
    "id": 3,
@@ -85,8 +85,8 @@
    "start_open": false,
    "file": "ch03.json",
    "units": 10,
-   "items": 187,
-   "built": "2026-11-24"
+   "items": 279,
+   "built": "2026-11-25"
   },
   {
    "id": 4,
@@ -99,8 +99,8 @@
    "start_open": false,
    "file": "ch04.json",
    "units": 9,
-   "items": 116,
-   "built": "2026-11-24"
+   "items": 254,
+   "built": "2026-11-25"
   },
   {
    "id": 5,
@@ -113,8 +113,8 @@
    "start_open": false,
    "file": "ch05.json",
    "units": 10,
-   "items": 159,
-   "built": "2026-11-24"
+   "items": 265,
+   "built": "2026-11-25"
   },
   {
    "id": 6,
@@ -125,8 +125,8 @@
    "start_open": true,
    "file": "ch06.json",
    "units": 10,
-   "items": 219,
-   "built": "2026-11-24"
+   "items": 328,
+   "built": "2026-11-25"
   },
   {
    "id": 7,
@@ -137,8 +137,8 @@
    "start_open": true,
    "file": "ch07.json",
    "units": 10,
-   "items": 236,
-   "built": "2026-11-24"
+   "items": 318,
+   "built": "2026-11-25"
   },
   {
    "id": 8,
@@ -171,8 +171,8 @@
    "start_open": true,
    "file": "ch10.json",
    "units": 24,
-   "items": 432,
-   "built": "2026-11-24"
+   "items": 608,
+   "built": "2026-11-25"
   },
   {
    "id": 11,

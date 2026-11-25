@@ -6,7 +6,7 @@ export const SETTINGS = {
   retention: 0.9,       // 목표 기억 유지율
   masteredDays: 7,      // 안정도 7일 이상 = 숙련
   unlockRatio: 0.7,     // 선수 장의 숙련 단위 비율
-  newPerDay: 3,         // 하루 새 단위 수
+  newPerDay: 5,         // 하루 새 단위 수
 };
 
 const scheduler = fsrs(generatorParameters({ enable_fuzz: false, request_retention: SETTINGS.retention }));
@@ -18,9 +18,9 @@ export const GRADE_NAME = { 1: 'Again', 2: 'Hard', 3: 'Good', 4: 'Easy' };
 export function gradeFor(mode, r) {
   switch (mode) {
     case 'mcq':
+      // 제한시간 안에 맞히면 Good, 4초 안이면 Easy. 느리게 맞혔다고 Hard를 주지 않는다.
       if (!r.correct) return GRADE.again;
-      if (r.ms > 6000) return GRADE.hard;
-      if (r.ms < 2000) return GRADE.easy;
+      if (r.ms <= 4000) return GRADE.easy;
       return GRADE.good;
     case 'order':
       if (r.gaveUp || r.checks >= 3) return GRADE.again;

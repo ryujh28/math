@@ -70,14 +70,16 @@ def exp_diag():
 
 def exp_jordan():
     out = []
-    for a in [-3, -2, -1, 1, 2, 3]:
-        A = sp.Matrix([[a, 1], [0, a]])
-        truth = (A * t).exp()
+    for a, c in itertools.product([-4, -3, -2, -1, 1, 2, 3, 4], [1, 2, -1]):
+        A = sp.Matrix([[a, c], [0, a]])
         e = sp.exp(a * t)
-        ans = sp.Matrix([[e, t * e], [0, e]])
-        cands = [(sp.Matrix([[e, 0], [0, e]]), "missing_factor"), (sp.Matrix([[e, e], [0, e]]), "algebra"),
-                 (sp.Matrix([[e, sp.exp(t)], [0, e]]), "algebra"), (sp.Matrix([[e, -t * e], [0, e]]), "sign")]
-        out.append({"params": {"a": a}, "tier": 2, "prompt": rf"A = {mat(A)}\qquad e^{{At}} = \;?",
+        truth = sp.Matrix([[e, c * t * e], [0, e]])
+        assert same(truth.diff(t), A * truth) and same(truth.subs(t, 0), sp.eye(2))
+        ans = truth
+        cands = [(sp.Matrix([[e, 0], [0, e]]), "missing_factor"), (sp.Matrix([[e, c * e], [0, e]]), "algebra"),
+                 (sp.Matrix([[e, c * sp.exp(t)], [0, e]]), "algebra"), (sp.Matrix([[e, -c * t * e], [0, e]]), "sign"),
+                 (sp.Matrix([[e, t * e], [0, e]]), "missing_factor")]
+        out.append({"params": {"a": a, "c": c}, "tier": 2, "prompt": rf"A = {mat(A)}\qquad e^{{At}} = \;?",
                     "answer": opt(mat(ans), lambda X=ans, tr=truth: same(X, tr)),
                     "wrong": [opt(mat(X), lambda X=X, tr=truth: same(X, tr), er) for X, er in cands]})
     return out

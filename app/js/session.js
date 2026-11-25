@@ -1,7 +1,18 @@
 // 세션 구성: 오늘 무엇을 얼마나 낼지 정한다. DOM을 쓰지 않는다 (node 테스트 가능).
 import * as E from './engine.js';
 
-export const DEFAULTS = { minutes: 10, capMinutes: 15, newPerDay: 3, testMode: false };
+export const DEFAULTS = { minutes: 10, capMinutes: 15, newPerDay: 5, testMode: false, v: 2 };
+
+/** 저장된 설정을 현재 판으로 올린다. 예전 기본값(하루 새 단위 3개)은 새 기본값 5개로. */
+export function migrateSettings(saved = {}) {
+  const s = { ...DEFAULTS, ...saved };
+  if (!saved.v || saved.v < 2) {
+    if (saved.newPerDay === 3 || saved.newPerDay == null) s.newPerDay = DEFAULTS.newPerDay;
+    s.v = 2;
+  }
+  return s;
+}
+export const EXTRA = { minutes: 5, bonusNew: 2 };
 const EST = { mcq: 10, order: 75, intro: 20 }; // 초
 
 const dayKey = (ts) => new Date(ts).toLocaleDateString('sv-SE'); // YYYY-MM-DD (로컬)
@@ -112,6 +123,54 @@ export function planSession({ index, packs, states, log, settings = DEFAULTS, no
   // 새 단위의 두 번째 문제는 맨 뒤에 (다른 문제 몇 개를 사이에 두고 다시 떠올리게)
   queue.push(...later);
   return { queue, dueCount, newCount: later.length, estMin: Math.max(1, Math.round(est / 60)) };
+}
+
+/**
+ * 한 판 더: 세션이 끝난 뒤 바로 이어 하는 짧은 판.
+ * 배운 단위 중 기억 확률(R)이 낮은 것부터 약 5분, 그리고 하루 한도를 넘어 새 단위 최대 2개.
+ * 보너스 새 단위는 하루 2×newPerDay 까지만 (한 판 더를 연타해도 새 단위가 쏟아지지 않게).
+ */
+export function planExtra({ index, packs, states, log, settings = DEFAULTS, now = Date.now(), chapter = null, extra = EXTRA }) {
+  const meta = unitMeta(packs);
+  let open = openChapters(index, packs, states, settings);
+  if (chapter != null) open = open.filter((c) => c === chapter);
+  const nowD = new Date(now);
+  const budget = extra.minutes * 60;
+  // 이번 판 직전에 푼 단위는 뒤로 미룬다 (방금 본 걸 또 보는 느낌을 줄이려고)
+  const lastSid = [...log].reverse().find((r) => r.kind === 'session')?.sid;
+  const justSeen = new Set(log.filter((r) => r.sid && r.sid === lastSid && r.unit).map((r) => r.unit));
+  const learned = [...meta.values()].filter((m) => open.includes(m.chapter) && states.has(m.unit.id));
+  const R = (m) => E.retrievability(states.get(m.unit.id), nowD) + (justSeen.has(m.unit.id) ? 1 : 0);
+  learned.sort((a, b) => R(a) - R(b));
+  const atoms = learned.filter((m) => m.unit.kind === 'atom');
+  const schemas = learned.filter((m) => m.unit.kind !== 'atom');
+  const mixed = [];
+  while (schemas.length || atoms.length) {
+    if (atoms.length) mixed.push(atoms.shift());
+    if (atoms.length) mixed.push(atoms.shift());
+    if (schemas.length) mixed.push(schemas.shift());
+  }
+  const queue = [];
+  let est = 0;
+  for (const m of mixed) {
+    const c = EST[modeOf(m.unit)];
+    if (est + c > budget) continue;
+    queue.push({ unit: m.unit.id, chapter: m.chapter, mode: modeOf(m.unit), isNew: false });
+    est += c;
+  }
+  const reviewCount = queue.length;
+  const room = Math.max(0, 2 * settings.newPerDay - newToday(log, now));
+  const fresh = newCandidates(meta, open, states).slice(0, Math.min(extra.bonusNew, room));
+  const later = [];
+  for (const m of fresh) {
+    const mode = modeOf(m.unit);
+    // 새 단위는 복습 몇 문제 뒤에 소개
+    queue.splice(Math.min(2, queue.length), 0, { unit: m.unit.id, chapter: m.chapter, mode, isNew: true, intro: true });
+    later.push({ unit: m.unit.id, chapter: m.chapter, mode, isNew: true });
+    est += EST.intro + 2 * EST[mode];
+  }
+  queue.push(...later);
+  return { queue, dueCount: reviewCount, newCount: later.length, estMin: Math.max(1, Math.round(est / 60)) };
 }
 
 /** 단위에 맞는 문제 하나: 난이도 단계 맞추고, 최근에 낸 문제는 피한다. */

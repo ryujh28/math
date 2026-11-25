@@ -41,7 +41,7 @@ def _vec_ok(A, l):
 # ---------------------------------------------------------------- 사실 원자
 def charpoly2():
     out = []
-    for A, P, d in nice2(18, seed=1):
+    for A, P, d in nice2(30, seed=1):
         tr, D = A.trace(), A.det()
         truth = (A - lam * sp.eye(2)).det()
         ok = lambda e, truth=truth: same(sp.expand(e), sp.expand(truth))
@@ -55,7 +55,7 @@ def charpoly2():
 
 def eig2():
     out = []
-    for A, P, d in nice2(20, seed=2):
+    for A, P, d in nice2(30, seed=2):
         truth = _eigset(A)
         ok = lambda vals, truth=truth: same(set(vals), truth)
         tr, D = A.trace(), A.det()
@@ -87,8 +87,10 @@ def eigvec2():
 def eig_triangular():
     out = []
     rng = random.Random(4)
-    for _ in range(16):
+    while len(out) < 24:
         dg = [rng.randint(-3, 4) for _ in range(3)]
+        if len(set(dg)) < 3:
+            continue
         A = sp.Matrix([[dg[0], rng.randint(-3, 3), rng.randint(-3, 3)], [0, dg[1], rng.randint(-3, 3)], [0, 0, dg[2]]])
         if rng.random() < 0.5:
             A = A.T

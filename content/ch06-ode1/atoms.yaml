@@ -3,6 +3,7 @@
 - {id: ode.sepgen, kind: gen, title: 변수분리 일반해, generator: "ode1:separable_general", hint: '$y^{\prime} = f(x)\,y \Rightarrow \dfrac{dy}{y} = f\,dx \Rightarrow y = Ce^{\int f\,dx}$.'}
 - {id: ode.exactk, kind: gen, title: 완전 조건, generator: "ode1:exact_k", tier: 2, hint: '$M\,dx + N\,dy = 0$이 완전 $\iff \dfrac{\partial M}{\partial y} = \dfrac{\partial N}{\partial x}$.'}
 - id: ode.linformula
+  generator: "fx6:linformula"
   kind: formula
   title: 1계 선형 해 공식
   tier: 1
@@ -14,6 +15,7 @@
     - {tex: '\dfrac{1}{\mu}\left(\int q\,dx + C\right)', error: algebra}
   hint: '양변에 $\mu$를 곱하면 $(\mu y)^{\prime} = \mu q$. 적분하고 $\mu$로 나눈다. 적분상수 $C$를 잊지 말 것.'
 - id: ode.exactcond
+  generator: "fx6:exactcond"
   kind: formula
   title: 완전미분방정식
   tier: 1
@@ -25,6 +27,7 @@
     - {tex: 'M = N', error: theorem_condition}
   hint: '$F_x = M$, $F_y = N$인 $F$가 있으려면 혼합 편미분이 같아야 한다: $M_y = F_{xy} = F_{yx} = N_x$.'
 - id: ode.bernoulli
+  generator: "fx6:bernoulli"
   kind: formula
   title: Bernoulli 방정식
   tier: 2
@@ -36,6 +39,7 @@
     - {tex: 'v = y/x', error: wrong_pair}
   hint: '$v = y^{1-n}$이면 $v^{\prime} + (1-n)pv = (1-n)q$로 선형이 된다. $v = y/x$는 동차형 방정식용.'
 - id: ode.existence
+  generator: "fx6:existence"
   kind: formula
   title: 존재·유일성
   tier: 2

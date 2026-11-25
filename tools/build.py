@@ -114,6 +114,46 @@ def _safe(fn):
         return None
 
 
+def _gen_items(a, uid, gen_ref, report, seed, start):
+    """생성기 사례들을 검증해 객관식 문제로. 정답 ok() == True, 오답 ok() == False만 남긴다."""
+    mod_name, fn = gen_ref.split(":")
+    cases = getattr(importlib.import_module(mod_name), fn)()
+    rng = random.Random(f"{seed}:{uid}")
+    rng.shuffle(cases)
+    per_tier, items, tiers, n = {}, [], set(), start
+    for c in cases:
+        tr = c.get("tier", a.get("tier", 1))
+        if per_tier.get(tr, 0) >= MAX_PER_TIER:
+            continue
+        tag = f"{uid} {c.get('params', {})}"
+        if _has_float(c["prompt"], c["answer"]["tex"], *[w["tex"] for w in c["wrong"]]):
+            report.append(f"- 실패 {tag}: TeX에 소수점 근삿값이 섞임")
+            continue
+        if _safe(c["answer"]["ok"]) is not True:
+            report.append(f"- 실패 {tag}: 정답 보기가 판정을 통과하지 못함")
+            continue
+        wr = []
+        for w in c["wrong"]:
+            v = _safe(w["ok"])
+            if v is None:
+                report.append(f"- 오답 제외 {tag}: 판정 오류")
+                continue
+            if v or w["tex"] == c["answer"]["tex"] or any(w["tex"] == q["tex"] for q in wr):
+                continue
+            wr.append({"tex": w["tex"], "error": w["error"]})
+        if len(wr) < 3:
+            report.append(f"- 제외 {tag}: 유효한 오답 {len(wr)}개")
+            continue
+        if any(it["prompt"] == c["prompt"] and it["answer"] == c["answer"]["tex"] for it in items):
+            continue  # 같은 문제·같은 정답이면 중복
+        items.append({"id": f"{uid}#{n}", "unit": uid, "type": "mcq", "tier": tr, "dir": c.get("dir", "fwd"),
+                      "prompt": c["prompt"], "answer": c["answer"]["tex"], "wrong": wr})
+        n += 1
+        tiers.add(tr)
+        per_tier[tr] = per_tier.get(tr, 0) + 1
+    return items, tiers
+
+
 def build_atoms(atoms, report, tdir=None, seed="v0"):
     if tdir is not None:
         sys.path.insert(0, str(tdir))
@@ -123,44 +163,23 @@ def build_atoms(atoms, report, tdir=None, seed="v0"):
         tiers = set()
         n = 0
         if a["kind"] == "gen":
-            mod_name, fn = a["generator"].split(":")
-            cases = getattr(importlib.import_module(mod_name), fn)()
-            rng = random.Random(f"{seed}:{uid}")
-            rng.shuffle(cases)
-            per_tier = {}
-            for c in cases:
-                tr = c.get("tier", a.get("tier", 1))
-                if per_tier.get(tr, 0) >= MAX_PER_TIER:
-                    continue
-                tag = f"{uid} {c.get('params', {})}"
-                if _has_float(c["prompt"], c["answer"]["tex"], *[w["tex"] for w in c["wrong"]]):
-                    report.append(f"- 실패 {tag}: TeX에 소수점 근삿값이 섞임")
-                    continue
-                if _safe(c["answer"]["ok"]) is not True:
-                    report.append(f"- 실패 {tag}: 정답 보기가 판정을 통과하지 못함")
-                    continue
-                wr = []
-                for w in c["wrong"]:
-                    v = _safe(w["ok"])
-                    if v is None:
-                        report.append(f"- 오답 제외 {tag}: 판정 오류")
-                        continue
-                    if v or w["tex"] == c["answer"]["tex"] or any(w["tex"] == q["tex"] for q in wr):
-                        continue
-                    wr.append({"tex": w["tex"], "error": w["error"]})
-                if len(wr) < 3:
-                    report.append(f"- 제외 {tag}: 유효한 오답 {len(wr)}개")
-                    continue
-                items.append({"id": f"{uid}#{n}", "unit": uid, "type": "mcq", "tier": tr, "dir": c.get("dir", "fwd"),
-                              "prompt": c["prompt"], "answer": c["answer"]["tex"], "wrong": wr})
-                n += 1
-                tiers.add(tr)
-                per_tier[tr] = per_tier.get(tr, 0) + 1
+            got, tiers_g = _gen_items(a, uid, a["generator"], report, seed, 0)
+            items += got
+            tiers |= tiers_g
+            n = len(got)
         elif a["kind"] == "formula":
-            wrong = [{"tex": w["tex"], "error": w["error"]} for w in a["wrong"]]
-            items.append({"id": f"{uid}#0", "unit": uid, "type": "mcq", "tier": a["tier"], "dir": "fwd",
-                          "prompt": a["prompt"], "answer": a["answer"], "wrong": wrong, "verified": "hand"})
-            tiers.add(a["tier"])
+            # 추상 공식 문제 + 손으로 쓴 변형(variants) + 구체적 적용 문제 생성기(generator)
+            for v in [a] + a.get("variants", []):
+                wrong = [{"tex": w["tex"], "error": w["error"]} for w in v["wrong"]]
+                items.append({"id": f"{uid}#{n}", "unit": uid, "type": "mcq", "tier": v.get("tier", a["tier"]), "dir": "fwd",
+                              "prompt": v["prompt"], "answer": v["answer"], "wrong": wrong, "verified": "hand"})
+                tiers.add(v.get("tier", a["tier"]))
+                n += 1
+            if a.get("generator"):
+                got, tiers_g = _gen_items(a, uid, a["generator"], report, seed, n)
+                items += got
+                tiers |= tiers_g
+                n += len(got)
         else:
             keys = list(a["params"])
             for combo in itertools.product(*[a["params"][k] for k in keys]):
@@ -389,7 +408,11 @@ def build_chapter(cdir, catalog, seed="v0"):
     deriv = yaml.safe_load(dpath.read_text()) if dpath.exists() else {}
     for u in units:
         if u["id"] in (deriv or {}):
-            u["derivation"] = deriv[u["id"]]
+            d = deriv[u["id"]]
+            if not isinstance(d, dict) or not d.get("goal") or not d.get("steps"):
+                raise SystemExit(f"{dpath}: {u['id']}에 goal(문제 상황)과 steps가 모두 있어야 합니다")
+            u["derivation_goal"] = d["goal"]
+            u["derivation"] = d["steps"]
         else:
             report.append(f"- 유도 없음: {u['id']}")
     pack = {"format": FORMAT, "built": datetime.date.today().isoformat(),

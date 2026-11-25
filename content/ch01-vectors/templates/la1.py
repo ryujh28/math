@@ -26,7 +26,7 @@ def _ok_val(val, truth):
 # ---------------------------------------------------------------- 사실 원자
 def dot():
     out = []
-    us, vs = _vecs(3, 12, seed=1), _vecs(3, 12, seed=2)
+    us, vs = _vecs(3, 30, seed=1), _vecs(3, 30, seed=2)
     for u, v in zip(us, vs):
         truth = u.dot(v)
         p = rf"{B}{{u}} = {tup(u)},\quad {B}{{v}} = {tup(v)} \qquad {B}{{u}}\cdot{B}{{v}} = \;?"
@@ -45,7 +45,7 @@ def dot():
 
 def norm():
     out = []
-    for v in _vecs(3, 14, seed=3):
+    for v in _vecs(3, 30, seed=3):
         truth = v.norm()
         ss = sum(c**2 for c in v)
         cand = [(ss, "missing_factor"), (sum(abs(c) for c in v), "wrong_pair"),

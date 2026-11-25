@@ -11,7 +11,7 @@
   inverse_tier: 2
   f: exp(a*t)
   F: 1/(s - a)
-  params: {a: [-3, -2, -1, 1, 2, 3]}
+  params: {a: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]}
   wrong_F:
     - {F: 1/(s + a), error: sign}
     - {F: s/(s - a), error: algebra}
@@ -30,7 +30,7 @@
   inverse_tier: 2
   f: t**n
   F: factorial(n)/s**(n + 1)
-  params: {n: [1, 2, 3, 4]}
+  params: {n: [1, 2, 3, 4, 5, 6, 7]}
   wrong_F:
     - {F: factorial(n)/s**n, error: algebra}
     - {F: n/s**(n + 1), error: missing_factor}
@@ -49,7 +49,7 @@
   inverse_tier: 2
   f: sin(b*t)
   F: b/(s**2 + b**2)
-  params: {b: [1, 2, 3, 4]}
+  params: {b: [1, 2, 3, 4, 5, 6, 7, 8]}
   wrong_F:
     - {F: s/(s**2 + b**2), error: wrong_pair}
     - {F: b/(s**2 - b**2), error: sign}
@@ -68,7 +68,7 @@
   inverse_tier: 2
   f: cos(b*t)
   F: s/(s**2 + b**2)
-  params: {b: [1, 2, 3, 4]}
+  params: {b: [1, 2, 3, 4, 5, 6, 7, 8]}
   wrong_F:
     - {F: b/(s**2 + b**2), error: wrong_pair}
     - {F: s/(s**2 - b**2), error: sign}
@@ -87,7 +87,7 @@
   inverse_tier: 3
   f: sinh(b*t)
   F: b/(s**2 - b**2)
-  params: {b: [1, 2, 3]}
+  params: {b: [1, 2, 3, 4, 5, 6]}
   wrong_F:
     - {F: b/(s**2 + b**2), error: sign}
     - {F: s/(s**2 - b**2), error: wrong_pair}
@@ -105,7 +105,7 @@
   inverse_tier: 3
   f: cosh(b*t)
   F: s/(s**2 - b**2)
-  params: {b: [1, 2, 3]}
+  params: {b: [1, 2, 3, 4, 5, 6]}
   wrong_F:
     - {F: s/(s**2 + b**2), error: sign}
     - {F: b/(s**2 - b**2), error: wrong_pair}
@@ -123,7 +123,7 @@
   inverse_tier: 2
   f: t*exp(a*t)
   F: 1/(s - a)**2
-  params: {a: [-3, -2, -1, 1, 2, 3]}
+  params: {a: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]}
   wrong_F:
     - {F: 1/(s + a)**2, error: sign}
     - {F: 1/(s - a), error: wrong_pair}
@@ -180,7 +180,7 @@
   inverse_tier: 3
   f: t*sin(b*t)
   F: 2*b*s/(s**2 + b**2)**2
-  params: {b: [1, 2, 3]}
+  params: {b: [1, 2, 3, 4, 5, 6]}
   wrong_F:
     - {F: b*s/(s**2 + b**2)**2, error: missing_factor}
     - {F: (s**2 - b**2)/(s**2 + b**2)**2, error: wrong_pair}
@@ -199,7 +199,7 @@
   inverse_tier: 3
   f: Heaviside(t - c)
   F: exp(-c*s)/s
-  params: {c: [1, 2, 3]}
+  params: {c: [1, 2, 3, 4]}
   wrong_F:
     - {F: exp(c*s)/s, error: sign}
     - {F: exp(-c*s), error: wrong_pair}
@@ -218,7 +218,7 @@
   inverse_tier: 3
   f: DiracDelta(t - c)
   F: exp(-c*s)
-  params: {c: [1, 2, 3]}
+  params: {c: [1, 2, 3, 4]}
   wrong_F:
     - {F: exp(-c*s)/s, error: wrong_pair}
     - {F: exp(c*s), error: sign}
@@ -230,6 +230,7 @@
   hint: '$\mathcal{L}\{\delta(t - c)\} = e^{-cs}$. 적분이 $t = c$에서의 $e^{-st}$ 값 하나만 남긴다.'
 
 - id: lap.deriv1
+  generator: "fx10:deriv1"
   kind: formula
   title: 1계 도함수의 변환
   tier: 1
@@ -242,6 +243,7 @@
   hint: '$\mathcal{L}\{y^{\prime}\} = sY - y(0)$. 부분적분의 경계항에서 $-y(0)$이 나온다.'
 
 - id: lap.deriv2
+  generator: "fx10:deriv2"
   kind: formula
   title: 2계 도함수의 변환
   tier: 1
@@ -255,6 +257,7 @@
   hint: '$\mathcal{L}\{y^{\prime\prime}\} = s^2Y - sy(0) - y^{\prime}(0)$. 1계 공식을 두 번 적용하면 $s$가 $y(0)$에 붙는다.'
 
 - id: lap.sshift
+  generator: "fx10:sshift"
   kind: formula
   title: '$s$-이동 정리'
   tier: 2
@@ -267,6 +270,7 @@
   hint: '시간 영역에서 $e^{at}$를 곱하면 $s$ 영역에서는 $a$만큼 오른쪽으로 이동한다: $F(s - a)$.'
 
 - id: lap.tshift
+  generator: "fx10:tshift"
   kind: formula
   title: '$t$-이동 정리'
   tier: 2
@@ -279,6 +283,7 @@
   hint: '시간 지연 $c$는 $s$ 영역에서 $e^{-cs}$ 인자로 나타난다.'
 
 - id: lap.conv
+  generator: "fx10:conv"
   kind: formula
   title: 합성곱 정리
   tier: 3
@@ -291,6 +296,7 @@
   hint: '시간 영역의 합성곱은 $s$ 영역의 곱. 전달함수 $Y = G\,F$가 여기서 나온다.'
 
 - id: lap.tmult
+  generator: "fx10:tmult"
   kind: formula
   title: t를 곱하면
   tier: 3
@@ -303,6 +309,7 @@
   hint: '$e^{-st}$를 $s$로 미분하면 $-t$가 나온다. 그래서 $t$를 곱하는 것은 $-\dfrac{d}{ds}$.'
 
 - id: lap.integral
+  generator: "fx10:integral"
   kind: formula
   title: 적분의 변환
   tier: 3

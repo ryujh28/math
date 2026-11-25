@@ -1,6 +1,6 @@
 // 게임 모드: 미니멀 훈련(mcq), 순서 맞추기(order).
 // 각 모드는 화면을 그리고, 플레이어가 끝내면 결과를 resolve하는 Promise를 돌려준다.
-import { render, html, renderProblem, rich } from './tex.js';
+import { render, html, renderProblem, renderPrompt, rich, fit } from './tex.js';
 
 const el = (tag, cls, text) => {
   const e = document.createElement(tag);
@@ -41,27 +41,34 @@ function nextButton(box, label = '다음', extra = null) {
 }
 
 // ------------------------------------------------------------------ 미니멀 훈련
+/** 객관식 화면(문제·시간 막대·보기)을 그린다. 채점 흐름과 분리해 두어 레이아웃만 따로 검사할 수 있다. */
+export function mcqBody(root, item) {
+  root.textContent = '';
+  const pr = el('div', 'prompt');
+  renderPrompt(pr, item.prompt);
+  root.appendChild(pr);
+  const bar = el('div', 'tbar');
+  const fill = el('i');
+  bar.appendChild(fill);
+  root.appendChild(bar);
+  const opts = shuffle([{ tex: item.answer, ok: true }, ...shuffle(item.wrong).slice(0, 3)]);
+  const box = el('div', 'opts');
+  const btns = opts.map((o, i) => {
+    const b = el('button', 'opt');
+    b.innerHTML = `<small>${i + 1}</small>` + html(o.tex);
+    box.appendChild(b);
+    return b;
+  });
+  root.appendChild(box);
+  fit(root);
+  return { pr, fill, opts, btns, box };
+}
+
 export function playMcq(root, item, ctx) {
   return new Promise((resolve) => {
-    root.textContent = '';
     const limit = item.tier >= 3 || item.verified === 'hand' ? 15000 : item.tier === 2 ? 12000 : 9000;
-    const pr = el('div', 'prompt');
-    render(pr, item.prompt, true);
-    root.appendChild(pr);
-    const bar = el('div', 'tbar');
-    const fill = el('i');
-    bar.appendChild(fill);
-    root.appendChild(bar);
-    const opts = shuffle([{ tex: item.answer, ok: true }, ...shuffle(item.wrong).slice(0, 3)]);
-    const box = el('div', 'opts');
-    const btns = opts.map((o, i) => {
-      const b = el('button', 'opt');
-      b.innerHTML = `<small>${i + 1}</small>` + html(o.tex);
-      b.addEventListener('click', () => choose(i));
-      box.appendChild(b);
-      return b;
-    });
-    root.appendChild(box);
+    const { fill, opts, btns } = mcqBody(root, item);
+    btns.forEach((b, i) => b.addEventListener('click', () => choose(i)));
     const fb = el('div', 'fb');
     root.appendChild(fb);
     const t0 = performance.now();
@@ -142,9 +149,10 @@ export function playOrder(root, item, ctx) {
     function draw() {
       solBox.textContent = '';
       sol.forEach((b, i) => solBox.appendChild(tile(b, () => { if (done) return; pool.push(...sol.splice(i, 1)); marks.clear(); draw(); }, marks.get(b) || '')));
-      if (!sol.length) solBox.appendChild(el('p', 'note', '오른쪽 블록을 눌러 순서대로 쌓으세요'));
+      if (!sol.length) solBox.appendChild(el('p', 'note', '블록을 눌러 순서대로 쌓으세요'));
       poolBox.textContent = '';
       pool.forEach((b, i) => poolBox.appendChild(tile(b, () => { if (done) return; sol.push(...pool.splice(i, 1)); marks.clear(); draw(); })));
+      fit(root);
     }
     draw();
 
@@ -197,6 +205,7 @@ export function playOrder(root, item, ctx) {
         list.appendChild(d);
       });
       fb.appendChild(list);
+      fit(fb);
       if (ctx.hint) {
         const h = el('p', 'hint');
         h.innerHTML = ctx.hintHtml || escapeHtml(ctx.hint);

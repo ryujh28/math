@@ -5,6 +5,7 @@
 - {id: la.eigtri, kind: gen, title: 삼각행렬의 고유값, generator: "la3:eig_triangular", hint: '삼각행렬의 고유값은 대각성분 그대로.'}
 - {id: la.trdet, kind: gen, title: 고유값과 trace·det, generator: "la3:trace_det", hint: '고유값의 합은 $\operatorname{tr}A$, 곱은 $\det A$.'}
 - id: la.symeig
+  generator: "fx3:symeig"
   kind: formula
   title: 대칭행렬의 고유값
   tier: 1
@@ -16,6 +17,7 @@
     - {tex: '\text{고유벡터는 서로 평행}', error: theorem_condition}
   hint: '실대칭행렬: 고유값은 실수, 고유벡터는 직교, 항상 직교대각화 가능 (스펙트럼 정리).'
 - id: la.similar
+  generator: "fx3:similar"
   kind: formula
   title: 닮은 행렬
   tier: 2
@@ -27,6 +29,7 @@
     - {tex: '\text{전치행렬}', error: wrong_pair}
   hint: '닮음 변환은 좌표계만 바꾼다. 고유값은 같고, 고유벡터는 $\mathbf{v} \mapsto P^{-1}\mathbf{v}$로 바뀐다.'
 - id: la.eigpow
+  generator: "fx3:eigpow"
   kind: formula
   title: 거듭제곱과 역행렬의 고유값
   tier: 2
