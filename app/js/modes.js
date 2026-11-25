@@ -1,4 +1,4 @@
-// 게임 모드: 미니멀 훈련(mcq), 순서 맞추기(order).
+// 게임 모드: 미니멀 훈련(mcq), 순서 맞추기(order), 오류 사냥(hunt).
 // 각 모드는 화면을 그리고, 플레이어가 끝내면 결과를 resolve하는 Promise를 돌려준다.
 import { render, html, renderProblem, renderPrompt, rich, fit } from './tex.js';
 
@@ -8,10 +8,10 @@ const el = (tag, cls, text) => {
   if (text != null) e.textContent = text;
   return e;
 };
-export const shuffle = (a) => {
+export const shuffle = (a, rand = Math.random) => {
   a = a.slice();
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(rand() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
@@ -223,4 +223,144 @@ export function playOrder(root, item, ctx) {
 
 export function escapeHtml(s) {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// ------------------------------------------------------------------ 오류 사냥
+/**
+ * 순서 맞추기 문제의 오답 블록 하나를 제자리에 끼워 넣어, 한 줄만 틀린 풀이를 만든다.
+ * (1) 틀린 줄 찾기 → (2) 오류 종류 고르기 → (3) 올바른 줄로 고치기 (같은 자리의 다른 오답이 있을 때)
+ * 결과: {lineOk, typeOk, fixOk, fast, taps, ms, error}
+ */
+export function huntCase(item, rand = Math.random) {
+  const d = item.decoys[Math.floor(rand() * item.decoys.length)];
+  const lines = item.steps.slice();
+  lines[d.pos] = d.tex;
+  const others = item.decoys.filter((x) => x !== d && x.pos === d.pos && x.tex !== item.steps[d.pos]);
+  const chips = shuffle([{ tex: item.steps[d.pos], ok: true }, ...shuffle(others).slice(0, 2).map((x) => ({ tex: x.tex, ok: false }))], rand);
+  return { d, lines, chips };
+}
+
+export function playHunt(root, item, ctx) {
+  return new Promise((resolve) => {
+    root.textContent = '';
+    const { d, lines, chips } = huntCase(item);
+    const pr = el('div', 'prompt small');
+    renderProblem(pr, item.problem);
+    root.appendChild(pr);
+    const lab = el('div', 'lab hunt-lab', '이 풀이의 한 줄에 실수가 하나 있습니다. 틀린 줄을 누르세요.');
+    root.appendChild(lab);
+    const box = el('div', 'slots hunt');
+    root.appendChild(box);
+    const stage = el('div', 'hunt-stage');
+    root.appendChild(stage);
+    const fb = el('div', 'fb');
+    root.appendChild(fb);
+    const t0 = performance.now();
+    let taps = 0, lineOk = false, typeOk = false, fixOk = true, phase = 'line';
+    const btns = lines.map((t, i) => {
+      const b = el('button', 'blk');
+      b.innerHTML = html(t);
+      b.addEventListener('click', () => tapLine(i));
+      box.appendChild(b);
+      return b;
+    });
+    fit(root);
+
+    function tapLine(i) {
+      if (phase !== 'line') return;
+      taps++;
+      if (i === d.pos) {
+        btns[i].classList.add('err');
+        lineOk = taps <= 2;
+        return askType();
+      }
+      btns[i].classList.add('miss');
+      btns[i].disabled = true;
+      if (taps >= 3) {
+        btns[d.pos].classList.add('err');
+        lineOk = false;
+        lab.textContent = `${d.pos + 1}번째 줄이 틀렸습니다.`;
+        return askType();
+      }
+      lab.textContent = taps === 1 ? '그 줄은 맞습니다. 다시 골라 보세요.' : '그 줄도 맞습니다. 한 번 더.';
+    }
+
+    function askType() {
+      phase = 'type';
+      btns.forEach((b) => { b.disabled = true; });
+      lab.textContent = `${d.pos + 1}번째 줄의 실수는 어떤 종류인가요?`;
+      const pool = (ctx.errorIds || []).filter((x) => x !== d.error);
+      const opts = shuffle([d.error, ...shuffle(pool).slice(0, 3)]);
+      stage.textContent = '';
+      const grid = el('div', 'opts types');
+      const tbtn = opts.map((id, k) => {
+        const b = el('button', 'opt');
+        b.innerHTML = `<small>${k + 1}</small>${escapeHtml(ctx.errName(id))}`;
+        b.addEventListener('click', () => pickType(k));
+        grid.appendChild(b);
+        return b;
+      });
+      stage.appendChild(grid);
+      function pickType(k) {
+        if (phase !== 'type') return;
+        typeOk = opts[k] === d.error && taps === 1;
+        tbtn.forEach((b, j) => {
+          b.disabled = true;
+          if (opts[j] === d.error) b.classList.add('good');
+          else if (j === k) b.classList.add('bad');
+        });
+        if (chips.length > 1) askFix(); else end();
+      }
+      onKey((e) => { const k = +e.key - 1; if (phase === 'type' && k >= 0 && k < opts.length) pickType(k); });
+    }
+
+    function askFix() {
+      phase = 'fix';
+      lab.textContent = '어떻게 고쳐야 하나요?';
+      const grid = el('div', 'opts fix');
+      const cb = chips.map((c, k) => {
+        const b = el('button', 'opt');
+        b.innerHTML = `<small>${k + 1}</small>${html(c.tex)}`;
+        b.addEventListener('click', () => pickFix(k));
+        grid.appendChild(b);
+        return b;
+      });
+      stage.appendChild(grid);
+      fit(stage);
+      function pickFix(k) {
+        if (phase !== 'fix') return;
+        fixOk = chips[k].ok;
+        cb.forEach((b, j) => {
+          b.disabled = true;
+          if (chips[j].ok) b.classList.add('good');
+          else if (j === k) b.classList.add('bad');
+        });
+        end();
+      }
+      onKey((e) => { const k = +e.key - 1; if (phase === 'fix' && k >= 0 && k < chips.length) pickFix(k); });
+    }
+
+    async function end() {
+      phase = 'done';
+      onKey(null);
+      const ms = Math.round(performance.now() - t0);
+      const fast = lineOk && typeOk && fixOk && ms < 6000 + lines.length * 4000;
+      // 고친 풀이를 보여 준다
+      btns[d.pos].innerHTML = html(item.steps[d.pos]);
+      btns[d.pos].classList.remove('err');
+      btns[d.pos].classList.add('fixed-line');
+      fit(box);
+      lab.textContent = `고친 풀이 (${d.pos + 1}번째 줄)`;
+      const good = lineOk && typeOk;
+      const head = good ? '<b class="ok">찾았습니다</b>'
+        : taps === 1 ? '<b class="no">줄은 찾았지만 종류가 틀림</b>'
+        : taps === 2 ? '<b class="no">두 번째에 찾음</b>' : '<b class="no">놓침</b>';
+      fb.innerHTML = `<div>${head} · ${escapeHtml(ctx.errName(d.error))} — ${rich(d.why)}</div>`;
+      if (good) ctx.onCorrect?.(fb);
+      await nextButton(fb, '다음', ctx.derivButton);
+      resolve({ lineOk, typeOk, fixOk, fast, taps, ms, error: good ? null : d.error });
+    }
+
+    onKey((e) => { const k = +e.key - 1; if (phase === 'line' && k >= 0 && k < lines.length) tapLine(k); });
+  });
 }

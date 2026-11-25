@@ -114,3 +114,12 @@ select { font: inherit; padding: 8px 10px; border-radius: 8px; border: 1.5px sol
 #sync-token { flex: 1 1 220px; min-width: 0; min-height: 44px; font: 14px ui-monospace, Menlo, monospace; padding: 0 10px;
   border: 1.5px solid var(--line); border-radius: 10px; background: var(--card); color: var(--ink); }
 #sync-status a { color: var(--blue); }
+
+/* 오류 사냥 */
+.hunt-lab { margin: 10px 0 6px; font-size: 14px; color: var(--ink); font-weight: 600; }
+.slots.hunt .blk { width: 100%; text-align: left; }
+.slots.hunt .blk:disabled { opacity: 1; cursor: default; }
+.blk.miss { opacity: .45 !important; text-decoration: line-through; }
+.blk.fixed-line { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 10%, var(--card)); }
+.hunt-stage .opts { margin-top: 10px; }
+.opts.types .opt { font-size: 15px; padding: 12px 8px 12px 22px; }

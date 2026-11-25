@@ -13,7 +13,7 @@ export function migrateSettings(saved = {}) {
   return s;
 }
 export const EXTRA = { minutes: 5, bonusNew: 2 };
-const EST = { mcq: 10, order: 75, intro: 20 }; // 초
+const EST = { mcq: 10, order: 75, hunt: 40, intro: 20 }; // 초
 
 const dayKey = (ts) => new Date(ts).toLocaleDateString('sv-SE'); // YYYY-MM-DD (로컬)
 
@@ -57,6 +57,19 @@ export function openChapters(index, packs, states, settings) {
 }
 
 const modeOf = (u) => (u.kind === 'schema' ? 'order' : 'mcq');
+
+/**
+ * 복습할 때의 모드. 풀이 뼈대는 순서 맞추기를 두 번 이상 맞힌 뒤부터
+ * 오류 사냥과 순서 맞추기를 번갈아 낸다 (풀이를 외워 버리지 않고, 검증하는 눈을 기르게).
+ */
+export const HUNT_AFTER = 2;
+export function reviewMode(u, st, log) {
+  if (u.kind !== 'schema') return 'mcq';
+  if (!st || st.correct < HUNT_AFTER) return 'order';
+  let last = null;
+  for (let i = log.length - 1; i >= 0; i--) if (log[i].unit === u.id && log[i].mode) { last = log[i].mode; break; }
+  return last === 'hunt' ? 'order' : 'hunt';
+}
 
 /** 아직 배우지 않은 단위를 장끼리 번갈아 가며, 장 안에서는 쉬운 것부터. */
 export function newCandidates(meta, open, states) {
@@ -103,9 +116,10 @@ export function planSession({ index, packs, states, log, settings = DEFAULTS, no
     if (atoms.length) rest.push(atoms.shift());
   }
   for (const m of rest) {
-    const c = EST[modeOf(m.unit)];
+    const mode = reviewMode(m.unit, states.get(m.unit.id), log);
+    const c = EST[mode];
     if (est + c > budget && queue.length) break;
-    queue.push({ unit: m.unit.id, chapter: m.chapter, mode: modeOf(m.unit), isNew: false });
+    queue.push({ unit: m.unit.id, chapter: m.chapter, mode, isNew: false });
     est += c;
   }
   const dueCount = queue.length;
@@ -153,9 +167,10 @@ export function planExtra({ index, packs, states, log, settings = DEFAULTS, now 
   const queue = [];
   let est = 0;
   for (const m of mixed) {
-    const c = EST[modeOf(m.unit)];
+    const mode = reviewMode(m.unit, states.get(m.unit.id), log);
+    const c = EST[mode];
     if (est + c > budget) continue;
-    queue.push({ unit: m.unit.id, chapter: m.chapter, mode: modeOf(m.unit), isNew: false });
+    queue.push({ unit: m.unit.id, chapter: m.chapter, mode, isNew: false });
     est += c;
   }
   const reviewCount = queue.length;

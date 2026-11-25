@@ -4,7 +4,7 @@ import * as store from './store.js';
 import { makeSync } from './sync.js';
 import * as E from './engine.js';
 import * as S from './session.js';
-import { playMcq, playOrder, clearKeys, escapeHtml, shuffle } from './modes.js';
+import { playMcq, playOrder, playHunt, clearKeys, escapeHtml, shuffle } from './modes.js';
 import { rich, setRich, html, renderPrompt, renderProblem, fit, shrink } from './tex.js';
 
 const $ = (s) => document.querySelector(s);
@@ -98,6 +98,21 @@ async function reload() {
 }
 
 const hintHtml = (t) => rich(t);
+
+/** 오류 사냥의 '오류 종류' 보기: 그 장의 문제에 실제로 나오는 오류 종류만 (Laplace에 Jacobian이 섞이지 않게). */
+const errCache = new Map();
+function chapterErrors(ch) {
+  if (!errCache.has(ch)) {
+    const seen = new Set();
+    for (const it of G.packs.get(ch)?.items || []) {
+      for (const w of it.wrong || []) if (w.error) seen.add(w.error);
+      for (const d of it.decoys || []) if (d.error) seen.add(d.error);
+    }
+    const ids = G.index.errors.map((x) => x.id).filter((id) => seen.has(id));
+    errCache.set(ch, ids.length >= 4 ? ids : G.index.errors.map((x) => x.id));
+  }
+  return errCache.get(ch);
+}
 
 const errName = (id) => G.errName[id] || (id === 'timeout' ? '시간 초과' : id || '');
 
@@ -279,7 +294,7 @@ function renderChapter(cid) {
     const tr = el('tr');
     const n = p.items.filter((it) => it.unit === u.id).length;
     tr.appendChild(setRich(el('td'), u.title));
-    tr.appendChild(el('td', null, u.kind === 'atom' ? '미니멀 훈련' : '순서 맞추기'));
+    tr.appendChild(el('td', null, u.kind === 'atom' ? '미니멀 훈련' : st && st.correct >= S.HUNT_AFTER ? '순서·오류 사냥' : '순서 맞추기'));
     tr.appendChild(el('td', 'num', String(n)));
     tr.appendChild(el('td', null, !st ? '새 단위' : E.isMastered(st) ? '숙련' : E.isDue(st) ? '복습 필요' : '학습 중'));
     const td = el('td');
@@ -389,10 +404,11 @@ async function runSession(chapter, extra = false) {
     const st = G.states.get(e.unit);
     const item = S.pickItem(m, st, G.log);
     const ctx = {
-      hint: m.unit.hint, hintHtml: hintHtml(m.unit.hint), errName, derivButton: () => derivButton(m),
+      hint: m.unit.hint, hintHtml: hintHtml(m.unit.hint), errName, derivButton: () => derivButton(m), errorIds: chapterErrors(m.chapter),
       prefill: e.mode === 'order' && (!st || st.attempts < 2) && item.tier === 1 ? 1 : 0,
     };
-    const result = await race((e.mode === 'mcq' ? playMcq : playOrder)(card, item, ctx));
+    const play = { mcq: playMcq, order: playOrder, hunt: playHunt }[e.mode];
+    const result = await race(play(card, item, ctx));
     if (G.quit) break;
     const grade = E.gradeFor(e.mode, result);
     const row = await store.addAttempt({ unit: e.unit, item: item.id, mode: e.mode, grade, ms: result.ms, result, error: result.error || null, sid });
