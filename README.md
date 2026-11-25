@@ -26,7 +26,7 @@ tools/test_engine.mjs, test_session.mjs  엔진·세션 테스트
 ```bash
 pip install -r tools/requirements.txt     # 처음 한 번
 python3 tools/build.py                    # 모든 장 빌드 (특정 장만: python3 tools/build.py 10)
-node tools/test_engine.mjs && node tools/test_session.mjs   # 테스트
+node tools/test_engine.mjs && node tools/test_session.mjs && node tools/test_sync.mjs   # 테스트
 node tools/check_tex.mjs                  # 팩의 모든 수식·문장을 KaTeX로 렌더링 검사
 python3 -m http.server 8000               # 로컬 실행 → http://localhost:8000
 ```
@@ -57,6 +57,15 @@ https://ryujh28.github.io/math/ 에서 열린다. 팩을 새로 빌드했으면 
   - 유도 창은 문제 상황 → 이 단위의 실제 예시 문제(가장 낮은 단계, 눌러서 답 보기) → 유도 순으로 보여 준다. 예시 문제는 팩에서 자동으로 고른다.
 - 힌트·오답 설명·장 요약·연결 카드·유도의 수식은 `$…$`로 감싼 TeX로 쓴다. 앱이 KaTeX로 그리고, `check_tex.mjs`가 `$` 밖에 남은 TeX 흔적이나 유니코드 위첨자를 잡는다.
 
+## 기기 동기화 (GitHub Gist)
+
+- 설정 → 기기 동기화에 GitHub 토큰(Gist 권한만)을 넣으면 연결된다. 첫 기기는 비밀 Gist를 만들고, 다음 기기는 같은 설명의 Gist를 찾아 붙는다.
+- Gist 안 파일: `log-<기기 id>-<YYYYMM>.json` (그 기기가 그 달에 남긴 시도 기록 배열). 기기는 자기 파일만 쓰고 모든 파일을 읽어 id 기준으로 합친다 → 동시에 플레이해도 덮어쓰기 충돌이 없다.
+- 언제: 앱을 열 때, 세션이 끝날 때, 앱으로 돌아올 때(visibilitychange), "지금 동기화".
+- 올리기는 개수가 달라진 달 파일만, 받기는 크기가 달라진 파일만. 1MB가 넘어 응답에서 잘린 파일은 raw_url로 받는다.
+- 토큰은 이 브라우저의 IndexedDB(ryujh28.github.io 출처)에만 저장된다. 같은 출처의 다른 페이지도 읽을 수 있으므로 Gist 권한만 준 토큰을 쓴다.
+- 검사: `node tools/test_sync.mjs` (가짜 Gist 서버로 두 기기·월 경계·잘린 파일·기기 초기화 복구).
+
 ## 화면 폭 원칙 (모바일)
 
 - 가로로 밀어야 보이는 화면을 만들지 않는다. 기준 폭 390px(일반 휴대폰), 340px까지 확인.
@@ -64,6 +73,10 @@ https://ryujh28.github.io/math/ 에서 열린다. 팩을 새로 빌드했으면 
 - 그래도 넓은 수식(큰 행렬 등)은 글자 크기를 줄여 맞춘다 (`fit`, 최소 55%). 보기 하나라도 넘치면 보기를 한 줄에 하나씩 놓는다. 블록·보기 안의 인라인 수식은 `=`·`+` 뒤에서 줄바꿈될 수 있다.
 - 장 화면 표는 560px 이하에서 단위·상태·기억·유도 열만 남긴다.
 - 점검: `tools/measure.html`을 띄워 (로컬 서버에서) 모든 문제를 실제 CSS로 그리고 넘치는 요소를 센다 (개발용, 배포에 필요 없음).
+
+## M2.1 변경
+
+- GitHub Gist 기기 동기화 (위 절).
 
 ## M1.4 변경
 

@@ -1,6 +1,7 @@
 // 게임 본체: 홈(오늘 세션·스킬 지도), 장 상세, 세션, 요약.
 import { loadIndex, loadBuiltPacks } from './packs.js';
 import * as store from './store.js';
+import { makeSync } from './sync.js';
 import * as E from './engine.js';
 import * as S from './session.js';
 import { playMcq, playOrder, clearKeys, escapeHtml, shuffle } from './modes.js';
@@ -19,6 +20,76 @@ const G = { index: null, packs: null, meta: null, log: [], states: new Map(), se
 function show(view) {
   for (const v of ['home', 'chapter', 'session', 'summary']) $('#' + v).hidden = v !== view;
   window.scrollTo(0, 0);
+}
+
+// ------------------------------------------------------------------ 기기 동기화
+const SYNC = makeSync(store);
+let syncing = null;
+
+function ago(ts) {
+  if (!ts) return '아직 없음';
+  const m = Math.round((Date.now() - ts) / 60000);
+  return m < 1 ? '방금' : m < 60 ? `${m}분 전` : m < 1440 ? `${Math.round(m / 60)}시간 전` : `${Math.round(m / 1440)}일 전`;
+}
+
+async function showSync(msg) {
+  const cfg = await SYNC.config();
+  $('#sync-off').hidden = !!cfg;
+  $('#sync-on').hidden = !cfg;
+  if (cfg) {
+    const link = cfg.url ? ` · <a href="${cfg.url}" target="_blank" rel="noopener">Gist 보기</a>` : '';
+    $('#sync-status').innerHTML = `${escapeHtml(cfg.login || '')} 계정에 연결됨 · 기기 ${escapeHtml(await store.deviceId())} · 마지막 동기화 ${ago(cfg.last)}${link}` +
+      (msg ? `<br>${escapeHtml(msg)}` : '');
+  }
+  $('#sync-msg').textContent = cfg ? '' : msg || '';
+}
+
+/** 동기화 한 번. 다른 기기 기록이 들어오면 상태를 다시 계산하고 화면을 새로 그린다. */
+async function syncNow({ quiet = false } = {}) {
+  if (syncing) return syncing;
+  syncing = (async () => {
+    try {
+      const r = await SYNC.syncNow();
+      if (!r) return null;
+      if (r.pulled) {
+        await reload();
+        if (!$('#home').hidden) renderHome();
+      }
+      await showSync(quiet ? '' : `받음 ${r.pulled}개 · 올림 ${r.pushed}개`);
+      return r;
+    } catch (e) {
+      await showSync(e.kind === 'network' ? '오프라인이라 다음에 다시 시도합니다.' : `동기화 실패: ${e.message}`);
+      return null;
+    } finally {
+      syncing = null;
+    }
+  })();
+  return syncing;
+}
+
+function bindSync() {
+  $('#sync-connect').addEventListener('click', async () => {
+    const token = $('#sync-token').value;
+    if (!token.trim()) return;
+    $('#sync-connect').disabled = true;
+    try {
+      const { created } = await SYNC.connect(token);
+      $('#sync-token').value = '';
+      await showSync(created ? '새 비밀 Gist를 만들었습니다.' : '기존 기록 Gist에 연결했습니다.');
+      await syncNow();
+    } catch (e) {
+      await showSync(`연결 실패: ${e.message}`);
+    } finally {
+      $('#sync-connect').disabled = false;
+    }
+  });
+  $('#sync-now').addEventListener('click', () => syncNow());
+  $('#sync-disconnect').addEventListener('click', async () => {
+    await SYNC.disconnect();
+    await showSync('연결을 해제했습니다. 이 기기의 기록은 그대로 남아 있습니다.');
+  });
+  // 앱으로 돌아올 때마다 받아 온다 (폰에서 하다가 맥을 열 때 등)
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') syncNow({ quiet: true }); });
 }
 
 async function reload() {
@@ -350,6 +421,7 @@ async function runSession(chapter, extra = false) {
   clearKeys();
   const minutes = Math.round((Date.now() - t0) / 6e4 * 10) / 10;
   if (done > 0) G.log.push(await store.addAttempt({ kind: 'session', sid, n: done, correct, minutes, chapter, extra }));
+  if (done > 0) syncNow({ quiet: true });
   const masteredNow = [...G.states].filter(([u, st]) => E.isMastered(st) && !masteredBefore.has(u)).map(([u]) => u);
   await renderSummary({ done, correct, best, minutes, newUnits: [...newUnits], masteredNow, chapters: [...chaptersSeen], chapter, round: G.round = (extra ? (G.round || 1) + 1 : 1) });
 }
@@ -425,8 +497,11 @@ async function main() {
   $('#deriv').addEventListener('click', (e) => { if (e.target.id === 'deriv') closeDerivation(); });
   $('#sum-home').addEventListener('click', renderHome);
   $('#s-quit').addEventListener('click', () => { G.quit = true; clearKeys(); $('#card').textContent = ''; G.quitR?.(); });
+  bindSync();
+  await showSync();
   renderHome();
   document.body.dataset.ready = '1';
+  syncNow({ quiet: true });
 }
 
 main();

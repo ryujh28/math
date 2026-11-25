@@ -106,3 +106,11 @@ select { font: inherit; padding: 8px 10px; border-radius: 8px; border: 1.5px sol
   .units td:first-child { white-space: normal; overflow-wrap: anywhere; }
   .units td:first-child .katex { white-space: normal; }
 }
+
+/* 기기 동기화 */
+.sync { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+.sync h3 { font-size: 15px; margin: 0 0 4px; }
+.sync .row { flex-wrap: wrap; }
+#sync-token { flex: 1 1 220px; min-width: 0; min-height: 44px; font: 14px ui-monospace, Menlo, monospace; padding: 0 10px;
+  border: 1.5px solid var(--line); border-radius: 10px; background: var(--card); color: var(--ink); }
+#sync-status a { color: var(--blue); }
