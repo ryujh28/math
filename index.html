@@ -3,38 +3,53 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#16181c">
+<meta name="theme-color" content="#f7f5f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151412" media="(prefers-color-scheme: dark)">
 <title>Isn't she lovely</title>
 <link rel="stylesheet" href="app/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="app/css/style.css?v=bdd8965528">
-<link rel="stylesheet" href="app/css/game.css?v=bdd8965528">
+<link rel="stylesheet" href="app/css/style.css?v=0dd2972b8f">
+<link rel="stylesheet" href="app/css/game.css?v=0dd2972b8f">
 <script src="app/vendor/katex/katex.min.js"></script>
-<script type="importmap" id="stamp">{"imports": {"./app/js/check.js": "./app/js/check.js?v=bdd8965528", "./app/js/engine.js": "./app/js/engine.js?v=bdd8965528", "./app/js/game.js": "./app/js/game.js?v=bdd8965528", "./app/js/modes.js": "./app/js/modes.js?v=bdd8965528", "./app/js/packs.js": "./app/js/packs.js?v=bdd8965528", "./app/js/session.js": "./app/js/session.js?v=bdd8965528", "./app/js/store.js": "./app/js/store.js?v=bdd8965528", "./app/js/sync.js": "./app/js/sync.js?v=bdd8965528", "./app/js/tex.js": "./app/js/tex.js?v=bdd8965528"}}</script>
+<script type="importmap" id="stamp">{"imports": {"./app/js/check.js": "./app/js/check.js?v=0dd2972b8f", "./app/js/engine.js": "./app/js/engine.js?v=0dd2972b8f", "./app/js/game.js": "./app/js/game.js?v=0dd2972b8f", "./app/js/modes.js": "./app/js/modes.js?v=0dd2972b8f", "./app/js/packs.js": "./app/js/packs.js?v=0dd2972b8f", "./app/js/session.js": "./app/js/session.js?v=0dd2972b8f", "./app/js/store.js": "./app/js/store.js?v=0dd2972b8f", "./app/js/sync.js": "./app/js/sync.js?v=0dd2972b8f", "./app/js/tex.js": "./app/js/tex.js?v=0dd2972b8f"}}</script>
 </head>
 <body class="game">
 
 <section id="home" class="view">
   <header class="top">
-    <div>
-      <h1>Isn't she lovely</h1>
-      <p class="sub" id="streak"></p>
-    </div>
+    <div class="brand">Isn't she lovely</div>
+    <button class="iconbtn" id="open-settings" aria-label="설정" aria-haspopup="dialog">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg>
+    </button>
   </header>
   <main>
-    <section class="card today" id="today"><p class="note">불러오는 중…</p></section>
-    <section class="card">
-      <h2>스킬 지도</h2>
+    <section class="today" id="today"><p class="note">불러오는 중…</p></section>
+    <section class="open-chs">
+      <div class="sec-head"><h2>열린 장</h2><button class="linkbtn" id="map-toggle" aria-expanded="false" aria-controls="map-wrap">전체 지도</button></div>
+      <div id="open-list" class="chlist"></div>
+      <p class="note" id="next-open"></p>
+    </section>
+    <section class="mapwrap" id="map-wrap" hidden>
       <p class="note">막대는 배운 단위의 기억 유지 평균입니다. 시간이 지나면 줄어들고, 복습하면 다시 찹니다.</p>
+      <label class="switch small"><input type="checkbox" id="map-unbuilt"> 준비 중인 장도 보기</label>
       <div id="map"></div>
     </section>
-    <section class="card settings">
-      <h2>설정</h2>
+  </main>
+</section>
+
+<div id="settings" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="settings-title">
+  <div class="sheet settings">
+    <div class="sheet-head"><h2 id="settings-title">설정</h2><button class="iconbtn" id="settings-close" aria-label="닫기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></div>
+
+      
       <div class="row">
         <label>세션 길이
           <select id="set-min"><option value="5">5분</option><option value="10">10분</option><option value="15">15분</option></select>
         </label>
         <label>하루 새 단위
           <select id="set-new"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option></select>
+        </label>
+        <label>제한시간
+          <select id="set-time"><option value="1">기본</option><option value="1.5">1.5배</option><option value="2">2배</option><option value="3">3배</option></select>
         </label>
         <label class="switch"><input type="checkbox" id="set-test"> 테스트 모드: 모든 장 열기</label>
       </div>
@@ -57,13 +72,12 @@
           </div>
         </div>
       </div>
-    </section>
-  </main>
-</section>
+  </div>
+</div>
 
 <section id="chapter" class="view" hidden>
   <main>
-    <button class="btn ghost" id="ch-back">← 홈</button>
+    <button class="linkbtn back" id="ch-back"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>홈</button>
     <section class="card">
       <h2 id="ch-title"></h2>
       <p class="note" id="ch-meta"></p>
@@ -83,13 +97,15 @@
 <section id="session" class="view" hidden>
   <div class="sbar">
     <div class="sbar-row">
-      <span id="s-count"></span>
+      <button class="iconbtn" id="s-quit" aria-label="세션 끝내기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      <div class="prog"><i id="s-prog"></i></div>
+      <span id="s-count" class="s-count"></span>
+    </div>
+    <div class="sbar-sub">
       <span id="s-unit" class="s-unit"></span>
       <span id="s-combo" class="combo"></span>
-      <span id="s-time"></span>
-      <button class="btn ghost small" id="s-quit">끝내기</button>
+      <span id="s-time" class="s-time"></span>
     </div>
-    <div class="prog"><i id="s-prog"></i></div>
   </div>
   <main>
     <section class="card play" id="card"></section>
@@ -99,9 +115,9 @@
 <section id="summary" class="view" hidden>
   <main>
     <section class="card">
-      <h2>오늘 세션 끝</h2>
+      <h1 class="headline">오늘 세션 끝</h1>
       <div id="sum-body"></div>
-      <div class="row"><button class="btn big" id="sum-more" hidden>한 판 더</button><button class="btn ghost" id="sum-home">홈으로</button></div>
+      <div class="sum-actions"><button class="btn ghost" id="sum-home">홈으로</button><button class="btn big" id="sum-more" hidden>한 판 더</button></div>
     </section>
   </main>
 </section>
@@ -111,10 +127,10 @@
     <div class="kicker" id="deriv-kicker"></div>
     <h2 id="deriv-title"></h2>
     <div id="deriv-body" class="deriv-body"></div>
-    <div class="row"><button class="btn" id="deriv-close">닫기 (Esc)</button></div>
+    <div class="row"><button class="btn" id="deriv-close">닫기</button></div>
   </div>
 </div>
 
-<script type="module" src="app/js/game.js?v=bdd8965528"></script>
+<script type="module" src="app/js/game.js?v=0dd2972b8f"></script>
 </body>
 </html>

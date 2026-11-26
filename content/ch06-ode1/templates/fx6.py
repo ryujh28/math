@@ -39,6 +39,8 @@ def linformula():
             out.append(_case(rf"{lhs} = {tex(q)}\ \text{{의 일반해}}", "y = " + tex(truth), lambda g=truth, ok=ok: ok(g),
                              [("y = " + tex(g), lambda g=g, ok=ok: ok(g), e) for g, e in cand],
                              tier=1 if not q.has(x) else 2, params={"a": a, "q": str(q)}))
+            if q.has(x):
+                out[-1]["pace"] = "heavy"  # 우변 적분에 부분적분이 들어간다
     return out
 
 

@@ -169,6 +169,7 @@ def _gen_items(a, uid, gen_ref, report, seed, start):
             continue  # 같은 문제·같은 정답이면 중복
         items.append({"id": f"{uid}#{n}", "unit": uid, "type": "mcq", "tier": tr, "dir": c.get("dir", "fwd"),
                       "prompt": c["prompt"], "answer": c["answer"]["tex"], "wrong": wr, "params": _jp(c.get("params", {})),
+                      **({"pace": c["pace"]} if c.get("pace") else {}),
                       **({"gen": gen_ref} if gen_ref else {})})
         n += 1
         tiers.add(tr)

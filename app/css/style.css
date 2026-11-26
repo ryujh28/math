@@ -1,23 +1,25 @@
 :root {
   color-scheme: light dark;
-  --bg: light-dark(#fbfbf9, #11151b);
-  --grid: light-dark(#e8edf2, #19202a);
-  --card: light-dark(#ffffff, #18202a);
-  --ink: light-dark(#16181c, #e9ecef);
-  --mute: light-dark(#5b6270, #9aa3ae);
-  --line: light-dark(#d3d9e0, #2c3644);
-  --soft: light-dark(#f1f4f8, #1f2833);
-  --red: #e5482d;
-  --blue: light-dark(#2d5be3, #86a2ff);
-  --ok: light-dark(#1d8a4b, #4fcb87);
+  /* A안 · 종이와 잉크: 미색 종이, 먹색 글자, 상태색은 세 가지(파랑 진행 · 초록 정답 · 주황빨강 오답)만 */
+  --bg: light-dark(#f7f5f0, #151412);
+  --card: light-dark(#ffffff, #1f1d1a);
+  --ink: light-dark(#1c1b19, #edeae3);
+  --ink2: light-dark(#3b3934, #cfcac0);
+  --mute: light-dark(#6b6862, #a19c92);
+  --line: light-dark(#d9d5cc, #34312c);
+  --line2: light-dark(#e6e2d9, #2a2824);
+  --soft: light-dark(#efece5, #26241f);
+  --red: light-dark(#c4402a, #e36a4f);
+  --blue: light-dark(#2b4acb, #8ea2f2);
+  --ok: light-dark(#1f7a4d, #5cc08a);
+  --radius: 14px;
 }
 * { box-sizing: border-box; min-width: 0; }
 [hidden] { display: none !important; }
 body {
   margin: 0; color: var(--ink); background: var(--bg);
-  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 24px 24px;
-  font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", system-ui, sans-serif;
+  font: 16px/1.55 "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
 }
 .top { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: end; justify-content: space-between;
   padding: 28px max(4vw, 16px) 8px; max-width: 1100px; margin: 0 auto; }
@@ -25,7 +27,7 @@ h1 { margin: 0; font-size: clamp(28px, 5vw, 40px); line-height: 1.05; letter-spa
 h2 { margin: 0 0 8px; font-size: 19px; }
 .sub, .note { color: var(--mute); font-size: 14px; margin: 4px 0; }
 main { max-width: 1100px; margin: 0 auto; padding: 8px max(4vw, 16px) 48px; display: grid; gap: 16px; }
-.card { background: var(--card); border: 1.5px solid var(--line); border-radius: 14px; padding: clamp(14px, 3vw, 22px); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(14px, 3vw, 22px); }
 .switch { font-size: 14px; display: flex; gap: 8px; align-items: center; min-height: 44px; cursor: pointer; }
 .switch input { width: 20px; height: 20px; }
 .checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
@@ -70,9 +72,9 @@ table.units { width: 100%; border-collapse: collapse; font-size: 14px; }
 .step.dec { border-style: dashed; border-color: var(--red); }
 .step small { display: block; font-size: 13px; color: var(--mute); }
 .grades { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 16px; }
-.btn { min-height: 44px; padding: 8px 16px; border-radius: 10px; border: 1.5px solid var(--ink); background: var(--ink); color: var(--bg);
+.btn { min-height: 48px; padding: 8px 18px; border-radius: 12px; border: 1px solid var(--ink); background: var(--ink); color: var(--bg);
   font: 600 15px/1 inherit; font-family: inherit; cursor: pointer; }
-.btn.ghost { background: transparent; color: var(--ink); }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
 .btn.danger { border-color: var(--red); color: var(--red); background: transparent; }
 .btn.danger:not(.ghost) { background: var(--red); color: #fff; }
 .row { display: flex; flex-wrap: wrap; gap: 8px; }

@@ -312,29 +312,97 @@ function derivButton(m, label = '유도 보기', cls = 'btn ghost') {
 }
 
 // ------------------------------------------------------------------ 홈
+const WD = ['일', '월', '화', '수', '목', '금', '토'];
+const pct = (x) => `${Math.round(x * 100)}%`;
+
+/** 지난 7일 문제 정답률 (튜토리얼·세션 기록 제외). 푼 문제가 없으면 null. */
+function weekAccuracy(now = Date.now()) {
+  const rows = G.log.filter((r) => r.grade != null && r.ts >= now - 7 * 864e5);
+  return rows.length ? rows.filter((r) => r.grade >= 2).length / rows.length : null;
+}
+
+function openInfo() {
+  const mm = masteryMap();
+  const startIds = G.index.chapters.filter((x) => x.start_open).map((x) => x.id);
+  const isOpen = (c) => G.packs.has(c.id) && E.isUnlocked(c, mm, { testMode: G.settings.testMode, startIds });
+  return { mm, isOpen };
+}
+
 function renderHome() {
   const st = S.streak(G.log);
-  $('#streak').textContent = st.count ? `연속 ${st.count}일${st.doneToday ? '' : ' · 오늘 아직'}` : '오늘 첫 세션을 시작해 보세요';
+  const now = new Date();
   const plan = S.planSession({ index: G.index, packs: G.packs, states: G.states, log: G.log, settings: G.settings });
   const t = $('#today');
   t.textContent = '';
+  const date = `${now.getMonth() + 1}월 ${now.getDate()}일 ${WD[now.getDay()]}요일`;
+  const streakTxt = st.count ? ` · ${st.count}일째 연속${st.doneToday ? '' : ' (오늘 아직)'}` : '';
+  t.appendChild(el('p', 'dateline', date + streakTxt));
+  const h = el('h1', 'headline');
   if (plan.queue.length) {
-    t.appendChild(el('div', 'today-nums', ''));
-    const nums = t.firstChild;
-    [['복습', plan.dueCount], ['새 단위', plan.newCount], ['예상', `${plan.estMin}분`]].forEach(([k, v]) => {
-      const d = el('div', 'num');
-      d.appendChild(el('b', null, String(v)));
-      d.appendChild(el('span', null, k));
-      nums.appendChild(d);
-    });
-    const b = el('button', 'btn big', '오늘 세션 시작');
-    b.addEventListener('click', () => runSession(null));
-    t.appendChild(b);
-  } else {
-    t.appendChild(el('p', null, '오늘 복습할 단위가 없고, 새 단위도 오늘 몫을 다 배웠습니다. 스킬 지도에서 장을 골라 더 연습할 수 있습니다.'));
+    const parts = [];
+    if (plan.dueCount) parts.push(`복습 ${plan.dueCount}개`);
+    if (plan.newCount) parts.push(`새 단위 ${plan.newCount}개`);
+    h.textContent = `오늘은 ${parts.join(', ')}입니다.`;
+  } else h.textContent = '오늘 몫은 끝났습니다.';
+  t.appendChild(h);
+  // 숫자 세 개
+  let total = 0, mastered = 0;
+  for (const p of G.packs.values()) {
+    total += p.units.length;
+    mastered += p.units.filter((u) => E.isMastered(G.states.get(u.id))).length;
   }
+  const acc = weekAccuracy();
+  const stats = el('div', 'stats');
+  [[plan.queue.length ? `${plan.estMin}분` : '–', '예상 시간'], [`${mastered}<small> / ${total}</small>`, '숙련 단위'], [acc == null ? '–' : pct(acc), '지난 7일 정답률']]
+    .forEach(([v, k]) => {
+      const d = el('div', 'stat');
+      const b = el('b');
+      b.innerHTML = v;
+      d.append(b, el('span', null, k));
+      stats.appendChild(d);
+    });
+  t.appendChild(stats);
+  if (!plan.queue.length) t.appendChild(el('p', 'note', '아래 장을 골라 더 연습할 수 있습니다.'));
+  const bar = el('div', 'startbar');
+  const b = el('button', 'btn big', plan.queue.length ? '오늘 세션 시작' : '한 판 더 하기');
+  b.addEventListener('click', () => runSession(null, !plan.queue.length));
+  bar.appendChild(b);
+  t.appendChild(bar);
+  renderOpenList();
   renderMap($('#map'));
   show('home');
+}
+
+/** 열린 장 목록과 다음에 열릴 장 안내. */
+function renderOpenList() {
+  const { mm, isOpen } = openInfo();
+  const box = $('#open-list');
+  box.textContent = '';
+  const open = G.index.chapters.filter(isOpen);
+  for (const c of open) {
+    const s = chapterStats(c.id);
+    const a = el('button', 'chrow');
+    a.appendChild(el('span', 'chno', String(c.id)));
+    const mid = el('span', 'chmid');
+    mid.appendChild(el('span', 'chtitle', c.title));
+    const meter = el('span', 'meter');
+    const fill = el('i');
+    fill.style.width = pct(mm.get(c.id) || 0);
+    meter.appendChild(fill);
+    mid.appendChild(meter);
+    const sub = s.learned ? `${s.mastered}/${s.total} 숙련 · 기억 ${pct(s.R)}` : `${s.total}단위 · 아직 시작 전`;
+    mid.appendChild(el('span', 'chsub', sub));
+    a.appendChild(mid);
+    a.appendChild(el('span', 'chpct', pct(mm.get(c.id) || 0)));
+    a.addEventListener('click', () => renderChapter(c.id));
+    box.appendChild(a);
+  }
+  const next = G.index.chapters.filter((c) => G.packs.has(c.id) && !isOpen(c));
+  const nx = $('#next-open');
+  if (!next.length) { nx.textContent = ''; return; }
+  const c = next[0];
+  const need = c.prereqs.length ? `${c.prereqs.join('·')}장을 70% 숙련하면 열립니다` : '시작 장 하나를 70% 숙련하면 열립니다';
+  nx.textContent = `다음에 열리는 장: ${c.id}장 ${c.title} · ${need}.`;
 }
 
 function chapterStats(cid) {
@@ -359,7 +427,9 @@ function renderMap(box) {
   for (const part of parts) {
     box.appendChild(el('div', 'part', part));
     const g = el('div', 'tiles');
-    for (const c of G.index.chapters.filter((x) => x.part === part)) {
+    const chs = G.index.chapters.filter((x) => x.part === part && (G.showUnbuilt || G.packs.has(x.id)));
+    if (!chs.length) { box.lastChild.remove(); continue; }
+    for (const c of chs) {
       const built = G.packs.has(c.id);
       const open = built && E.isUnlocked(c, mm, { testMode: G.settings.testMode, startIds: G.index.chapters.filter((x) => x.start_open).map((x) => x.id) });
       const s = chapterStats(c.id);
@@ -474,16 +544,25 @@ function renderChapter(cid) {
     const st = G.states.get(u.id);
     const tr = el('tr');
     const n = p.items.filter((it) => it.unit === u.id).length;
-    tr.appendChild(setRich(el('td'), u.title));
+    const tdt = setRich(el('td'), u.title);
+    tdt.appendChild(el('small', 'kind ' + u.kind, u.kind === 'atom' ? '공식' : '풀이'));
+    tr.appendChild(tdt);
     tr.appendChild(el('td', null, u.kind === 'atom' ? '미니멀 훈련' : st && st.correct >= S.HUNT_AFTER ? (u.graph ? '순서·사냥·그래프' : '순서·오류 사냥') : '순서 맞추기'));
     tr.appendChild(el('td', 'num', String(n)));
-    tr.appendChild(el('td', null, !st ? '새 단위' : st.relearn ? '다시 배움' : E.isMastered(st) ? '숙련' : E.isDue(st) ? '복습 필요' : '학습 중'));
-    const td = el('td');
-    const r = el('span', 'rust');
-    const f = el('i');
-    f.style.width = `${Math.round(E.retrievability(st) * 100)}%`;
-    r.appendChild(f);
-    td.appendChild(r);
+    const [stTxt, stCls] = !st ? ['새 단위', 'new'] : st.relearn ? ['다시 배움', 'due'] : E.isMastered(st) ? ['숙련', 'ok'] : E.isDue(st) ? ['복습 필요', 'due'] : ['학습 중', 'on'];
+    const tds = el('td');
+    tds.appendChild(el('span', 'state ' + stCls, stTxt));
+    tr.appendChild(tds);
+    const td = el('td', 'mem');
+    if (st) {
+      const R = E.retrievability(st);
+      const r = el('span', 'meter');
+      const f = el('i');
+      f.style.width = pct(R);
+      if (R < RUSTY_R) f.classList.add('low');
+      r.appendChild(f);
+      td.append(r, el('span', 'memtxt', pct(R)));
+    } else td.textContent = '—';
     tr.appendChild(td);
     tr.appendChild(el('td', null, dueText(st)));
     const tdb = el('td');
@@ -524,7 +603,7 @@ function tutorialCard(box, m, kind = 'new') {
     };
     const actions = (nextLabel, extra = []) => {
       const row = el('div', 'intro-actions');
-      const b = el('button', 'btn', `${nextLabel} (Enter)`);
+      const b = el('button', 'btn', `${nextLabel}`);
       const go = () => { page++; page < pages.length ? pages[page]() : finish('done'); };
       b.addEventListener('click', go);
       setKey((e) => { if (e.key === 'Enter') { e.preventDefault(); go(); } });
@@ -681,7 +760,7 @@ async function connectionCard(box, chapters) {
 
 function waitNext(box, label = '계속') {
   return new Promise((resolve) => {
-    const b = el('button', 'btn', `${label} (Enter)`);
+    const b = el('button', 'btn', `${label}`);
     const go = () => { removeEventListener('keydown', k); resolve(); };
     const k = (e) => { if (e.key === 'Enter') { e.preventDefault(); go(); } };
     b.addEventListener('click', go);
@@ -744,7 +823,7 @@ async function runSession(chapter, extra = false, custom = null) {
     const ctx = {
       hint: m.unit.hint, hintHtml: hintHtml(m.unit.hint), errName, derivButton: () => derivButton(m), errorIds: chapterErrors(m.chapter),
       prefill: e.mode === 'order' && (!st || st.attempts < 2) && item.tier === 1 ? 1 : 0,
-      limitMs: S.timeLimit(m.unit, item),
+      limitMs: Math.round(S.timeLimit(m.unit, item) * (G.settings.timeScale || 1)),
     };
     ctx.easyMs = S.easyMs(ctx.limitMs);
     const play = { mcq: playMcq, order: playOrder, hunt: playHunt, graph: playGraph }[e.mode];
@@ -787,10 +866,11 @@ async function renderSummary(r) {
   const box = $('#sum-body');
   box.textContent = '';
   const st = S.streak(G.log);
-  const nums = el('div', 'today-nums');
-  [['푼 문제', r.done], ['정답률', r.done ? `${Math.round((r.correct / r.done) * 100)}%` : '–'], ['최고 콤보', r.best], ['시간', `${r.minutes}분`], ['연속', `${st.count}일`]]
+  box.appendChild(el('p', 'dateline', `${r.minutes}분 · 연속 ${st.count}일`));
+  const nums = el('div', 'stats');
+  [['푼 문제', r.done], ['정답률', r.done ? `${Math.round((r.correct / r.done) * 100)}%` : '–'], ['최고 콤보', r.best]]
     .forEach(([k, v]) => {
-      const d = el('div', 'num');
+      const d = el('div', 'stat');
       d.appendChild(el('b', null, String(v)));
       d.appendChild(el('span', null, k));
       nums.appendChild(d);
@@ -816,8 +896,37 @@ async function renderSummary(r) {
 
 function alertBox(msg) {
   const t = $('#today');
-  const p = el('p', 'note', msg);
-  t.appendChild(p);
+  t.querySelector('.alert')?.remove();
+  t.insertBefore(el('p', 'note alert', msg), t.querySelector('.startbar'));
+}
+
+// ------------------------------------------------------------------ 설정 창 · 전체 지도
+let setKey = null;
+function openSettings() {
+  $('#settings').hidden = false;
+  document.body.classList.add('locked');
+  setKey = (e) => { if (e.key === 'Escape') { e.preventDefault(); closeSettings(); } };
+  addEventListener('keydown', setKey);
+  $('#settings-close').focus({ preventScroll: true });
+}
+function closeSettings() {
+  $('#settings').hidden = true;
+  document.body.classList.remove('locked');
+  if (setKey) removeEventListener('keydown', setKey);
+  setKey = null;
+  $('#open-settings').focus({ preventScroll: true });
+}
+function bindHome() {
+  $('#open-settings').addEventListener('click', openSettings);
+  $('#settings-close').addEventListener('click', closeSettings);
+  $('#settings').addEventListener('click', (e) => { if (e.target.id === 'settings') closeSettings(); });
+  $('#map-toggle').addEventListener('click', () => {
+    const w = $('#map-wrap');
+    w.hidden = !w.hidden;
+    $('#map-toggle').setAttribute('aria-expanded', String(!w.hidden));
+    $('#map-toggle').textContent = w.hidden ? '전체 지도' : '지도 접기';
+  });
+  $('#map-unbuilt').addEventListener('change', (e) => { G.showUnbuilt = e.target.checked; renderMap($('#map')); });
 }
 
 // ------------------------------------------------------------------ 설정
@@ -825,16 +934,18 @@ async function bindSettings() {
   const s = G.settings;
   $('#set-min').value = String(s.minutes);
   $('#set-new').value = String(s.newPerDay);
+  $('#set-time').value = String(s.timeScale || 1);
   $('#set-test').checked = !!s.testMode;
   const save = async () => {
     s.minutes = +$('#set-min').value;
     s.capMinutes = Math.max(15, s.minutes + 5);
     s.newPerDay = +$('#set-new').value;
+    s.timeScale = +$('#set-time').value || 1;
     s.testMode = $('#set-test').checked;
     await store.kvSet('settings', s);
     renderHome();
   };
-  ['#set-min', '#set-new', '#set-test'].forEach((id) => $(id).addEventListener('change', save));
+  ['#set-min', '#set-new', '#set-time', '#set-test'].forEach((id) => $(id).addEventListener('change', save));
 }
 
 async function main() {
@@ -856,6 +967,7 @@ async function main() {
   $('#sum-home').addEventListener('click', renderHome);
   $('#s-quit').addEventListener('click', () => { G.quit = true; clearKeys(); $('#card').textContent = ''; G.quitR?.(); });
   bindSync();
+  bindHome();
   await showSync();
   renderHome();
   document.body.dataset.ready = '1';

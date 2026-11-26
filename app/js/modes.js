@@ -36,7 +36,7 @@ export function explainHtml(item, ctx) {
 /** 다음으로 넘어가는 버튼 (Enter로도). */
 function nextButton(box, label = '다음', extra = null) {
   return new Promise((resolve) => {
-    const b = el('button', 'btn', `${label} (Enter)`);
+    const b = el('button', 'btn', `${label}`);
     b.addEventListener('click', () => { onKey(null); resolve(); });
     if (extra) {
       const row = el('div', 'row');
@@ -138,7 +138,7 @@ export function playOrder(root, item, ctx) {
     cols.append(left, right);
     root.appendChild(cols);
     const ctl = el('div', 'row');
-    const checkBtn = el('button', 'btn', '검사 (Enter)');
+    const checkBtn = el('button', 'btn', '검사');
     const giveBtn = el('button', 'btn ghost', '정답 보기');
     ctl.append(checkBtn, giveBtn);
     root.appendChild(ctl);

@@ -1,7 +1,7 @@
 // 세션 구성: 오늘 무엇을 얼마나 낼지 정한다. DOM을 쓰지 않는다 (node 테스트 가능).
 import * as E from './engine.js';
 
-export const DEFAULTS = { minutes: 10, capMinutes: 15, newPerDay: 5, testMode: false, v: 2 };
+export const DEFAULTS = { minutes: 10, capMinutes: 15, newPerDay: 5, testMode: false, timeScale: 1, v: 2 };
 
 /** 저장된 설정을 현재 판으로 올린다. 예전 기본값(하루 새 단위 3개)은 새 기본값 5개로. */
 export function migrateSettings(saved = {}) {
@@ -219,8 +219,9 @@ export function pickItem(m, st, log, rand = Math.random, mode = null) {
  */
 export const PACE_MS = { light: 20000, compute: 40000, heavy: 60000, epic: 120000 };
 export function timeLimit(unit, item) {
-  let ms = PACE_MS[unit?.pace] ?? [10000, 10000, 13000, 16000][Math.min(3, item.tier || 1)];
-  if (!unit?.pace && item.verified === 'hand') ms += 3000;
+  const pace = item.pace || unit?.pace;  // 같은 단위라도 어려운 문제는 문제 자체에 pace를 단다
+  let ms = PACE_MS[pace] ?? [10000, 10000, 13000, 16000][Math.min(3, item.tier || 1)];
+  if (!pace && item.verified === 'hand') ms += 3000;
   const len = (item.prompt || '').length + (item.answer || '').length + (item.wrong || []).reduce((a, w) => a + w.tex.length, 0);
   ms += Math.min(10000, Math.max(0, Math.ceil((len - 160) / 40)) * 1000);
   return ms;
