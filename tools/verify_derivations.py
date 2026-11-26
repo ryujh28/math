@@ -183,6 +183,9 @@ CHECKS = {
     "lap.delta": [("ℒ{δ(t − c)} = e^{−cs}", lambda: Z(L(sp.DiracDelta(t - cc)) - sp.exp(-cc * s)))],
     "lap.deriv1": [("ℒ{y′} = sY − y(0) (예: y = e^{2t}cos t)", lambda: (lambda Y: Z(L(sp.diff(Y, t)) - (s * L(Y) - Y.subs(t, 0))))(sp.exp(2 * t) * sp.cos(t)))],
     "lap.deriv2": [("ℒ{y″} = s²Y − sy(0) − y′(0) (예)", lambda: (lambda Y: Z(L(sp.diff(Y, t, 2)) - (s**2 * L(Y) - s * Y.subs(t, 0) - sp.diff(Y, t).subs(t, 0))))(sp.exp(-t) * sp.sin(3 * t) + t**2))],
+    "lap.csqinv": [("(as + b)/((s − α)² + β²) = ℒ{e^{αt}(a cos βt + (b + aα)/β sin βt)}",
+                    lambda: (lambda A_, B_, al_, b_: Z(L(sp.exp(al_ * t) * (A_ * sp.cos(b_ * t) + (B_ + A_ * al_) / b_ * sp.sin(b_ * t)))
+                                                     - (A_ * s + B_) / ((s - al_) ** 2 + b_**2)))(2, 3, -1, 2))],
     "lap.sshift": [("ℒ{eᵃᵗf} = F(s − a) (예: f = t² + cos t)", lambda: (lambda F_: Z(L(sp.exp(a * t) * F_) - L(F_).subs(s, s - a)))(t**2 + sp.cos(t)))],
     "lap.tshift": [("ℒ{u(t − c)f(t − c)} = e^{−cs}F(s) (예: f = t e^{−t})", lambda: Z(L(sp.Heaviside(t - cc) * (t - cc) * sp.exp(-(t - cc))) - sp.exp(-cc * s) * L(t * sp.exp(-t))))],
     "lap.conv": [("ℒ{f*g} = FG (예: f = e^{−t}, g = sin t)", lambda: (lambda tau: Z(L(sp.integrate(sp.exp(-tau) * sp.sin(t - tau), (tau, 0, t))) - L(sp.exp(-t)) * L(sp.sin(t))))(sp.Symbol("tau")))],

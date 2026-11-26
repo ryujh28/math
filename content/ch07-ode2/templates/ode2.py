@@ -217,47 +217,115 @@ def _root_vals(kind, roots):
     return [al + be * sp.I, al - be * sp.I]
 
 
-def undetermined():
+C_ = sp.Symbol("C")
+
+
+def _fit(L, R, form):
+    """시행 꼴 form의 미정계수를 맞춘 특수해 (안 맞으면 None)."""
+    unk = sorted(form.free_symbols - {x}, key=lambda z: z.name)
+    pts = [sp.Rational(k, 7) for k in (1, 2, 3, 5, 6, 9)][: len(unk) + 2]
+    co = sp.solve([sp.expand(L(form) - R).subs(x, pt) for pt in pts], unk, dict=True)
+    if not co:
+        return None, None
+    yp = sp.simplify(form.subs(co[0]))
+    return (yp, co[0]) if same(L(yp), R) else (None, None)
+
+
+def _forcings(p, q, kind, roots):
+    """(가족, 강제항 R, 맞는 시행 꼴, 틀린 시행 꼴, 단계). 가족마다 구조가 다르다."""
     out = []
+    rv = set(_root_vals(kind, roots))
+    a_ok = [a for a in (1, 2, -1, -2, 3) if a not in rv]
+    if a_ok:
+        a = a_ok[(p + q) % len(a_ok)]
+        out.append(("exp", 4 * sp.exp(a * x), A_ * sp.exp(a * x), A_ * x * sp.exp(a * x), 1))
+    out.append(("poly1", q * x + p + 2 * q, A_ * x + B_, A_ * x, 1))   # y_p = x + 2: 상수항이 꼭 필요
+    out.append(("poly2", 2 * q * x**2 if q else 2 * x**2, A_ * x**2 + B_ * x + C_, A_ * x**2, 2))
+    if kind == "real" and q != 0 and 0 not in rv and a_ok:
+        a = a_ok[0]
+        out.append(("sum", 3 * sp.exp(a * x) + q, A_ * sp.exp(a * x) + B_, A_ * sp.exp(a * x), 2))
+    for bb in (1, 2, 3):
+        if kind == "cplx" and roots == (0, bb):
+            continue
+        fn = sp.cos if (p + bb) % 2 == 0 else sp.sin
+        R = 5 * fn(bb * x)
+        bad = A_ * fn(bb * x) if p != 0 else A_ * (sp.sin if fn is sp.cos else sp.cos)(bb * x)
+        out.append(("trig", R, A_ * sp.cos(bb * x) + B_ * sp.sin(bb * x), bad, 2))
+        break
+    if kind == "real":
+        r1 = roots[0] if roots[0] != 0 else roots[1]
+        out.append(("res", 3 * sp.exp(r1 * x), A_ * x * sp.exp(r1 * x), A_ * sp.exp(r1 * x), 3))
+    if kind == "rep":
+        rr = roots[0]
+        out.append(("res2", 2 * sp.exp(rr * x), A_ * x**2 * sp.exp(rr * x), A_ * x * sp.exp(rr * x), 3))
+    if kind == "cplx" and roots[0] == 0:
+        be = roots[1]
+        out.append(("trigres", 4 * sp.cos(be * x), x * (A_ * sp.cos(be * x) + B_ * sp.sin(be * x)),
+                    A_ * sp.cos(be * x) + B_ * sp.sin(be * x), 3))
+    if kind == "cplx" and roots[0] != 0:
+        be = roots[1]
+        b2 = 1 if be != 1 else 2
+        a2 = roots[0] - 1      # 지수가 동차해의 실수부와 같으면 cos만으로도 맞아 버리므로 비켜 둔다
+        R = 2 * sp.exp(a2 * x) * sp.cos(b2 * x)
+        out.append(("expcos", R, sp.exp(a2 * x) * (A_ * sp.cos(b2 * x) + B_ * sp.sin(b2 * x)),
+                    A_ * sp.exp(a2 * x) * sp.cos(b2 * x), 3))
+    return out
+
+
+FAMILY_CAP = {"exp": 10, "poly1": 8, "poly2": 10, "sum": 8, "trig": 10, "res": 8, "res2": 5, "trigres": 3, "expcos": 8}
+WHY_TRIAL = {
+    "exp": r"강제항 $e^{ax}$가 동차해와 겹치지 않으면 $Ae^{ax}$면 충분합니다. $x$를 곱하는 것은 공명일 때뿐입니다.",
+    "poly1": r"일차식 강제항에는 상수항까지 갖춘 $Ax + B$를 씁니다. 상수항이 빠지면 $qy$와 $py^{\prime}$에서 나오는 항을 맞출 수 없습니다.",
+    "poly2": r"이차식 강제항에는 $Ax^2 + Bx + C$를 씁니다. 미분하면 낮은 차수 항이 생기므로 모든 차수가 필요합니다.",
+    "sum": r"강제항이 두 항의 합이면 각 항에 맞는 꼴을 더합니다(중첩). 상수 강제항에는 상수 $B$가 필요합니다.",
+    "trig": r"$\cos$나 $\sin$ 강제항에는 $A\cos bx + B\sin bx$를 씁니다. 미분하면 $\cos$와 $\sin$이 서로 바뀌기 때문입니다.",
+    "res": r"강제항 $e^{rx}$가 동차해와 겹치면(공명) $Ae^{rx}$는 대입하면 0이 됩니다. $x$를 곱해 $Axe^{rx}$로 씁니다.",
+    "res2": r"$e^{rx}$가 중근의 동차해 $e^{rx}$, $xe^{rx}$와 모두 겹치므로 $x^2$을 곱해 $Ax^2e^{rx}$로 씁니다.",
+    "trigres": r"$\cos\beta x$가 동차해와 겹치므로(공명) $x(A\cos\beta x + B\sin\beta x)$로 씁니다.",
+    "expcos": r"$e^{ax}\cos bx$ 강제항에는 $e^{ax}(A\cos bx + B\sin bx)$를 씁니다. $\sin$ 항이 빠지면 계수를 맞출 수 없습니다.",
+}
+
+
+def undetermined():
+    """미정계수법. 동차해 종류(실근·중근·복소근)와 강제항 가족(지수·다항식·합·삼각·공명)을 섞어 구조가 다른 문제를 만든다."""
+    out, count = [], {}
     for p, q, kind, basis, roots in _cases():
-        if kind != "real" or q == 0:
+        if q == 0:
             continue
         L = _L(p, q)
-        forcings = []
-        for a in [1, 2, -1, 3]:
-            if a not in roots and a * a + p * a + q != 0:
-                forcings.append((4 * sp.exp(a * x), A_ * sp.exp(a * x), "exp"))
-        forcings.append((q * x + p, A_ * x + B_, "lin"))
-        forcings.append((5 * sp.cos(x), A_ * sp.cos(x) + B_ * sp.sin(x), "cos"))
-        for R, form, fk in forcings[:3]:
-            co = sp.solve([sp.expand(L(form) - R).subs(x, pt) for pt in (sp.Rational(1, 3), sp.Rational(2, 3), sp.Rational(5, 4))][:len(form.free_symbols - {x})],
-                          list(form.free_symbols - {x}), dict=True)
-            if not co:
+        okb = _basis_ok(p, q)
+        for fam, R, form, bad_form, tier in _forcings(p, q, kind, roots):
+            if count.get(fam, 0) >= FAMILY_CAP[fam]:
                 continue
-            yp = sp.simplify(form.subs(co[0]))
-            if not same(L(yp), R):
+            yp, co = _fit(L, R, form)
+            if yp is None or yp == 0:
                 continue
-            okb = _basis_ok(p, q)
-            okt = _trial_ok(p, q, R, [A_, B_])
+            unk = sorted(co, key=lambda z: z.name)
+            okt = _trial_ok(p, q, R, [A_, B_, C_])
             full = C1 * basis[0] + C2 * basis[1] + yp
             ok_full = lambda g, L=L, R=R, b=basis: is_family_solution(g, lambda h, L=L, R=R: L(h) - R, [C1, C2]) and independent(list(b))
-            co_tex = ",\\ ".join(f"{tex(k)} = {tex(v)}" for k, v in sorted(co[0].items(), key=lambda kv: kv[0].name))
+            co_tex = ",\\ ".join(f"{tex(k)} = {tex(co[k])}" for k in unk)
+            gen = _gen_tex(kind, roots)
             steps = [
-                step(f"y_h = {_gen_tex(kind, roots)}", lambda b=basis, ok=okb: ok(b)),
+                step(f"y_h = {gen}", lambda b=basis, ok=okb: ok(b)),
                 step(f"y_p = {tex(form)}", lambda g=form, ok=okt: ok(g)),
                 step(co_tex, lambda g=yp, L=L, R=R: same(L(g), R)),
-                step(f"y = {_gen_tex(kind, roots)} + {sum_tex(yp)}".replace("+ -", "- "), lambda g=full, ok=ok_full: ok(g)),
+                step(f"y = {gen} + {sum_tex(yp)}".replace("+ -", "- "), lambda g=full, ok=ok_full: ok(g)),
             ]
-            bad_form = A_ * x * form if fk == "exp" else (A_ * sp.cos(x) if fk == "cos" else A_ * x)
-            bad_yp = -yp
-            bad_co = ",\\ ".join(f"{tex(k)} = {tex(-v)}" for k, v in sorted(co[0].items(), key=lambda kv: kv[0].name))
-            decoys = [
-                decoy(1, f"y_p = {tex(bad_form)}", lambda g=bad_form, ok=okt: ok(g), "theorem_condition", WHY["trial"]),
-                decoy(2, bad_co, lambda g=bad_yp, L=L, R=R: same(L(g), R), "sign", WHY["coef"]),
-                decoy(3, f"y = {_gen_tex(kind, roots)} + {sum_tex(bad_yp)}".replace("+ -", "- "),
-                      lambda g=C1 * basis[0] + C2 * basis[1] + bad_yp, ok=ok_full: ok(g), "sign", WHY["yp_sign"]),
+            bad_co = ",\\ ".join(f"{tex(k)} = {tex(-co[k])}" for k in unk)
+            decoys = []
+            wb = _wrong_bases(kind, roots)
+            if wb:
+                b_, er, spec = wb[0]
+                decoys.append(decoy(0, f"y_h = {_btex(b_, spec)}", lambda b=b_, ok=okb: ok(b), er, WHY["rep"] if kind == "rep" else WHY["family"]))
+            decoys += [
+                decoy(1, f"y_p = {tex(bad_form)}", lambda g=bad_form, ok=okt: ok(g), "theorem_condition", WHY_TRIAL[fam]),
+                decoy(2, bad_co, lambda g=-yp, L=L, R=R: same(L(g), R), "sign", WHY["coef"]),
+                decoy(3, f"y = {gen} + {sum_tex(-yp)}".replace("+ -", "- "),
+                      lambda g=C1 * basis[0] + C2 * basis[1] - yp, ok=ok_full: ok(g), "sign", WHY["yp_sign"]),
             ]
-            out.append({"params": {"p": p, "q": q, "R": str(R)}, "tier": 2 if fk != "cos" else 3,
+            count[fam] = count.get(fam, 0) + 1
+            out.append({"params": {"p": p, "q": q, "R": str(R), "family": fam}, "tier": tier,
                         "problem": rf"{_ode_tex(p, q, R)}\ \text{{의 일반해}}", "steps": steps, "decoys": decoys})
     return out
 

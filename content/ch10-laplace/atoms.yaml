@@ -176,6 +176,20 @@
     - {f: cos(b*t), error: missing_factor}
   hint: '$\mathcal{L}\{e^{at}\cos bt\} = \dfrac{s - a}{(s - a)^2 + b^2}$이다. 분모뿐 아니라 분자의 $s$도 $s - a$로 바꿔야 한다.'
 
+- id: lap.csqinv
+  pace: compute
+  generator: "fx10:csqinv"
+  kind: formula
+  title: 완전제곱으로 역변환
+  tier: 2
+  prompt: '\mathcal{L}^{-1}\left\{\dfrac{s - a}{(s - a)^2 + b^2}\right\} = \;?'
+  answer: 'e^{at}\cos bt'
+  wrong:
+    - {tex: 'e^{-at}\cos bt', error: sign}
+    - {tex: 'e^{at}\sin bt', error: wrong_pair}
+    - {tex: '\cos bt', error: missing_factor}
+  hint: '분모 $s^2 + ps + q$가 실수로 인수분해되지 않으면 $(s - \alpha)^2 + \beta^2$로 완전제곱한다. 분자도 $A(s - \alpha) + B\beta$ 꼴로 다시 쓰면 $e^{\alpha t}(A\cos\beta t + B\sin\beta t)$로 되돌아간다.'
+
 - id: lap.tsin
   pace: light
   kind: pair

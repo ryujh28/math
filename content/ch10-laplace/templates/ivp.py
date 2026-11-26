@@ -110,7 +110,8 @@ def _ivp1_case(a, y0, k, b, tier):
 
 
 # ---------------------------------------------------------------- 2계 공통
-def _eq2(p, q, y0, v0, R_s, drop_p_ic=False, flip_ic=False):
+def _eq2(p, q, y0, v0, R_s, drop_p_ic=False, flip_ic=False, m=1):
+    """변환된 방정식. m은 y''의 계수 (m y'' + p y' + q y = R 꼴, p·q·R은 그대로 쓴 값)."""
     sg = 1 if flip_ic else -1
     if drop_p_ic or y0 == 0:
         pterm = (p, "sY")
@@ -118,8 +119,12 @@ def _eq2(p, q, y0, v0, R_s, drop_p_ic=False, flip_ic=False):
     else:
         pterm = (p, f"(sY {'-' if y0 > 0 else '+'} {abs(y0)})")
         pexpr = p * (s * Y - y0)
-    parts = [(1, "s^{2}Y"), (sg * y0, "s"), (sg * v0, ""), pterm, (q, "Y")]
-    expr = s**2 * Y + sg * y0 * s + sg * v0 + pexpr + q * Y - R_s
+    if m == 1:
+        parts = [(1, "s^{2}Y"), (sg * y0, "s"), (sg * v0, ""), pterm, (q, "Y")]
+    else:
+        inner = join_terms([(1, "s^{2}Y"), (sg * y0, "s"), (sg * v0, "")])
+        parts = [(m, rf"\left({inner}\right)" if (y0 or v0) else "s^{2}Y"), pterm, (q, "Y")]
+    expr = m * (s**2 * Y + sg * y0 * s + sg * v0) + pexpr + q * Y - R_s
     return expr, f"{join_terms(parts)} = {tex(R_s)}"
 
 
@@ -218,45 +223,137 @@ def ivp2_repeated():
 
 
 # ---------------------------------------------------------------- 복소근 (완전제곱 → s-이동)
+WHY.update({
+    "const_s": r"상수 $K$의 변환은 $K$가 아니라 $\dfrac{K}{s}$입니다.",
+    "pf_miss": r"$\dfrac{K}{s(s^2 + ps + q)}$를 나누면 $\dfrac{A}{s}$ 항이 따로 나옵니다. 그 항이 빠지면 정상상태 값이 사라집니다.",
+    "monic": r"$y^{\prime\prime}$의 계수로 나누지 않고 정리했습니다. 분모는 계수로 나눈 $s^2 + ps + q$여야 합니다.",
+    "pure_sin": r"$\dfrac{1}{s^2 + \beta^2}$의 역변환은 $\dfrac{1}{\beta}\sin\beta t$입니다. $\beta$로 나누지 않았습니다.",
+})
+
+
+def _csq_case(al, be, y0, v0, m=1):
+    """동차 복소근 문제 (m은 y''의 계수, al = 0이면 감쇠 없는 진동)."""
+    p, q = -2 * al, al * al + be * be
+    C = v0 - al * y0          # 분자 = y0(s − α) + C
+    num = y0 * s + v0 + p * y0
+    den = s**2 + p * s + q
+    Ys = num / den
+    Cb = sp.Rational(C, be)
+    y = sp.exp(al * t) * (y0 * sp.cos(be * t) + Cb * sp.sin(be * t))
+    inner = join_terms([(y0, rf"\cos {tex(be * t)}"), (Cb, rf"\sin {tex(be * t)}")])
+    pre = tex(sp.exp(al * t)) if al else ""
+    y_tex = rf"y = {pre}\left({inner}\right)" if al else f"y = {inner}"
+    if al:
+        sq = f"\\left({shift(al)}\\right)^{{2}} + {be * be}"
+        csq = (y0 * (s - al) + C) / ((s - al) ** 2 + be**2)
+        csq_tex = rf"Y = \frac{{{join_terms([(y0, f'({shift(al)})'), (C, '')])}}}{{{sq}}}"
+    else:
+        sq = f"s^{{2}} + {be * be}"
+        csq = y0 * s / (s**2 + be**2) + Cb * be / (s**2 + be**2)
+        csq_tex = "Y = " + join_terms([(y0, rf"\frac{{s}}{{{sq}}}"), (Cb, rf"\frac{{{be}}}{{{sq}}}")])
+    eq, eqt = _eq2(m * p, m * q, y0, v0, 0, m=m)
+    steps = [{"kind": "eqY", "expr": eq, "tex": eqt},
+             {"kind": "Y", "expr": Ys, "tex": rf"Y = \frac{{{tex(num)}}}{{{tex(den)}}}"},
+             {"kind": "Y", "expr": csq, "tex": csq_tex},
+             {"kind": "y", "expr": y, "tex": y_tex}]
+    decoys = _ic_decoys(m * p, m * q, y0, v0, 0) if m == 1 else []
+    if m != 1:
+        e, tx = _eq2(m * p, m * q, y0, v0, 0, flip_ic=True, m=m)
+        decoys.append({"pos": 0, "kind": "eqY", "expr": e, "tex": tx, "error": "sign", "why": WHY["ic_sign"]})
+        bad = (m * y0 * s + m * v0 + m * p * y0) / (s**2 + m * p * s + m * q)
+        decoys.append({"pos": 1, "kind": "Y", "expr": bad, "tex": rf"Y = \frac{{{tex(sp.expand(bad.as_numer_denom()[0]))}}}{{{tex(sp.expand(bad.as_numer_denom()[1]))}}}",
+                       "error": "algebra", "why": WHY["monic"]})
+    if al:
+        bad = (y0 * (s + al) + C) / ((s + al) ** 2 + be**2)
+        sqb = f"\\left({shift(-al)}\\right)^{{2}} + {be * be}"
+        decoys.append({"pos": 2, "kind": "Y", "expr": bad,
+                       "tex": rf"Y = \frac{{{join_terms([(y0, f'({shift(-al)})'), (C, '')])}}}{{{sqb}}}",
+                       "error": "sign", "why": WHY["csq_sign"]})
+        bad = sp.exp(-al * t) * (y0 * sp.cos(be * t) + Cb * sp.sin(be * t))
+        decoys.append({"pos": 3, "kind": "y", "expr": bad, "tex": rf"y = {tex(sp.exp(-al * t))}\left({inner}\right)",
+                       "error": "sign", "why": WHY["exp_sign"]})
+    if be != 1 and C != 0:
+        bad = sp.exp(al * t) * (y0 * sp.cos(be * t) + C * sp.sin(be * t))
+        inner2 = join_terms([(y0, rf"\cos {tex(be * t)}"), (C, rf"\sin {tex(be * t)}")])
+        decoys.append({"pos": 3, "kind": "y", "expr": bad, "tex": rf"y = {pre}\left({inner2}\right)" if al else f"y = {inner2}",
+                       "error": "missing_factor", "why": WHY["csq_beta"] if al else WHY["pure_sin"]})
+    if not al and y0 and C:
+        bad = y0 * sp.sin(be * t) + Cb * sp.cos(be * t)
+        decoys.append({"pos": 3, "kind": "y", "expr": bad,
+                       "tex": "y = " + join_terms([(y0, rf"\sin {tex(be * t)}"), (Cb, rf"\cos {tex(be * t)}")]),
+                       "error": "wrong_pair", "why": WHY["swap"]})
+    lead = "" if m == 1 else str(m)
+    problem = f"{join_terms([(m, P2), (m * p, P1), (m * q, 'y')])} = 0,\\quad {_ics_tex(y0, v0)}"
+    return {"params": {"alpha": al, "beta": be, "y0": y0, "v0": v0, "m": m, "family": "hom" if m == 1 else "nonmonic"},
+            "problem": problem, "steps": steps, "decoys": decoys,
+            "verify": {"coeffs": [p, q], "rhs": 0, "ics": [y0, v0], "y": y}}
+
+
+def _csq_const(al, be, K):
+    """정지 상태에서 상수 입력: y'' + py' + qy = K, y(0) = y'(0) = 0 → A/s + 완전제곱 항."""
+    p, q = -2 * al, al * al + be * be
+    A = sp.Rational(K, q)
+    den = s**2 + p * s + q
+    Ys = K / (s * den)
+    sq = f"\\left({shift(al)}\\right)^{{2}} + {be * be}"
+    D = A * al                                   # 분자 = -A(s − α) + Aα
+    csq = A / s + (-A * (s - al) + D) / ((s - al) ** 2 + be**2)
+    numt = join_terms([(-A, f"({shift(al)})"), (D, "")])
+    csq_tex = "Y = " + join_terms([(A, r"\frac{1}{s}")]) + rf" + \frac{{{numt}}}{{{sq}}}"
+    csq_tex = csq_tex.replace("+ \\frac{-", "- \\frac{") if False else csq_tex
+    Db = D / be
+    y = A - A * sp.exp(al * t) * sp.cos(be * t) + Db * sp.exp(al * t) * sp.sin(be * t)
+    inner = join_terms([(-A, rf"\cos {tex(be * t)}"), (Db, rf"\sin {tex(be * t)}")])
+    y_tex = rf"y = {tex(A)} + {tex(sp.exp(al * t))}\left({inner}\right)"
+    R_s = sp.Integer(K) / s
+    eq, eqt = _eq2(p, q, 0, 0, R_s)
+    steps = [{"kind": "eqY", "expr": eq, "tex": eqt},
+             {"kind": "Y", "expr": Ys, "tex": rf"Y = \frac{{{K}}}{{s\left({tex(den)}\right)}}"},
+             {"kind": "Y", "expr": csq, "tex": csq_tex},
+             {"kind": "y", "expr": y, "tex": y_tex}]
+    e, tx = _eq2(p, q, 0, 0, sp.Integer(K))
+    decoys = [{"pos": 0, "kind": "eqY", "expr": e, "tex": tx, "error": "wrong_pair", "why": WHY["const_s"]}]
+    bad = (-A * (s - al) + D) / ((s - al) ** 2 + be**2)
+    decoys.append({"pos": 2, "kind": "Y", "expr": bad, "tex": rf"Y = \frac{{{numt}}}{{{sq}}}", "error": "missing_factor", "why": WHY["pf_miss"]})
+    sqb = f"\\left({shift(-al)}\\right)^{{2}} + {be * be}"
+    bad = A / s + (-A * (s + al) + D) / ((s + al) ** 2 + be**2)
+    decoys.append({"pos": 2, "kind": "Y", "expr": bad,
+                   "tex": "Y = " + join_terms([(A, r"\frac{1}{s}")]) + rf" + \frac{{{join_terms([(-A, f'({shift(-al)})'), (D, '')])}}}{{{sqb}}}",
+                   "error": "sign", "why": WHY["csq_sign"]})
+    bad = A - A * sp.exp(-al * t) * sp.cos(be * t) + Db * sp.exp(-al * t) * sp.sin(be * t)
+    decoys.append({"pos": 3, "kind": "y", "expr": bad, "tex": rf"y = {tex(A)} + {tex(sp.exp(-al * t))}\left({inner}\right)",
+                   "error": "sign", "why": WHY["exp_sign"]})
+    problem = f"{join_terms([(1, P2), (p, P1), (q, 'y')])} = {K},\\quad {_ics_tex(0, 0)}"
+    return {"params": {"alpha": al, "beta": be, "K": K, "family": "const"}, "problem": problem, "steps": steps, "decoys": decoys,
+            "verify": {"coeffs": [p, q], "rhs": K, "ics": [0, 0], "y": y}}
+
+
 def ivp2_complex():
+    """복소근. 가족: 감쇠 진동(완전제곱 → s-이동) · 감쇠 없는 진동 · y''의 계수가 1이 아닌 식 · 정지 상태에서 상수 입력(A/s + 완전제곱)."""
     out = []
+    hom = []
     for al, be in itertools.product([-3, -2, -1, 1], [1, 2, 3]):
         for y0, v0 in itertools.product([-2, -1, 1, 2], [-3, -2, -1, 0, 1, 2, 3]):
-            p, q = -2 * al, al * al + be * be
-            C = v0 - al * y0          # 분자 = y0(s − α) + C
-            num = y0 * s + v0 + p * y0
-            den = s**2 + p * s + q
-            Ys = num / den
-            sq = f"\\left({shift(al)}\\right)^{{2}} + {be * be}"
-            csq = (y0 * (s - al) + C) / ((s - al) ** 2 + be**2)
-            csq_tex = rf"Y = \frac{{{join_terms([(y0, f'({shift(al)})'), (C, '')])}}}{{{sq}}}"
-            Cb = sp.Rational(C, be)
-            y = sp.exp(al * t) * (y0 * sp.cos(be * t) + Cb * sp.sin(be * t))
-            inner = join_terms([(y0, rf"\cos {tex(be * t)}"), (Cb, rf"\sin {tex(be * t)}")])
-            y_tex = rf"y = {tex(sp.exp(al * t))}\left({inner}\right)"
-            eq, eqt = _eq2(p, q, y0, v0, 0)
-            steps = [{"kind": "eqY", "expr": eq, "tex": eqt},
-                     {"kind": "Y", "expr": Ys, "tex": rf"Y = \frac{{{tex(num)}}}{{{tex(den)}}}"},
-                     {"kind": "Y", "expr": csq, "tex": csq_tex},
-                     {"kind": "y", "expr": y, "tex": y_tex}]
-            decoys = _ic_decoys(p, q, y0, v0, 0)
-            bad = (y0 * (s + al) + C) / ((s + al) ** 2 + be**2)
-            sqb = f"\\left({shift(-al)}\\right)^{{2}} + {be * be}"
-            decoys.append({"pos": 2, "kind": "Y", "expr": bad,
-                           "tex": rf"Y = \frac{{{join_terms([(y0, f'({shift(-al)})'), (C, '')])}}}{{{sqb}}}",
-                           "error": "sign", "why": WHY["csq_sign"]})
-            bad = sp.exp(-al * t) * (y0 * sp.cos(be * t) + Cb * sp.sin(be * t))
-            decoys.append({"pos": 3, "kind": "y", "expr": bad, "tex": rf"y = {tex(sp.exp(-al * t))}\left({inner}\right)",
-                           "error": "sign", "why": WHY["exp_sign"]})
-            if be != 1 and C != 0:
-                bad = sp.exp(al * t) * (y0 * sp.cos(be * t) + C * sp.sin(be * t))
-                inner2 = join_terms([(y0, rf"\cos {tex(be * t)}"), (C, rf"\sin {tex(be * t)}")])
-                decoys.append({"pos": 3, "kind": "y", "expr": bad, "tex": rf"y = {tex(sp.exp(al * t))}\left({inner2}\right)",
-                               "error": "missing_factor", "why": WHY["csq_beta"]})
-            tier = 2 if (al < 0 and Cb.q == 1) else 3
-            out.append({"params": {"alpha": al, "beta": be, "y0": y0, "v0": v0}, "tier": tier,
-                        "problem": _problem2(p, q, y0, v0), "steps": steps, "decoys": decoys,
-                        "verify": {"coeffs": [p, q], "rhs": 0, "ics": [y0, v0], "y": y}})
+            c = _csq_case(al, be, y0, v0)
+            Cb = sp.Rational(v0 - al * y0, be)
+            c["tier"] = 2 if (al < 0 and Cb.q == 1) else 3
+            hom.append(c)
+    out += hom[::14]                                         # 감쇠 진동은 고르게 솎아 다른 가족과 비슷한 수로
+    for be, (y0, v0) in itertools.product([1, 2, 3], [(2, -3), (-1, 3), (1, 1), (2, 1), (1, -2)]):
+        c = _csq_case(0, be, y0, v0)
+        c["tier"] = 1
+        out.append(c)
+    for k, ((al, be), m, (y0, v0)) in enumerate(itertools.product([(-1, 1), (-1, 2), (-2, 1), (-1, 3), (1, 2)], [2, 3], [(1, 0), (0, 1), (2, -1)])):
+        if k % 2:
+            continue
+        c = _csq_case(al, be, y0, v0, m=m)
+        c["tier"] = 3
+        out.append(c)
+    for (al, be), mult in itertools.product([(-1, 1), (-1, 2), (-2, 1), (-1, 3), (-2, 2), (-3, 1), (1, 1)], [1, 2, -1]):
+        q = al * al + be * be
+        c = _csq_const(al, be, q * mult)
+        c["tier"] = 3
+        out.append(c)
     return out
 
 

@@ -137,8 +137,8 @@
    "start_open": true,
    "file": "ch07.json",
    "units": 10,
-   "items": 318,
-   "built": "2026-11-25"
+   "items": 358,
+   "built": "2026-11-26"
   },
   {
    "id": 8,
@@ -170,9 +170,9 @@
    "level": "학부",
    "start_open": true,
    "file": "ch10.json",
-   "units": 24,
-   "items": 608,
-   "built": "2026-11-25"
+   "units": 25,
+   "items": 641,
+   "built": "2026-11-26"
   },
   {
    "id": 11,

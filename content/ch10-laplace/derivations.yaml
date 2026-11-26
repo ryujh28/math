@@ -68,6 +68,17 @@ lap.deriv2:
   steps:
   - 1계 공식을 $y^{\prime}$에 적용하면 $\mathcal{L}\{y^{\prime\prime}\} = s\,\mathcal{L}\{y^{\prime}\} - y^{\prime}(0)$.
   - $$\mathcal{L}\{y^{\prime\prime}\} = s\big(sY - y(0)\big) - y^{\prime}(0) = s^2Y - sy(0) - y^{\prime}(0)$$
+lap.csqinv:
+  goal: '분모가 실수로 인수분해되지 않는 $F(s) = \dfrac{as + b}{s^2 + ps + q}$를 시간 영역으로 되돌린다. 답: $e^{\alpha t}(A\cos\beta t + B\sin\beta t)$.'
+  steps:
+  - 분모를 완전제곱한다. $p = -2\alpha$, $q = \alpha^2 + \beta^2$이면
+  - $$s^2 + ps + q = (s - \alpha)^2 + \beta^2$$
+  - 분자를 $s - \alpha$와 상수로 다시 쓴다.
+  - $$as + b = a(s - \alpha) + (b + a\alpha)$$
+  - 두 항을 감쇠 코사인·감쇠 사인의 변환 꼴로 맞춘다. 사인 항은 $\beta$를 분자에 만들어야 하므로 $\beta$로 나눈다.
+  - $$F(s) = a\,\frac{s - \alpha}{(s - \alpha)^2 + \beta^2} + \frac{b + a\alpha}{\beta}\cdot\frac{\beta}{(s - \alpha)^2 + \beta^2}$$
+  - $$f(t) = e^{\alpha t}\left(a\cos\beta t + \frac{b + a\alpha}{\beta}\sin\beta t\right)$$
+  - 분모의 $s^2$ 계수가 1이 아니면 먼저 그 수로 분자·분모를 나눈다.
 lap.sshift:
   goal: '$f(t)$의 변환 $F(s)$를 알 때 $e^{at}f(t)$의 변환을 구한다 ($s$-이동 정리): $F(s - a)$.'
   steps:

@@ -118,7 +118,7 @@ def sshift():
         truth = F.subs(s, s - a)
         ok = _lap_ok(target)
         cand = [(F.subs(s, s + a), "sign"), (F / (s - a), "wrong_pair"), (F, "missing_factor"), (sp.exp(-a * s) * F, "wrong_pair")]
-        et = "e^{" + (tex(a) if a != 1 else "") + "t}"
+        et = "e^{" + {1: "", -1: "-"}.get(a, tex(a)) + "t}"
         out.append(_case(rf"\mathcal{{L}}\{{{et}{ft}\}} = \;?", _F(truth), lambda G=truth, ok=ok: ok(G),
                          [(_F(G), lambda G=G, ok=ok: ok(G), e) for G, e in cand], tier=1 if ft in ("t", r"t^{2}") else 2,
                          params={"f": ft, "a": a}))
@@ -183,3 +183,70 @@ def integral():
                   lambda f, F: [(s * F, "wrong_pair"), (F / s ** 2, "algebra"), (F, "missing_factor"), (-sp.diff(F, s), "wrong_pair"),
                                 (F / s - f.subs(t, 0) / s, "initial_condition")],
                   tier_of=lambda i: 2)
+
+
+def _damped_tex(al, A, B, be):
+    inner = join_terms([(A, rf"\cos {tex(be * t)}"), (B, rf"\sin {tex(be * t)}")])
+    if al == 0:
+        return inner
+    pre = tex(sp.exp(al * t))
+    if A == 0 or B == 0:
+        return pre + inner if not inner.startswith("-") else "-" + pre + inner[1:].lstrip()
+    return rf"{pre}\left({inner}\right)"
+
+
+def csqinv():
+    """완전제곱으로 역변환: ℒ⁻¹{(as + b)/(m(s² + ps + q))}. 가족마다 분자·분모 구조가 다르다.
+    cos: 분자가 (s − α)의 배수 · sin: 분자가 상수 · mix: 둘 다 · pure: α = 0 · lead: 분모 s²의 계수가 1이 아님."""
+    out = []
+    specs = []
+    for al, be in itertools.product([-3, -2, -1, 1, 2], [1, 2, 3]):
+        specs.append(("cos", al, be, 1, 0, 1))          # A, B, m
+        specs.append(("sin", al, be, 0, 1, 1))
+        specs.append(("mix", al, be, 2, 1, 1))
+        specs.append(("mix", al, be, 1, -2, 1))
+    for be in (1, 2, 3):
+        specs.append(("pure", 0, be, 3, 2, 1))
+        specs.append(("pure", 0, be, -1, 1, 1))
+    for al, be in [(-1, 1), (-1, 2), (-2, 1), (1, 1), (-1, 3)]:
+        specs.append(("lead", al, be, 1, 1, 2))
+        specs.append(("lead", al, be, 2, -1, 3))
+    tiers = {"cos": 2, "sin": 2, "pure": 1, "mix": 3, "lead": 3}
+    keep = {"cos": 7, "sin": 7, "mix": 10, "pure": 6, "lead": 8}
+    seen = {}
+    for k, (fam, al, be, A, B, mm) in enumerate(specs):
+        if seen.get(fam, 0) >= keep[fam] or (fam in ("cos", "sin", "mix") and k % 3 == 1):
+            continue
+        # 시간 영역 답 f = e^{αt}(A cos βt + B sin βt), 그 변환을 m으로 나눈 꼴로 낸다 → 답은 f/m
+        f = sp.exp(al * t) * (A * sp.cos(be * t) + B * sp.sin(be * t))
+        F = sp.expand(A * (s - al) + B * be)
+        den = sp.expand((s - al) ** 2 + be**2)
+        num_show, den_show = F, sp.expand(mm * den)
+        target = f / mm
+        G = num_show / den_show
+        ok = lambda fo, G=G: laplace_same(fo, G)
+        As, Bs = sp.Rational(A, mm), sp.Rational(B, mm)
+        ans = _damped_tex(al, As, Bs, be)
+        cand = []
+        if al:
+            cand.append((sp.exp(-al * t) * (As * sp.cos(be * t) + Bs * sp.sin(be * t)), _damped_tex(-al, As, Bs, be), "sign"))
+        if Bs and be != 1:
+            cand.append((sp.exp(al * t) * (As * sp.cos(be * t) + Bs * be * sp.sin(be * t)), _damped_tex(al, As, Bs * be, be), "missing_factor"))
+        if As != Bs:
+            cand.append((sp.exp(al * t) * (Bs * sp.cos(be * t) + As * sp.sin(be * t)), _damped_tex(al, Bs, As, be), "wrong_pair"))
+        cA, cB = sp.Rational(F.coeff(s, 1), mm), sp.Rational(F.coeff(s, 0), mm * be)   # 분자를 s − α로 다시 쓰지 않은 실수
+        if (cA, cB) != (As, Bs):
+            cand.append((sp.exp(al * t) * (cA * sp.cos(be * t) + cB * sp.sin(be * t)), _damped_tex(al, cA, cB, be), "algebra"))
+        if mm != 1:
+            cand.append((f, _damped_tex(al, A, B, be), "missing_factor"))
+        if al == 0:
+            hyp = As * sp.cosh(be * t) + Bs * sp.sinh(be * t)
+            cand.append((hyp, join_terms([(As, rf"\cosh {tex(be * t)}"), (Bs, rf"\sinh {tex(be * t)}")]), "sign"))
+        if len(cand) < 3:
+            cand.append((sp.exp(al * t) * (As * sp.cos(be * t) - Bs * sp.sin(be * t)) if Bs else sp.exp(al * t) * As * sp.sin(be * t),
+                         _damped_tex(al, As, -Bs, be) if Bs else _damped_tex(al, 0, As, be), "sign" if Bs else "wrong_pair"))
+        prompt = rf"\mathcal{{L}}^{{-1}}\left\{{\frac{{{tex(num_show)}}}{{{tex(den_show)}}}\right\}} = \;?"
+        out.append(_case(prompt, ans, lambda fo=target, ok=ok: ok(fo), [(tx, lambda fo=fo, ok=ok: ok(fo), e) for fo, tx, e in cand],
+                         tier=tiers[fam], params={"alpha": al, "beta": be, "A": A, "B": B, "m": mm, "family": fam}))
+        seen[fam] = seen.get(fam, 0) + 1
+    return out

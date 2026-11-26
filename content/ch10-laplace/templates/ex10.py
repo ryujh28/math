@@ -1,6 +1,7 @@
 """10장 변환 정리 문제별 해설."""
 import sympy as sp
 from exkit import tex, m, dm, p, t, s
+from texkit import join_terms
 from fx10 import BASE, CONV
 
 FT = {ft: f for ft, f in BASE}
@@ -76,5 +77,23 @@ def integral(P, it):
             f"{m('F = ' + tex(F))} → {m(F_(F / s))}"], []
 
 
-EXPLAIN = {"lap.deriv1": deriv1, "lap.deriv2": deriv2, "lap.sshift": sshift, "lap.tshift": tshift, "lap.conv": conv,
+def csqinv(P, it):
+    al, be, A, B, mm = P["alpha"], P["beta"], P["A"], P["B"], P["m"]
+    num = sp.expand(A * (s - al) + B * be)
+    den = sp.expand((s - al) ** 2 + be**2)
+    As, Bs = sp.Rational(A, mm), sp.Rational(B, mm)
+    sh = tex(s - al)
+    lines = []
+    if mm != 1:
+        lines.append(f"분모의 {m('s^{2}')} 계수 {m(tex(mm))}로 분자·분모를 나눈다.")
+    sq = f"({sh})^{{2}} + {tex(be**2)}" if al else f"s^{{2}} + {tex(be**2)}"
+    lines.append(f"완전제곱: {m(tex(den) + ' = ' + sq)}")
+    if al and A and B:
+        lines.append(f"분자를 {m(sh)}와 상수로 다시 쓴다: {m(tex(num) + ' = ' + join_terms([(A, '(' + sh + ')'), (B * be, '')]))}")
+    f = sp.exp(al * t) * (As * sp.cos(be * t) + Bs * sp.sin(be * t))
+    lines.append(f"사인 항은 {m(tex(be))}로 나눠 맞춘다 → {m('f(t) = ' + tex(f))}")
+    return lines, [(LT(f), num / (mm * den))]
+
+
+EXPLAIN = {"lap.csqinv": csqinv, "lap.deriv1": deriv1, "lap.deriv2": deriv2, "lap.sshift": sshift, "lap.tshift": tshift, "lap.conv": conv,
            "lap.tmult": tmult, "lap.integral": integral}
