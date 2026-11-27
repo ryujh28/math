@@ -94,10 +94,11 @@ def vmat(M) -> str:
     return r"\begin{vmatrix}" + r" \\ ".join(rows) + r"\end{vmatrix}"
 
 
-def aug(M) -> str:
-    """첨가행렬 [A | b]."""
+def aug(M, split=None) -> str:
+    """첨가행렬 [A | b]. split: 세로줄 앞의 열 수 (기본: 마지막 열 앞)."""
     M = sp.Matrix(M)
-    cols = "c" * (M.cols - 1) + "|c"
+    k = M.cols - 1 if split is None else split
+    cols = "c" * k + "|" + "c" * (M.cols - k)
     rows = [" & ".join(tex(e) for e in M.row(i)) for i in range(M.rows)]
     return r"\left(\begin{array}{" + cols + "}" + r" \\ ".join(rows) + r"\end{array}\right)"
 

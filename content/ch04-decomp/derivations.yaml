@@ -54,3 +54,17 @@ la.lu:
   - '행 연산 $R_i \leftarrow R_i - l_{ij}R_j$는 왼쪽에 기본행렬을 곱하는 것과 같다: $E\,A = U$.'
   - $E^{-1}$은 승수를 부호 그대로 대각 아래에 모은 단위 하삼각행렬 $L$이다.
   - $$A = LU,\quad L = \begin{pmatrix}1 & 0 & 0\\ l_{21} & 1 & 0\\ l_{31} & l_{32} & 1\end{pmatrix}$$
+la.svdcalc:
+  goal: '$2\times 2$ 행렬 $A$를 $U\Sigma V^T$로 직접 계산하는 절차다.'
+  steps:
+  - '$A^TA = V\Sigma^T\Sigma V^T$라 $V$는 $A^TA$의 정규직교 고유벡터, $\sigma_i^2$는 그 고유값이다.'
+  - '$AV = U\Sigma$의 $i$열을 보면 $A\mathbf{v}_i = \sigma_i\mathbf{u}_i$이다.'
+  - $$\mathbf{u}_i = \frac{A\mathbf{v}_i}{\sigma_i}, \qquad \mathbf{u}_i\cdot\mathbf{u}_j = \frac{\mathbf{v}_i^TA^TA\mathbf{v}_j}{\sigma_i\sigma_j} = \delta_{ij}$$
+  - '$\sigma_2 = 0$이면 $\mathbf{u}_2$는 $\mathbf{u}_1$에 수직인 아무 단위벡터나 된다.'
+la.projcalc:
+  goal: '직선·열공간·평면 위로의 사영행렬을 구체적으로 계산한다.'
+  steps:
+  - '열공간 위로의 사영은 $P = A(A^TA)^{-1}A^T$이다 (정규방정식에서).'
+  - '한 열 $\mathbf{a}$이면 $(A^TA)^{-1} = 1/\mathbf{a}^T\mathbf{a}$라 $P = \dfrac{\mathbf{a}\mathbf{a}^T}{\mathbf{a}^T\mathbf{a}}$이다.'
+  - '평면은 법선 $\mathbf{n}$의 직교여공간이라 $P = I - \dfrac{\mathbf{n}\mathbf{n}^T}{\mathbf{n}^T\mathbf{n}}$이다.'
+  - '검산: $P^2 = P$, $P^T = P$.'

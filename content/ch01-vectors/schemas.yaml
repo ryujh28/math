@@ -1,11 +1,11 @@
 # 1장 벡터공간과 내적 · 풀이 뼈대
 - id: la.gs
   title: Gram–Schmidt 정규직교화
-  generator: la1:gram_schmidt
+  generator: la1:gs_families
   steps: [내적 계산, 사영 빼기, e₁ 정규화, e₂ 정규화]
   hint: '먼저 $\mathbf{u}_1 = \mathbf{v}_1$로 두고, $\mathbf{v}_2$에서 $\mathbf{u}_1$ 방향 사영을 빼서 $\mathbf{u}_2$를 만든다. 마지막에 각 벡터를 자기 길이로 나누면 정규직교 벡터 $\mathbf{e}_1, \mathbf{e}_2$가 된다.'
 - id: la.planeproj
-  title: 평면 위로의 사영
-  generator: la1:plane_projection
-  steps: [법선과 내적, 법선 성분, 빼기]
-  hint: '법선이 $\mathbf{n}$인 평면 위로의 사영은 $\mathbf{v}$에서 법선 방향 성분을 뺀 것이다: $\mathbf{v} - \dfrac{\mathbf{n}\cdot\mathbf{v}}{\mathbf{n}\cdot\mathbf{n}}\mathbf{n}$.'
+  title: 평면·직선 위로의 사영과 거리
+  generator: la1:plane_families
+  steps: [내적, 성분, 결과]
+  hint: '법선이 $\mathbf{n}$인 평면 위로의 사영은 $\mathbf{v}$에서 법선 방향 성분을 뺀 것이다: $\mathbf{v} - \dfrac{\mathbf{n}\cdot\mathbf{v} - d}{\mathbf{n}\cdot\mathbf{n}}\mathbf{n}$. 평면이 원점을 지나면 $d = 0$이고, 점과 평면 사이 거리는 $\dfrac{|\mathbf{n}\cdot\mathbf{p} - d|}{\|\mathbf{n}\|}$이다. 직선 위로의 사영은 방향 성분만 남긴다.'

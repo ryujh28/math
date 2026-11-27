@@ -1,11 +1,16 @@
 # 3장 고유값 문제 · 풀이 뼈대
 - id: la.diag
   title: '$2\times 2$ 대각화'
-  generator: la3:diagonalize
+  generator: la3:diag_families
   steps: [특성방정식, 고유값, 고유벡터, P와 D]
-  hint: '고유값을 구하고 각 고유값의 고유벡터를 $P$의 열로 놓은 뒤, 같은 순서로 고유값을 $D$의 대각에 놓으면 $A = PDP^{-1}$이다.'
+  hint: '고유값을 구하고 각 고유값의 고유벡터를 $P$의 열로 놓은 뒤, 같은 순서로 고유값을 $D$의 대각에 놓으면 $A = PDP^{-1}$이다. 대칭행렬은 고유벡터를 정규화해 직교행렬 $Q$로 대각화한다.'
 - id: la.apow
   title: 대각화로 거듭제곱
-  generator: la3:matrix_power
-  steps: [A = PDP⁻¹, Dⁿ, Aⁿ = PDⁿP⁻¹, 결과]
-  hint: '$A = PDP^{-1}$이면 $A^{n} = PD^{n}P^{-1}$이다. 대각행렬 $D$의 거듭제곱은 대각성분을 각각 $n$제곱하면 된다.'
+  generator: la3:apow_families
+  steps: [A = PDP⁻¹, Dⁿ, 공식, 결과]
+  hint: '$A = PDP^{-1}$이면 $A^{n} = PD^{n}P^{-1}$이다. 대각행렬 $D$의 거듭제곱은 대각성분을 각각 $n$제곱하면 된다. 고유값이 $0$과 $1$뿐이면 $A^{n} = A$이고, $|\lambda| < 1$인 성분은 $n \to \infty$에서 $0$으로 간다.'
+- id: la.eig3
+  title: '$3\times 3$ 고유값'
+  generator: la3:eig3
+  steps: [특성다항식, 인수분해, 고유값, 고유벡터]
+  hint: '$\det(A - \lambda I)$를 전개해 삼차 특성다항식을 만들고 인수분해한다. 삼각행렬이나 블록행렬이면 대각 성분이나 블록에서 바로 읽는다. 고유벡터는 $(A - \lambda I)\mathbf{v} = \mathbf{0}$을 풀어 구한다.'

@@ -187,3 +187,136 @@ def plane_projection():
         out.append({"params": {"n": list(n), "v": list(v)}, "tier": tier, "problem": prob, "steps": steps, "decoys": decoys,
                     "verify": lambda w=w, n=n: None if same(w.dot(n), 0) else "결과가 평면 위에 있지 않음"})
     return out
+
+
+# ---------------------------------------------------------------- M3.6 2단계: 가족 추가
+WHY.update({
+    "gs_orth": r"$\mathbf{v}_2\cdot\mathbf{u}_1 = 0$이면 이미 직교라서 뺄 것이 없습니다: $\mathbf{u}_2 = \mathbf{v}_2$.",
+    "gs_e1": r"$\mathbf{e}_1 = \dfrac{\mathbf{u}_1}{\|\mathbf{u}_1\|}$입니다. 길이로 나누지 않으면 단위벡터가 아닙니다.",
+    "pl_off": r"평면 $\mathbf{n}\cdot\mathbf{x} = d$로의 사영은 $\mathbf{v} - \dfrac{\mathbf{n}\cdot\mathbf{v} - d}{\mathbf{n}\cdot\mathbf{n}}\mathbf{n}$입니다. $d$를 빼지 않았습니다.",
+    "ln_sub": r"직선 위로의 사영은 방향벡터 성분 자체입니다. 빼면 직선에 수직인 성분이 됩니다.",
+    "pd_sign": r"$d$를 빼야 하는데 더했습니다. 평면 $\mathbf{n}\cdot\mathbf{x} = d$에서 법선 방향으로 떨어진 정도는 $\mathbf{n}\cdot\mathbf{p} - d$입니다.",
+    "off_sign": r"$\mathbf{n}\cdot\mathbf{v} - d$에서 $d$를 빼야 하는데 더했습니다.",
+    "ln_norm": r"사영 계수의 분모는 $\|\mathbf{d}\|$가 아니라 $\|\mathbf{d}\|^2 = \mathbf{d}\cdot\mathbf{d}$입니다.",
+    "ln_dot": r"$\mathbf{d}\cdot\mathbf{v}$ 계산이 틀렸습니다. 성분끼리 곱해 더해 보세요.",
+    "dist_abs": r"거리는 $\dfrac{|\mathbf{n}\cdot\mathbf{p} - d|}{\|\mathbf{n}\|}$입니다. $\|\mathbf{n}\|^2$으로 나누면 안 됩니다.",
+})
+
+
+def _gs_case(v1, v2, family, tier):
+    a, b = v2.dot(v1), v1.dot(v1)
+    ref = sp.GramSchmidt([v1, v2])
+    refn = sp.GramSchmidt([v1, v2], True)
+    u2 = v2 - (a / b) * v1
+    e1, e2 = v1 / v1.norm(), u2 / u2.norm()
+    prob = rf"{B}{{v}}_1 = {tup(v1)},\ {B}{{v}}_2 = {tup(v2)}\ \text{{을 Gram–Schmidt로 정규직교화}}"
+    u2tx = rf"{B}{{u}}_2 = {B}{{v}}_2 = {tup(u2)}\ (\text{{이미 직교}})" if a == 0 else rf"{B}{{u}}_2 = {join_terms([(1, B + '{v}_2'), (-(a / b), B + '{u}_1')])} = {tup(u2)}"
+    steps = [
+        vstep(rf"{B}{{v}}_2\cdot{B}{{u}}_1 = {tex(a)},\quad {B}{{u}}_1\cdot{B}{{u}}_1 = {tex(b)}\quad ({B}{{u}}_1 = {B}{{v}}_1)", (a, b), (v2.dot(ref[0]), ref[0].dot(ref[0]))),
+        vstep(u2tx, u2, ref[1]),
+        vstep(rf"{B}{{e}}_1 = {tup(e1)}", e1, refn[0]),
+        vstep(rf"{B}{{e}}_2 = {tup(e2)}", e2, refn[1]),
+    ]
+    decoys = [vdecoy(2, rf"{B}{{e}}_1 = {tup(v1 / b)}", v1 / b, refn[0], "normalization", WHY["gs_e1"]) if b != 1 else None,
+              vdecoy(3, rf"{B}{{e}}_2 = {tup(u2 / v1.norm())}", u2 / v1.norm(), refn[1], "normalization", WHY["gs_unit"]) if not same(u2.norm(), v1.norm()) else None]
+    if a == 0:
+        bad = v2 - v1
+        decoys.append(vdecoy(1, rf"{B}{{u}}_2 = {B}{{v}}_2 - {B}{{u}}_1 = {tup(bad)}", bad, ref[1], "algebra", WHY["gs_orth"]))
+    else:
+        bad_s = v2 + (a / b) * v1
+        decoys.append(vdecoy(1, rf"{B}{{u}}_2 = {join_terms([(1, B + '{v}_2'), ((a / b), B + '{u}_1')])} = {tup(bad_s)}", bad_s, ref[1], "sign", WHY["gs_sign"]))
+        decoys.append(vdecoy(0, rf"{B}{{v}}_2\cdot{B}{{u}}_1 = {tex(b)},\quad {B}{{u}}_1\cdot{B}{{u}}_1 = {tex(b)}\quad ({B}{{u}}_1 = {B}{{v}}_1)",
+                             (b, b), (v2.dot(ref[0]), ref[0].dot(ref[0])), "algebra", WHY["gs_dot"]))
+    decoys = [d for d in decoys if d]
+
+    def verify(e1=e1, e2=e2):
+        return None if same(e1.dot(e2), 0) and same(e1.norm(), 1) and same(e2.norm(), 1) else "정규직교 아님"
+    return {"params": {"v1": list(v1), "v2": list(v2), "family": family}, "tier": tier, "problem": prob, "steps": steps, "decoys": decoys, "verify": verify}
+
+
+def gs_families():
+    """Gram–Schmidt. 가족: ℝ³ 두 벡터(기존) · ℝ² 두 벡터 · 이미 직교인 쌍(ℝ³)."""
+    out = []
+    for c in gram_schmidt():
+        c["params"]["family"] = "r3"
+        c["tier"] = min(3, c["tier"] + 1)        # ℝ³은 ℝ²보다 한 단계 위 (단계당 30문제 상한도 고르게)
+        out.append(c)
+    out = out[:26]
+    v1s, v2s = _vecs(2, 12, -3, 3, seed=31), _vecs(2, 12, -3, 4, seed=32)
+    r2 = []
+    for v1, v2 in itertools.product(v1s, v2s):
+        if v1[0] * v2[1] - v1[1] * v2[0] == 0 or v2.dot(v1) == 0:
+            continue
+        r2.append(_gs_case(v1, v2, "r2", 1 if (v2.dot(v1) / v1.dot(v1)).q == 1 else 2))
+    out += r2[::max(1, len(r2) // 20)][:20]
+    orth = []
+    for v1, v2 in itertools.product(_vecs(3, 14, -2, 2, seed=33), _vecs(3, 30, -3, 3, seed=34)):
+        if v2.dot(v1) == 0 and v1.cross(v2) != sp.zeros(3, 1):
+            orth.append(_gs_case(v1, v2, "orth", 1))
+    out += orth[::max(1, len(orth) // 14)][:14]
+    return out
+
+
+def plane_families():
+    """사영과 거리. 가족: 원점을 지나는 평면(기존) · 평면 n·x = d · 직선 위로 사영 · 점과 평면 사이 거리."""
+    out = []
+    for c in plane_projection():
+        c["params"]["family"] = "plane0"
+        out.append(c)
+    out = out[:24]
+    ns, vs = _vecs(3, 8, -2, 2, seed=41), _vecs(3, 12, -3, 3, seed=42)
+    off, line, dist = [], [], []
+    for (n, v), d in zip(itertools.product(ns, vs), itertools.cycle([1, 2, -1, 3, -2])):
+        nn, nv = n.dot(n), n.dot(v)
+        if nv - d != 0:
+            w = v - ((nv - d) / nn) * n
+            ok_w = lambda q, n=n, v=v, d=d: same(sp.Matrix(q).dot(n), d) and same((v - sp.Matrix(q)).cross(n), sp.zeros(3, 1))
+            pl = join_terms([(n[0], "x"), (n[1], "y"), (n[2], "z")])
+            steps = [
+                vstep(rf"{B}{{n}}\cdot{B}{{v}} - d = {tex(nv - d)},\quad {B}{{n}}\cdot{B}{{n}} = {tex(nn)}", (nv - d, nn), (v.dot(n) - d, n.norm() ** 2)),
+                step(rf"\frac{{{B}{{n}}\cdot{B}{{v}} - d}}{{{B}{{n}}\cdot{B}{{n}}}}{B}{{n}} = {tup(((nv - d) / nn) * n)}", lambda q=((nv - d) / nn) * n, ok=ok_w, v=v: ok(v - q)),
+                step(rf"{B}{{v}} - \frac{{{B}{{n}}\cdot{B}{{v}} - d}}{{{B}{{n}}\cdot{B}{{n}}}}{B}{{n}} = {tup(w)}", lambda q=w, ok=ok_w: ok(q)),
+            ]
+            bw = v - (nv / nn) * n
+            decoys = [
+                decoy(2, rf"{B}{{v}} - \frac{{{B}{{n}}\cdot{B}{{v}}}}{{{B}{{n}}\cdot{B}{{n}}}}{B}{{n}} = {tup(bw)}", lambda q=bw, ok=ok_w: ok(q), "algebra", WHY["pl_off"]),
+                decoy(2, rf"{B}{{v}} + \frac{{{B}{{n}}\cdot{B}{{v}} - d}}{{{B}{{n}}\cdot{B}{{n}}}}{B}{{n}} = {tup(v + ((nv - d) / nn) * n)}", lambda q=v + ((nv - d) / nn) * n, ok=ok_w: ok(q), "sign", WHY["pl_sign"]),
+                vdecoy(0, rf"{B}{{n}}\cdot{B}{{v}} - d = {tex(nv + d)},\quad {B}{{n}}\cdot{B}{{n}} = {tex(nn)}", (nv + d, nn), (v.dot(n) - d, n.norm() ** 2), "sign", WHY["off_sign"]),
+            ]
+            off.append({"params": {"n": list(n), "v": list(v), "d": d, "family": "offset"}, "tier": 3,
+                        "problem": rf"{B}{{v}} = {tup(v)}\ \text{{를 평면}}\ {pl} = {d}\ \text{{위로 사영}}", "steps": steps, "decoys": decoys,
+                        "verify": lambda w=w, n=n, d=d: None if same(w.dot(n), d) else "평면 위가 아님"})
+        if nv != 0:
+            pr = (nv / nn) * n
+            ok_p = lambda q, n=n, v=v: same(sp.Matrix(q).cross(n), sp.zeros(3, 1)) and same((v - sp.Matrix(q)).dot(n), 0)
+            steps = [
+                vstep(rf"{B}{{d}} = {tup(n)},\quad {B}{{d}}\cdot{B}{{v}} = {tex(nv)},\quad {B}{{d}}\cdot{B}{{d}} = {tex(nn)}", (nv, nn), (v.dot(n), n.norm() ** 2)),
+                step(rf"\operatorname{{proj}}_{{{B}{{d}}}}{B}{{v}} = {join_terms([(nv / nn, B + '{d}')])} = {tup(pr)}", lambda q=pr, ok=ok_p: ok(q)),
+                step(rf"{B}{{v}} - \operatorname{{proj}}_{{{B}{{d}}}}{B}{{v}} = {tup(v - pr)}\ \perp {B}{{d}}\ (\text{{확인}})", lambda q=v - pr, n=n: same(q.dot(n), 0)),
+            ]
+            decoys = [
+                decoy(1, rf"\operatorname{{proj}}_{{{B}{{d}}}}{B}{{v}} = {join_terms([(nv / sp.sqrt(nn), B + '{d}')])} = {tup((nv / sp.sqrt(nn)) * n)}", lambda q=(nv / sp.sqrt(nn)) * n, ok=ok_p: ok(q), "normalization", WHY["ln_norm"]),
+                decoy(1, rf"\operatorname{{proj}}_{{{B}{{d}}}}{B}{{v}} = {tup(v - pr)}", lambda q=v - pr, ok=ok_p: ok(q), "wrong_pair", WHY["ln_sub"]),
+                vdecoy(0, rf"{B}{{d}} = {tup(n)},\quad {B}{{d}}\cdot{B}{{v}} = {tex(nv + 1)},\quad {B}{{d}}\cdot{B}{{d}} = {tex(nn)}", (nv + 1, nn), (v.dot(n), n.norm() ** 2), "algebra", WHY["ln_dot"]),
+            ]
+            line.append({"params": {"d": list(n), "v": list(v), "family": "line"}, "tier": 1,
+                         "problem": rf"{B}{{v}} = {tup(v)}\ \text{{를 방향}}\ {B}{{d}} = {tup(n)}\ \text{{인 원점 지나는 직선 위로 사영}}", "steps": steps, "decoys": decoys,
+                         "verify": lambda q=pr, ok=ok_p: None if ok(q) else "사영 확인 실패"})
+        if nv - d != 0:
+            nrm = sp.sqrt(nn)
+            D_ = sp.Abs(nv - d) / nrm
+            pl = join_terms([(n[0], "x"), (n[1], "y"), (n[2], "z")])
+            steps = [
+                vstep(rf"{B}{{n}}\cdot{B}{{p}} - d = {tex(nv - d)}", nv - d, v.dot(n) - d),
+                vstep(rf"\|{B}{{n}}\| = {tex(nrm)}", nrm, n.norm()),
+                vstep(rf"\text{{거리}} = \frac{{|{tex(nv - d)}|}}{{{tex(nrm)}}} = {tex(sp.radsimp(D_))}", D_, sp.Abs(v.dot(n) - d) / n.norm()),
+            ]
+            decoys = [
+                vdecoy(2, rf"\text{{거리}} = \frac{{|{tex(nv - d)}|}}{{{tex(nn)}}} = {tex(sp.Abs(nv - d) / nn)}", sp.Abs(nv - d) / nn, sp.Abs(v.dot(n) - d) / n.norm(), "normalization", WHY["dist_abs"]),
+                vdecoy(0, rf"{B}{{n}}\cdot{B}{{p}} - d = {tex(nv + d)}", nv + d, v.dot(n) - d, "sign", WHY["pd_sign"]),
+                vdecoy(1, rf"\|{B}{{n}}\| = {tex(nn)}", nn, n.norm(), "normalization", WHY["dist_abs"]),
+            ]
+            dist.append({"params": {"n": list(n), "p": list(v), "d": d, "family": "dist"}, "tier": 2,
+                         "problem": rf"\text{{점}}\ {B}{{p}} = {tup(v)}\ \text{{와 평면}}\ {pl} = {d}\ \text{{사이의 거리}}", "steps": steps, "decoys": decoys})
+    pick = lambda L, k: L[::max(1, len(L) // k)][:k]
+    return out + pick(off, 18) + pick(line, 18) + pick(dist, 18)

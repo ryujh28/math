@@ -223,6 +223,39 @@ CHECKS = {
                          ("ℒ{u(t − c) sin ω(t − c)/ω} = e^{−cs}/(s² + ω²)", lambda: Z(L(sp.Heaviside(t - cc) * sp.sin(w * (t - cc)) / w) - sp.exp(-cc * s) / (s**2 + w**2)))],
 }
 
+# ---------------- M3.6 2단계 (선형대수 뼈대)
+_J = sp.Matrix([[0, -1], [1, 0]])
+
+
+def _colrep(M, i, col):
+    M = M.copy()
+    M[:, i] = col
+    return M
+
+
+_x0 = sp.Matrix(sp.symbols("p1 p2"))
+CHECKS.update({
+    "la.gjinv": [("E·[A | I] = [EA | E], EA = I ⇒ E = A⁻¹ (기호 3×3)", lambda: (lambda E: MZ(E * sp.Matrix.hstack(A3, sp.eye(3)) - sp.Matrix.hstack(sp.eye(3), A3.inv())))(A3.inv()))],
+    "la.cramer": [("det Aᵢ = xᵢ det A (기호 2×2)", lambda: (lambda bb: (lambda X: all(Z(_colrep(A2, i, bb).det() - X[i] * A2.det()) for i in range(2)))(A2.inv() * bb))(sp.Matrix(sp.symbols("b1 b2"))))],
+    "la.eig3": [("det(A − λI) = −λ³ + tr A λ² − c₁λ + det A (기호)", lambda: Z((A3 - lam * sp.eye(3)).det() - (-lam**3 + A3.trace() * lam**2 - sum(A3.minor(i, i) for i in range(3)) * lam + A3.det()))),
+                ("삼각행렬: det(A − λI) = Π(aᵢᵢ − λ)", lambda: (lambda T: Z((T - lam * sp.eye(3)).det() - sp.prod([T[i, i] - lam for i in range(3)])))(sp.Matrix([[a, b, c], [0, d, p], [0, 0, q]])))],
+    "la.svdcalc": [("uᵢ = Avᵢ/σᵢ 정규직교, A = UΣVᵀ (예)", lambda: (lambda A: (lambda ev: (lambda Vm: (lambda S: (lambda U: MZ(U.T * U - sp.eye(2)) and MZ(U * S * Vm.T - A))(
+        A * Vm * S.inv()))(sp.diag(*[sp.sqrt(e) for e in ev])))(sp.Matrix.hstack(*[(A.T * A - e * sp.eye(2)).nullspace()[0].normalized() for e in ev])))(
+        sorted((A.T * A).eigenvals().keys(), reverse=True)))(sp.Matrix([[-2, -2], [-5, -2]])))],
+    "la.projcalc": [("한 열이면 A(AᵀA)⁻¹Aᵀ = aaᵀ/aᵀa", lambda: MZ(u * (u.T * u).inv() * u.T - u * u.T / u.dot(u))),
+                    ("I − nnᵀ/nᵀn: P² = P, Pn = 0", lambda: (lambda P: MZ(P * P - P) and MZ(P * u))(sp.eye(3) - u * u.T / u.dot(u)))],
+    "la.odesys": [("Av = λv ⇒ (e^{λt}v)′ = A e^{λt}v (예)", lambda: (lambda v1: MZ(sp.diff(sp.exp(2 * t) * v1, t) - A0 * sp.exp(2 * t) * v1))(P0[:, 0])),
+                  ("복소: e^{at}(p cos bt − q sin bt)는 해 (A = P(aI + bJ)P⁻¹)", lambda: (lambda A: (lambda vv: (lambda pp, qq: MZ(sp.simplify(sp.diff(sp.exp(-t) * (pp * sp.cos(2 * t) - qq * sp.sin(2 * t)), t) - A * sp.exp(-t) * (pp * sp.cos(2 * t) - qq * sp.sin(2 * t)))))(
+                      vv.applyfunc(sp.re), vv.applyfunc(sp.im)))((A - (-1 + 2 * sp.I) * sp.eye(2)).nullspace()[0].applyfunc(sp.expand)))(P0 * (-sp.eye(2) + 2 * _J) * P0.inv())),
+                  ("중근: (A − λI)w = v ⇒ e^{λt}(tv + w)는 해", lambda: (lambda A, v1, w1: MZ(sp.diff(sp.exp(3 * t) * (t * v1 + w1), t) - A * sp.exp(3 * t) * (t * v1 + w1)))(P0 * sp.Matrix([[3, 1], [0, 3]]) * P0.inv(), P0[:, 0], P0[:, 1]))],
+})
+CHECKS["la.expat"] += [("J² = −I ⇒ e^{(aI + bJ)t} = e^{at}(cos bt I + sin bt J)", lambda: MZ(sp.simplify(((2 * sp.eye(2) + 3 * _J) * t).exp().applyfunc(lambda e: e.rewrite(sp.cos)) - sp.exp(2 * t) * (sp.cos(3 * t) * sp.eye(2) + sp.sin(3 * t) * _J)))),
+                       ("N² = 0 ⇒ e^{(λI + N)t} = e^{λt}(I + Nt)", lambda: (lambda N: MZ(sp.simplify(((-1 * sp.eye(2) + N) * t).exp() - sp.exp(-t) * (sp.eye(2) + N * t))))(sp.Matrix([[2, -4], [1, -2]])))]
+CHECKS["la.planeproj"] += [("n·x = d 평면: v − ((n·v − d)/n·n)n 은 평면 위", lambda: Z(u.dot(v - (u.dot(v) - d) / u.dot(u) * u) - d)),
+                           ("거리 = |n·p − d|/‖n‖ = 법선 성분의 길이", lambda: Z(((u.dot(v) - d) / u.dot(u) * u).dot((u.dot(v) - d) / u.dot(u) * u) - (u.dot(v) - d) ** 2 / u.dot(u)))]
+CHECKS["la.gauss"] += [("행 교환은 해를 바꾸지 않는다 (예)", lambda: (lambda M, bb: M.solve(bb) == M.permute_rows([1, 0, 2]).solve(bb.permute_rows([1, 0, 2])))(sp.Matrix([[0, 1, 2], [1, 1, 0], [2, 0, 1]]), sp.Matrix([1, 2, 3])))]
+
+
 CONCEPT = {
     "la.rank": "수식 주장 없음 (행 연산과 계수의 관계를 말로 설명)",
 }

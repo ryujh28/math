@@ -54,3 +54,10 @@ la.apow:
   steps:
   - $$A^n = (PDP^{-1})(PDP^{-1})\cdots(PDP^{-1}) = PD^nP^{-1}$$
   - 가운데의 $P^{-1}P$가 모두 $I$로 사라진다. $D^n$은 대각성분의 $n$제곱이다.
+la.eig3:
+  goal: '$3\times 3$ 행렬의 고유값을 삼차 특성다항식의 근으로 구하고 고유벡터 하나를 찾는다.'
+  steps:
+  - $$p(\lambda) = \det(A - \lambda I) = -\lambda^3 + (\operatorname{tr}A)\lambda^2 - c_1\lambda + \det A$$
+  - '$c_1$은 대각 $2\times 2$ 소행렬식의 합이다. 고유값의 합은 $\operatorname{tr}A$, 곱은 $\det A$이다.'
+  - 삼각행렬이면 $A - \lambda I$도 삼각이라 $p(\lambda) = \prod(a_{ii} - \lambda)$이다. 블록 대각행렬이면 블록마다 따로 구한다.
+  - '고유벡터는 $(A - \lambda I)\mathbf{v} = \mathbf{0}$의 영공간에서 고른다.'

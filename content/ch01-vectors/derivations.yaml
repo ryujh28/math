@@ -61,3 +61,6 @@ la.planeproj:
   - '$\mathbf{v}$를 법선 성분과 평면 위 성분으로 나눈다: $\mathbf{v} = \mathbf{v}_\perp + \mathbf{v}_\parallel$, $\mathbf{v}_\perp \parallel \mathbf{n}$, $\mathbf{v}_\parallel\cdot\mathbf{n} = 0$.'
   - '법선 성분은 $\mathbf{n}$ 위로의 사영이다: $\mathbf{v}_\perp = \dfrac{\mathbf{n}\cdot\mathbf{v}}{\mathbf{n}\cdot\mathbf{n}}\mathbf{n}$.'
   - $$\mathbf{v}_\parallel = \mathbf{v} - \frac{\mathbf{n}\cdot\mathbf{v}}{\mathbf{n}\cdot\mathbf{n}}\mathbf{n}$$
+  - '평면이 $\mathbf{n}\cdot\mathbf{x} = d$이면 $\mathbf{n}\cdot\mathbf{v}$ 대신 $\mathbf{n}\cdot\mathbf{v} - d$를 쓴다. 그래야 결과가 $\mathbf{n}\cdot\mathbf{x} = d$를 만족한다.'
+  - '점과 평면 사이 거리는 법선 성분의 길이다: $\dfrac{|\mathbf{n}\cdot\mathbf{p} - d|}{\|\mathbf{n}\|}$.'
+  - '직선(방향 $\mathbf{d}$) 위로의 사영은 반대로 방향 성분만 남긴다: $\dfrac{\mathbf{d}\cdot\mathbf{v}}{\mathbf{d}\cdot\mathbf{d}}\mathbf{d}$.'

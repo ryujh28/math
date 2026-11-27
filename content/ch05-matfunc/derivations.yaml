@@ -49,9 +49,18 @@ la.expat:
   - $A = PDP^{-1}$로 대각화하고 $e^{At} = Pe^{Dt}P^{-1}$을 쓴다.
   - $\mathbf{x}(t) = e^{At}\mathbf{x}_0$는 각 고유벡터 방향 성분이 $e^{\lambda_it}$로 따로 변하는 것의 합이다.
   - '검산: $X(t) = e^{At}$는 $X^{\prime} = AX$, $X(0) = I$를 만족해야 한다.'
+  - '$A = aI + bJ$, $J = \begin{pmatrix}0 & -1 \\ 1 & 0\end{pmatrix}$이면 $J^2 = -I$라 $e^{bJt} = \cos bt\,I + \sin bt\,J$이고, $aI$와 $J$는 교환하므로 $e^{At} = e^{at}e^{bJt}$이다.'
+  - '중근이라 $A = \lambda I + N$, $N^2 = 0$이면 급수가 끊겨 $e^{At} = e^{\lambda t}(I + Nt)$이다.'
 la.paxes:
   goal: '$ax^2 + bxy + cy^2 = 1$ 같은 이차곡선을 회전한 좌표에서 $\lambda_1X^2 + \lambda_2Y^2 = 1$ 꼴로 바꿔 모양(타원·쌍곡선)과 축 방향을 읽는다.'
   steps:
   - $A = Q\Lambda Q^T$이고 새 좌표 $(X, Y)^T = Q^T\mathbf{x}$는 원래 좌표를 회전한 것이다.
   - $$q = \mathbf{x}^TA\mathbf{x} = \lambda_1X^2 + \lambda_2Y^2$$
   - $q = 1$은 $\lambda$가 둘 다 양수면 타원, 부호가 다르면 쌍곡선이다.
+la.odesys:
+  goal: '$\mathbf{x}^{\prime} = A\mathbf{x}$, $\mathbf{x}(0) = \mathbf{x}_0$를 고유값으로 푸는 절차다.'
+  steps:
+  - '$A\mathbf{v} = \lambda\mathbf{v}$이면 $\mathbf{x} = e^{\lambda t}\mathbf{v}$가 해다: $\mathbf{x}^{\prime} = \lambda e^{\lambda t}\mathbf{v} = A\mathbf{x}$.'
+  - 독립인 해 두 개의 일차결합이 일반해이고, $\mathbf{x}(0) = \mathbf{x}_0$으로 상수를 정한다.
+  - '복소 고유값 $a + bi$, $\mathbf{v} = \mathbf{p} + i\mathbf{q}$이면 $e^{(a + bi)t}\mathbf{v}$의 실수부와 허수부가 각각 실수해다.'
+  - '고유벡터가 하나뿐이면 $(A - \lambda I)\mathbf{w} = \mathbf{v}$인 $\mathbf{w}$로 $e^{\lambda t}(t\mathbf{v} + \mathbf{w})$가 둘째 해다.'

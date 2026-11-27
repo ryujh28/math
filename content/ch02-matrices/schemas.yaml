@@ -1,11 +1,21 @@
 # 2장 행렬과 선형변환 · 풀이 뼈대
 - id: la.gauss
   title: Gauss 소거
-  generator: la2:gauss3
-  steps: [1열 소거, 2열 소거, x₃, 뒤에서부터 대입]
-  hint: '피벗 아래를 $0$으로 만드는 행 연산($R_i - l\,R_j$)으로 위삼각 꼴을 만든 뒤, 맨 아래 식부터 차례로 풀어 위로 대입한다.'
+  generator: la2:gauss_families
+  steps: [1열 소거, 2열 소거, 마지막 행 해석, 해]
+  hint: '피벗 아래를 $0$으로 만드는 행 연산($R_i - l\,R_j$)으로 위삼각 꼴을 만든다. 피벗 자리가 $0$이면 아래 행과 바꾼다. 마지막 행이 $0 = c\ (c \ne 0)$이면 해가 없고, $0 = 0$이면 자유변수가 생긴다. 그렇지 않으면 맨 아래 식부터 위로 대입한다.'
 - id: la.cofactor
   title: '$3\times 3$ 여인수 전개'
-  generator: la2:cofactor3
-  steps: [전개식, 소행렬식, 대입, 결과]
-  hint: '$3\times 3$ 행렬식은 1행의 각 원소에 그 원소의 행과 열을 지운 $2\times 2$ 행렬식을 곱하고, 부호를 $+,\,-,\,+$로 바꿔 가며 더한다.'
+  generator: la2:cofactor_families
+  steps: [전개 줄과 식, 소행렬식, 대입, 결과]
+  hint: '$3\times 3$ 행렬식은 한 행(또는 열)의 각 원소에 그 원소의 행과 열을 지운 $2\times 2$ 행렬식을 곱하고, 부호 $(-1)^{i+j}$를 붙여 더한다. $0$이 많은 줄을 고르면 계산이 줄고, 삼각행렬은 대각성분의 곱이다.'
+- id: la.gjinv
+  title: Gauss–Jordan으로 역행렬
+  generator: la2:gauss_jordan_inverse
+  steps: ['[A | I]', 열마다 소거, 'A⁻¹']
+  hint: '$[A \mid I]$에 행 연산을 해서 왼쪽을 $I$로 만들면 오른쪽이 $A^{-1}$이 된다. 열마다 피벗을 $1$로 만들고 그 열의 다른 성분을 모두 $0$으로 만든다.'
+- id: la.cramer
+  title: Cramer 공식
+  generator: la2:cramer
+  steps: [계수 행렬식 D, 열을 바꾼 행렬식, 해]
+  hint: '$D = \det A \ne 0$이면 $x_i = D_i / D$이다. $D_i$는 $A$의 $i$열을 우변 $\mathbf{b}$로 바꾼 행렬의 행렬식이다.'

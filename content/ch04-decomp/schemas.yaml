@@ -1,11 +1,21 @@
 # 4장 행렬 분해 · 풀이 뼈대
 - id: la.lsq
-  title: 최소제곱 직선 맞춤
-  generator: la4:lsq_line
-  steps: [A와 b, 정규방정식, 해, 직선]
-  hint: '점들에 가장 잘 맞는 직선 $y = c_0 + c_1x$를 구할 때, $A$의 각 행은 $(1,\ x_i)$, $\mathbf{b}$는 $y_i$로 놓고 정규방정식 $A^TA\mathbf{c} = A^T\mathbf{b}$를 푼다.'
+  title: 최소제곱 맞춤
+  generator: la4:lsq_families
+  steps: [A와 b, 정규방정식, 해, 맞춘 식]
+  hint: '맞출 식의 각 항이 $A$의 열이 된다. 직선 $y = c_0 + c_1x$는 행 $(1,\ x_i)$, 원점을 지나는 직선은 $(x_i)$, 이차곡선은 $(1,\ x_i,\ x_i^2)$이다. $\mathbf{b}$는 $y_i$로 놓고 정규방정식 $A^TA\mathbf{c} = A^T\mathbf{b}$를 푼다.'
 - id: la.lu
-  title: '$3\times 3$ LU 분해'
-  generator: la4:lu3
-  steps: [1열 승수, 1열 소거, 2열 승수, L과 U]
+  title: LU 분해
+  generator: la4:lu_families
+  steps: [승수, 소거, 다음 승수, L과 U]
   hint: '$A = LU$에서 $U$는 Gauss 소거가 끝난 위삼각행렬이고, $L$은 소거에 쓴 승수 $l_{ij}$를 대각 아래 $(i, j)$ 자리에 적은 하삼각행렬이다.'
+- id: la.svdcalc
+  title: '$2\times 2$ 특이값 분해 계산'
+  generator: la4:svd2
+  steps: ['AᵀA', 특이값, V, U, 'A = UΣVᵀ']
+  hint: '$A^TA$의 고유값 $\lambda_i$에서 특이값 $\sigma_i = \sqrt{\lambda_i}$를 큰 순서로 얻는다. 같은 순서의 정규화된 고유벡터가 $V$의 열이고, $\mathbf{u}_i = A\mathbf{v}_i/\sigma_i$가 $U$의 열이다. $\sigma_2 = 0$이면 $\mathbf{u}_2$는 $\mathbf{u}_1$에 수직인 단위벡터로 고른다.'
+- id: la.projcalc
+  title: 사영행렬 계산
+  generator: la4:projection_matrix
+  steps: [재료, 중간 계산, P, 확인]
+  hint: '직선 위로의 사영행렬은 $P = \dfrac{\mathbf{a}\mathbf{a}^T}{\mathbf{a}^T\mathbf{a}}$, 열공간 위로는 $P = A(A^TA)^{-1}A^T$이다. 법선이 $\mathbf{n}$인 평면 위로는 $P = I - \dfrac{\mathbf{n}\mathbf{n}^T}{\mathbf{n}^T\mathbf{n}}$이다. 어느 경우든 $P^2 = P$이다.'
