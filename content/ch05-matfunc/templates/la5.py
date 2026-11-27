@@ -109,7 +109,7 @@ def exp_At():
         seen.add(tuple(A))
         truth = (A * t).exp()                                  # 독립 계산
         eD = sp.diag(sp.exp(d1 * t), sp.exp(d2 * t))
-        res = sp.simplify(P * eD * P.inv())
+        res = (P * eD * P.inv()).applyfunc(sp.expand)      # 성분을 지수의 합으로 (인수분해된 꼴은 읽기 어렵다)
         ok_vec = lambda P_, d_, A=A: P_.det() != 0 and all(same(A * P_[:, j], d_[j] * P_[:, j]) for j in range(2))
         steps = [
             step(rf"\lambda = {tex(d1)},\ {tex(d2)},\quad P = {mat(P)}", lambda P_=P, d_=(d1, d2), f=ok_vec: f(P_, d_)),
@@ -117,7 +117,7 @@ def exp_At():
             step(rf"e^{{At}} = P\,e^{{Dt}}P^{{-1}}", lambda: True),
             vstep(rf"e^{{At}} = {mat(res)}", res, truth),
         ]
-        bad_res = sp.simplify(P.inv() * eD * P)
+        bad_res = (P.inv() * eD * P).applyfunc(sp.expand)
         bad_eD = sp.diag(sp.exp(-d1 * t), sp.exp(-d2 * t))
         Pb = sp.Matrix([[P[0, 1], P[0, 0]], [P[1, 0], P[1, 1]]])
         decoys = [

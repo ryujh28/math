@@ -1,5 +1,6 @@
 """1장 문제별 해설."""
 import sympy as sp
+from texkit import join_terms
 from exkit import tex, tup, V, prod, m, dm, p
 
 
@@ -14,7 +15,7 @@ def norm(P, it):
     v = V(P["v"])
     ss = sum(c**2 for c in v)
     sq_ = " + ".join(p(c) + "^{2}" for c in v)
-    return [f"성분 제곱의 합: {m(sq_ + ' = ' + tex(ss))}", f"그 제곱근: {m(r'\|\mathbf{v}\| = \sqrt{' + tex(ss) + '} = ' + tex(sp.sqrt(ss)))}"], \
+    return [f"성분 제곱의 합: {m(sq_ + ' = ' + tex(ss))}", f"그 제곱근: {m(r'\|\mathbf{v}\| = \sqrt{' + tex(ss) + '}' + ('' if tex(sp.sqrt(ss)) == r'\sqrt{' + tex(ss) + '}' else ' = ' + tex(sp.sqrt(ss))))}"], \
         [(sp.sqrt(ss), v.norm())]
 
 
@@ -62,7 +63,8 @@ def gs(P, it):
     a, b = v2.dot(v1), v1.dot(v1)
     u2 = v2 - a / b * v1
     return [f"{m(r'\mathbf{v}_2\cdot\mathbf{u}_1 = ' + tex(a))}, {m(r'\mathbf{u}_1\cdot\mathbf{u}_1 = ' + tex(b))}",
-            dm(r"\mathbf{u}_2 = \mathbf{v}_2 - \frac{" + tex(a) + "}{" + tex(b) + r"}\mathbf{u}_1 = " + tup(v2) + " - " + p(a / b) + tup(v1) + " = " + tup(u2)),
+            dm(r"\mathbf{u}_2 = " + join_terms([(1, r"\mathbf{v}_2"), (-sp.Rational(a, b), r"\mathbf{u}_1")]) + " = "
+               + join_terms([(1, tup(v2)), (-sp.Rational(a, b), tup(v1))]) + " = " + tup(u2)),
             f"검산: {m(r'\mathbf{u}_2\cdot\mathbf{u}_1 = ' + tex(u2.dot(v1)))}"], [(u2.dot(v1), 0)]
 
 

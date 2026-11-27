@@ -1,5 +1,6 @@
 """3장 문제별 해설."""
 import sympy as sp
+from texkit import join_terms
 from exkit import tex, mat, tup, sq, V, prod, m, dm, p
 
 lam = sp.Symbol("lambda")
@@ -36,8 +37,8 @@ def eigvec(P, it):
     ns = ns * den
     g = sp.gcd(list(ns))
     ns = ns / g if g else ns
-    return [f"{m(r'(A - \lambda I)\mathbf{v} = \mathbf{0}')}을 푼다: {m(r'A - ' + p(l) + 'I = ' + mat(B))}",
-            f"첫 행 {m(tex(B[0, 0]) + 'v_1 + ' + p(B[0, 1]) + 'v_2 = 0')} → {m(r'\mathbf{v} \propto ' + mat(ns))} (상수배는 모두 고유벡터)"], \
+    return [f"{m(r'(A - \lambda I)\mathbf{v} = \mathbf{0}')}을 푼다: {m((r'A - ' + p(l) + 'I = ' if l != 0 else r'\lambda = 0\text{이므로 } A = ') + mat(B))}",
+            (lambda r, nm: f"{nm} {m(join_terms([(B[r, 0], 'v_1'), (B[r, 1], 'v_2')]) + ' = 0')} → {m(r'\mathbf{v} \propto ' + mat(ns))} (상수배는 모두 고유벡터)")(*((0, '첫 행') if any(B[0, :]) else (1, '둘째 행')))], \
         [(A * ns, l * ns)]
 
 
@@ -51,7 +52,7 @@ def eigtri(P, it):
 
 def trdet(P, it):
     l1, l2 = P["l"]
-    ask = str(P["ask"])
+    ask = it["params"]["ask"]   # revive가 "det"를 sympy 함수로 바꿔 버리므로 원본 문자열을 쓴다
     if ask == "det":
         return [f"{m(r'\det A = \lambda_1\lambda_2')}", f"{m(prod(l1, l2) + ' = ' + tex(l1 * l2))}"], []
     return [f"{m(r'\operatorname{tr}A = \lambda_1 + \lambda_2')}", f"{m(tex(l1) + ' + ' + p(l2) + ' = ' + tex(l1 + l2))}"], []

@@ -126,9 +126,42 @@ lap.ivp2.complex:
   - 분모를 완전제곱 $(s - \alpha)^2 + \beta^2$로 바꾸고 분자도 $(s - \alpha)$ 기준으로 쓴다.
   - $$Y = A\frac{s - \alpha}{(s - \alpha)^2 + \beta^2} + \frac{C}{\beta}\cdot\frac{\beta}{(s - \alpha)^2 + \beta^2}$$
   - $s$-이동으로 $y = e^{\alpha t}\Big(A\cos\beta t + \dfrac{C}{\beta}\sin\beta t\Big)$.
+lap.ivp.step:
+  goal: '시각 $c$에 켜지는 입력 $Ku(t - c)$를 받는 계의 응답을 구하는 절차다. 예: $y^{\prime} + ay = Ku(t - c)$, $y(0) = 0$.'
+  steps:
+  - '계단 함수의 변환은 $\mathcal{L}\{u(t - c)\} = \dfrac{e^{-cs}}{s}$이다. 양변을 변환하면'
+  - $$(s + a)Y = \frac{Ke^{-cs}}{s}, \qquad Y = e^{-cs}\,\frac{K}{s(s + a)}$$
+  - '$e^{-cs}$를 떼어 둔 채 나머지만 부분분수로 나눈다.'
+  - $$\frac{K}{s(s + a)} = \frac{K}{a}\left(\frac{1}{s} - \frac{1}{s + a}\right) \;\leftrightarrow\; \frac{K}{a}\left(1 - e^{-at}\right)$$
+  - '$t$-이동 정리 $\mathcal{L}^{-1}\{e^{-cs}G(s)\} = u(t - c)g(t - c)$로 되돌린다.'
+  - $$y = \frac{K}{a}\,u(t - c)\left(1 - e^{-a(t - c)}\right)$$
+  - '사각 펄스 $u(t - c_1) - u(t - c_2)$는 같은 응답을 $c_1$, $c_2$만큼 옮겨 뺀다. 초기값이 있으면 그 부분은 $e^{-cs}$ 없이 따로 되돌린다.'
 lap.ivp2.impulse:
-  goal: '진동자 $y'''' + \omega^2y = \delta(t - c)$에 시각 $c$에 충격이 가해질 때의 응답을 구하는 절차다.'
+  goal: '시각 $c$에 충격 $\delta(t - c)$가 가해질 때의 응답을 구하는 절차다. 예: 진동자 $y'''' + \omega^2y = \delta(t - c)$. 감쇠가 있으면 분모를 인수분해하거나 완전제곱한 뒤 같은 방식으로 옮긴다.'
   steps:
   - '$y^{\prime\prime} + \omega^2y = \delta(t - c)$를 변환: $s^2Y - sy(0) - y^{\prime}(0) + \omega^2Y = e^{-cs}$.'
   - $$Y = \frac{s\,y(0) + y^{\prime}(0)}{s^2 + \omega^2} + e^{-cs}\frac{1}{s^2 + \omega^2}$$
   - $\dfrac{1}{s^2 + \omega^2} \leftrightarrow \dfrac{\sin\omega t}{\omega}$이므로, $t$-이동으로 둘째 항은 $\dfrac{1}{\omega}u(t - c)\sin\omega(t - c)$.
+lap.convsolve:
+  goal: '정지 상태에서 시작하는 계의 응답을 합성곱 $y = h * f$로 구하는 절차다. 예: $y^{\prime\prime} + y = 1$, $y(0) = y^{\prime}(0) = 0$.'
+  steps:
+  - '초기값이 0이면 변환이 $(s^2 + 1)Y = F(s)$이므로 $Y = H(s)F(s)$, $H(s) = \dfrac{1}{s^2 + 1}$.'
+  - '$H$의 역변환이 충격응답이다: $h(t) = \sin t$.'
+  - '합성곱 정리 $\mathcal{L}\{h * f\} = H(s)F(s)$에 의해'
+  - $$y(t) = \int_0^t h(t - \tau)f(\tau)\,d\tau = \int_0^t \sin(t - \tau)\,d\tau = 1 - \cos t$$
+  - '입력 $f$의 변환을 몰라도, 또는 $F(s)$의 역변환이 어려워도 적분 하나로 답이 나온다.'
+lap.system:
+  goal: '연립 1계 ODE를 Laplace 변환으로 푸는 절차다. 예: $x^{\prime} = x + 2y$, $y^{\prime} = 2x + y$, $x(0) = 1$, $y(0) = 0$.'
+  steps:
+  - '두 식을 변환하면 $sX - 1 = X + 2Y$, $sY = 2X + Y$로 $X$, $Y$에 대한 연립 일차방정식이 된다.'
+  - $$\begin{pmatrix} s - 1 & -2 \\ -2 & s - 1 \end{pmatrix}\begin{pmatrix} X \\ Y \end{pmatrix} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$$
+  - '행렬식 $(s - 1)^2 - 4 = (s - 3)(s + 1)$. Cramer 공식으로 $X = \dfrac{s - 1}{(s - 3)(s + 1)}$, $Y = \dfrac{2}{(s - 3)(s + 1)}$.'
+  - '부분분수: $X = \dfrac{1}{2(s - 3)} + \dfrac{1}{2(s + 1)}$이므로 $x = \tfrac{1}{2}e^{3t} + \tfrac{1}{2}e^{-t}$. $y$도 같은 방식이다.'
+  - '극점 $3$, $-1$은 계수행렬의 고유값이다. 복소 고유값이면 $\cos$, $\sin$이 나온다.'
+lap.volterra:
+  goal: '적분방정식 $y(t) = f(t) + \lambda\int_0^t k(t - \tau)y(\tau)\,d\tau$를 합성곱 정리로 푸는 절차다. 예: $y = 1 + \int_0^t (t - \tau)y(\tau)\,d\tau$.'
+  steps:
+  - '적분항은 $k$와 $y$의 합성곱이므로 변환하면 $K(s)Y(s)$가 된다. 예: $k = t$, $K = \dfrac{1}{s^2}$.'
+  - $$Y = \frac{1}{s} + \frac{1}{s^2}Y \;\Rightarrow\; Y = \frac{F}{1 - \lambda K} = \frac{s}{s^2 - 1}$$
+  - '부분분수: $\dfrac{s}{(s - 1)(s + 1)} = \dfrac{1}{2(s - 1)} + \dfrac{1}{2(s + 1)}$.'
+  - $$y = \tfrac{1}{2}e^{t} + \tfrac{1}{2}e^{-t} = \cosh t$$

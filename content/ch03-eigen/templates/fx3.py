@@ -45,7 +45,7 @@ def eigpow():
         truth = sp.nsimplify(f(lam))
         cand = [(sp.nsimplify(g(lam)), "algebra") for g in wf]
         tier = 1 if form in ("A^{-1}", "A^{2}", "(A + 2I)") else 2
-        out.append(_case(rf"A\mathbf{{v}} = {tex(lam)}\mathbf{{v}}\text{{일 때 }} {form}\mathbf{{v}} = \;?", _sv(truth),
+        out.append(_case(rf"A\mathbf{{v}} = {_sv(lam)}\text{{일 때 }} {form}\mathbf{{v}} = \;?", _sv(truth),
                          lambda c=truth, tr=truth: same(c, tr), [(_sv(c), lambda c=c, tr=truth: same(c, tr), e) for c, e in cand],
                          tier=tier, params={"form": form, "lam": str(lam)}))
     return out

@@ -57,3 +57,28 @@ ode2.euler:
   - $y = x^r$을 대입하면 $r(r-1) + ar + b = 0$.
   - 또는 $x = e^t$로 치환하면 $x\dfrac{d}{dx} = \dfrac{d}{dt}$라 상수계수 방정식이 되고, 그 해 $e^{rt}$가 곧 $x^r$이다.
   - $x = 1$에서의 초기조건으로 $C_1, C_2$를 정한다.
+ode2.varparam.solve:
+  goal: '$y^{\prime\prime} + py^{\prime} + qy = g(x)$의 특수해를 매개변수 변환법으로 실제로 구하는 절차다. 예: $y^{\prime\prime} + y = \sec x$.'
+  steps:
+  - '동차해 $y_1 = \cos x$, $y_2 = \sin x$, Wronskian $W = y_1y_2^{\prime} - y_1^{\prime}y_2 = 1$.'
+  - '$y_p = u_1y_1 + u_2y_2$로 놓고 $u_1^{\prime}y_1 + u_2^{\prime}y_2 = 0$, $u_1^{\prime}y_1^{\prime} + u_2^{\prime}y_2^{\prime} = g$를 풀면'
+  - $$u_1^{\prime} = -\frac{y_2g}{W} = -\tan x, \qquad u_2^{\prime} = \frac{y_1g}{W} = 1$$
+  - '적분하면 $u_1 = \ln\left|\cos x\right|$, $u_2 = x$.'
+  - $$y_p = \cos x\,\ln\left|\cos x\right| + x\sin x$$
+  - '미정계수법이 안 되는 $\sec$, $\tan$, $\ln x$, $1/x^k$ 같은 강제항에도 쓸 수 있다.'
+ode2.reduction.solve:
+  goal: '2계 선형 동차방정식의 해 $y_1$ 하나를 알 때 두 번째 해 $y_2$를 계수 낮추기로 구하는 절차다. 예: $x^2y^{\prime\prime} - xy^{\prime} + y = 0$, $y_1 = x$.'
+  steps:
+  - '$y^{\prime\prime}$의 계수로 나눠 표준형 $y^{\prime\prime} + p(x)y^{\prime} + q(x)y = 0$을 만든다. 예: $p(x) = -\dfrac{1}{x}$.'
+  - '$y_2 = vy_1$을 대입하면 $v^{\prime}$에 대한 1계 식이 되고, 그 해가'
+  - $$v^{\prime} = \frac{e^{-\int p\,dx}}{y_1^{2}}$$
+  - '예: $e^{-\int p\,dx} = e^{\ln x} = x$, $v^{\prime} = \dfrac{x}{x^2} = \dfrac{1}{x}$, $v = \ln x$.'
+  - '$y_2 = vy_1 = x\ln x$. 적분상수는 $y_1$의 배수만 더하므로 버린다.'
+ode2.forced:
+  goal: '용수철·질량 계나 RLC 회로에 주기적인 외력이 걸릴 때의 일반해를 구하는 절차다. 예: $m = 1$, $c = 2$, $k = 5$, $F = 10\cos t$.'
+  steps:
+  - '뉴턴 법칙으로 $my^{\prime\prime} + cy^{\prime} + ky = F(t)$. RLC 회로는 $Lq^{\prime\prime} + Rq^{\prime} + \tfrac{1}{C}q = E(t)$로 같은 꼴이다.'
+  - '특성근: $r^2 + 2r + 5 = 0$, $r = -1 \pm 2i$. $c^2 - 4mk < 0$이라 저감쇠(진동하며 줄어듦)이다.'
+  - '특수해 $y_p = A\cos t + B\sin t$를 대입해 $\cos$, $\sin$ 계수를 맞추면 $A = 2$, $B = 1$.'
+  - $$y = e^{-t}\left(C_1\cos 2t + C_2\sin 2t\right) + 2\cos t + \sin t$$
+  - '감쇠가 있으면 동차해는 시간이 지나며 사라지고 $y_p$만 남는다(정상상태). 감쇠가 없고 $\omega$가 고유진동수 $\sqrt{k/m}$와 같으면 공명이라 $y_p = t(A\cos\omega t + B\sin\omega t)$로 진폭이 커진다.'

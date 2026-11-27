@@ -17,8 +17,19 @@ def _case(prompt, ans_tex, ans_ok, wrong, tier=None, params=None):
 
 
 def _F(e):
-    """보기 표시용: 통분·약분한 꼴."""
-    return tex(sp.factor(sp.cancel(sp.together(e))))
+    """보기 표시용: 통분·약분한 꼴. 분모는 인수분해, 분자는 전개 ((s - 2)(s + 2) 대신 s² - 4)."""
+    if e.has(sp.exp):
+        return tex(sp.factor(sp.cancel(sp.together(e))))
+    n, d = sp.fraction(sp.cancel(sp.together(e)))
+    f1, f2 = sp.factor(d), sp.sqf(d)
+    n, d = sp.expand(n), (f2 if f2.is_Pow and len(tex(f2)) < len(tex(f1)) else f1)   # (s-2)²(s+2)² → (s²-4)²
+    if d == 1:
+        return tex(n)
+    neg = n.could_extract_minus_sign()
+    if neg:
+        n = sp.expand(-n)
+    body = tex(sp.factor(n)) if n.is_Mul or n.is_Pow or n.is_number else tex(n)
+    return ("- " if neg else "") + rf"\frac{{{body}}}{{{tex(d)}}}"
 
 
 def _ytex(e):
@@ -197,7 +208,7 @@ def _damped_tex(al, A, B, be):
 
 def csqinv():
     """완전제곱으로 역변환: ℒ⁻¹{(as + b)/(m(s² + ps + q))}. 가족마다 분자·분모 구조가 다르다.
-    cos: 분자가 (s − α)의 배수 · sin: 분자가 상수 · mix: 둘 다 · pure: α = 0 · lead: 분모 s²의 계수가 1이 아님."""
+    cos: 분자가 (s − α)의 배수 · sin: 분자가 상수 · mix: 둘 다 · lead: 분모 s²의 계수가 1이 아님."""
     out = []
     specs = []
     for al, be in itertools.product([-3, -2, -1, 1, 2], [1, 2, 3]):
@@ -205,14 +216,11 @@ def csqinv():
         specs.append(("sin", al, be, 0, 1, 1))
         specs.append(("mix", al, be, 2, 1, 1))
         specs.append(("mix", al, be, 1, -2, 1))
-    for be in (1, 2, 3):
-        specs.append(("pure", 0, be, 3, 2, 1))
-        specs.append(("pure", 0, be, -1, 1, 1))
     for al, be in [(-1, 1), (-1, 2), (-2, 1), (1, 1), (-1, 3)]:
         specs.append(("lead", al, be, 1, 1, 2))
         specs.append(("lead", al, be, 2, -1, 3))
-    tiers = {"cos": 2, "sin": 2, "pure": 1, "mix": 3, "lead": 3}
-    keep = {"cos": 7, "sin": 7, "mix": 10, "pure": 6, "lead": 8}
+    tiers = {"cos": 1, "sin": 2, "mix": 2, "lead": 3}    # α = 0(이동 없음)은 완전제곱이 아니므로 넣지 않는다
+    keep = {"cos": 8, "sin": 8, "mix": 12, "lead": 10}
     seen = {}
     for k, (fam, al, be, A, B, mm) in enumerate(specs):
         if seen.get(fam, 0) >= keep[fam] or (fam in ("cos", "sin", "mix") and k % 3 == 1):

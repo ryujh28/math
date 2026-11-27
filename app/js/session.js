@@ -1,7 +1,7 @@
 // 세션 구성: 오늘 무엇을 얼마나 낼지 정한다. DOM을 쓰지 않는다 (node 테스트 가능).
 import * as E from './engine.js';
 
-export const DEFAULTS = { minutes: 10, capMinutes: 15, newPerDay: 5, testMode: false, timeScale: 1, v: 2 };
+export const DEFAULTS = { minutes: 10, capMinutes: 15, newPerDay: 5, testMode: false, timeScale: 1, schemaBoost: false, v: 2 };
 
 /** 저장된 설정을 현재 판으로 올린다. 예전 기본값(하루 새 단위 3개)은 새 기본값 5개로. */
 export function migrateSettings(saved = {}) {
@@ -106,10 +106,11 @@ export function planSession({ index, packs, states, log, settings = DEFAULTS, no
 
   const queue = [];
   let est = 0;
+  const boost = !!settings.schemaBoost; // 풀이 비중 '높게': 워밍업 1분, 뼈대 2 : 원자 1, 남는 시간은 뼈대 연습
   const atoms = due.filter((m) => m.unit.kind === 'atom');
   const schemas = due.filter((m) => m.unit.kind !== 'atom');
-  // 워밍업: 원자 2분
-  while (atoms.length && est < 120) {
+  // 워밍업: 원자 2분 (높게: 1분)
+  while (atoms.length && est < (boost ? 60 : 120)) {
     const m = atoms.shift();
     queue.push({ unit: m.unit.id, chapter: m.chapter, mode: 'mcq', isNew: false });
     est += estOf(m.unit, 'mcq');
@@ -118,8 +119,9 @@ export function planSession({ index, packs, states, log, settings = DEFAULTS, no
   const rest = [];
   while (schemas.length || atoms.length) {
     if (schemas.length) rest.push(schemas.shift());
+    if (boost && schemas.length) rest.push(schemas.shift());
     if (atoms.length) rest.push(atoms.shift());
-    if (atoms.length) rest.push(atoms.shift());
+    if (!boost && atoms.length) rest.push(atoms.shift());
   }
   for (const m of rest) {
     const mode = reviewMode(m.unit, states.get(m.unit.id), log);
@@ -127,6 +129,19 @@ export function planSession({ index, packs, states, log, settings = DEFAULTS, no
     if (est + c > budget && queue.length) break;
     queue.push({ unit: m.unit.id, chapter: m.chapter, mode, isNew: false });
     est += c;
+  }
+  // 높게: 복습할 뼈대가 바닥나 시간이 남으면, 기억이 약한 뼈대부터 연습으로 채운다 (복습 시기 전이라도)
+  if (boost) {
+    const inQ = new Set(queue.map((q) => q.unit));
+    const extra = learned.filter((m) => m.unit.kind !== 'atom' && !inQ.has(m.unit.id))
+      .sort((a, b) => E.retrievability(states.get(a.unit.id), nowD) - E.retrievability(states.get(b.unit.id), nowD));
+    for (const m of extra) {
+      const mode = reviewMode(m.unit, states.get(m.unit.id), log);
+      const c = estOf(m.unit, mode);
+      if (est + c > budget) break;
+      queue.push({ unit: m.unit.id, chapter: m.chapter, mode, isNew: false, practice: true });
+      est += c;
+    }
   }
   const dueCount = queue.length;
   // 새 단위

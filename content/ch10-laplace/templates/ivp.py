@@ -9,6 +9,7 @@
 검증은 tools/build.py가 한다. 여기서는 만들기만 한다.
 """
 import itertools
+from fx10 import _damped_tex
 import sympy as sp
 from texkit import t, s, Y, tex, join_terms, sum_tex, shift, tshift
 
@@ -43,7 +44,7 @@ def _ics_tex(y0, v0=None):
 
 
 # ---------------------------------------------------------------- 1계
-def ivp1():
+def _ivp1_base():
     out = []
     for a, y0 in itertools.product([1, 2, 3, 4], [-3, -2, -1, 1, 2, 3]):  # 동차
         out.append(_ivp1_case(a, y0, 0, None, tier=1))
@@ -104,7 +105,7 @@ def _ivp1_case(a, y0, k, b, tier):
         decoys.append({"pos": 3, "kind": "y", "expr": ybad, "tex": "y = " + sum_tex(ybad),
                        "error": "sign", "why": WHY["exp_sign"]})
     steps.append({"kind": "y", "expr": y, "tex": "y = " + sum_tex(y)})
-    return {"params": {"a": a, "y0": y0, "k": k, "b": b}, "tier": tier, "problem": problem,
+    return {"params": {"a": a, "y0": y0, "k": k, "b": b, "family": "hom" if k == 0 else ("const" if b is None else "exp")}, "tier": tier, "problem": problem,
             "steps": steps, "decoys": decoys,
             "verify": {"coeffs": [a], "rhs": R_t, "ics": [y0], "y": y}}
 
@@ -144,7 +145,7 @@ def _ic_decoys(p, q, y0, v0, R_s):
 
 
 # ---------------------------------------------------------------- 서로 다른 실근
-def ivp2_real():
+def _ivp2_real_base():
     out = []
     roots = [-4, -3, -2, -1, 1, 2]
     for r1, r2 in itertools.combinations(roots, 2):
@@ -179,14 +180,14 @@ def ivp2_real():
             if A != B:
                 bad = B * sp.exp(r1 * t) + A * sp.exp(r2 * t)
                 decoys.append({"pos": 3, "kind": "y", "expr": bad, "tex": "y = " + sum_tex(bad), "error": "algebra", "why": WHY["swap"]})
-            out.append({"params": {"r1": r1, "r2": r2, "y0": y0, "v0": v0}, "tier": tier,
+            out.append({"params": {"r1": r1, "r2": r2, "y0": y0, "v0": v0, "family": "hom"}, "tier": tier,
                         "problem": _problem2(p, q, y0, v0), "steps": steps, "decoys": decoys,
                         "verify": {"coeffs": [p, q], "rhs": 0, "ics": [y0, v0], "y": y}})
     return out
 
 
 # ---------------------------------------------------------------- 중근
-def ivp2_repeated():
+def _ivp2_repeated_base():
     out = []
     for r in [-3, -2, -1, 1, 2]:
         for y0, v0 in itertools.product([-2, -1, 1, 2], [-3, -2, -1, 0, 1, 2, 3]):
@@ -216,7 +217,7 @@ def ivp2_repeated():
             bad = y0 * sp.exp(-r * t) + K * t * sp.exp(-r * t)
             decoys.append({"pos": 3, "kind": "y", "expr": bad, "tex": "y = " + sum_tex(bad), "error": "sign", "why": WHY["exp_sign"]})
             tier = 2 if r < 0 and y0 > 0 else 3
-            out.append({"params": {"r": r, "y0": y0, "v0": v0}, "tier": tier,
+            out.append({"params": {"r": r, "y0": y0, "v0": v0, "family": "hom"}, "tier": tier,
                         "problem": _problem2(p, q, y0, v0), "steps": steps, "decoys": decoys,
                         "verify": {"coeffs": [p, q], "rhs": 0, "ics": [y0, v0], "y": y}})
     return out
@@ -240,9 +241,8 @@ def _csq_case(al, be, y0, v0, m=1):
     Ys = num / den
     Cb = sp.Rational(C, be)
     y = sp.exp(al * t) * (y0 * sp.cos(be * t) + Cb * sp.sin(be * t))
-    inner = join_terms([(y0, rf"\cos {tex(be * t)}"), (Cb, rf"\sin {tex(be * t)}")])
     pre = tex(sp.exp(al * t)) if al else ""
-    y_tex = rf"y = {pre}\left({inner}\right)" if al else f"y = {inner}"
+    y_tex = "y = " + _damped_tex(al, y0, Cb, be)
     if al:
         sq = f"\\left({shift(al)}\\right)^{{2}} + {be * be}"
         csq = (y0 * (s - al) + C) / ((s - al) ** 2 + be**2)
@@ -253,7 +253,8 @@ def _csq_case(al, be, y0, v0, m=1):
         csq_tex = "Y = " + join_terms([(y0, rf"\frac{{s}}{{{sq}}}"), (Cb, rf"\frac{{{be}}}{{{sq}}}")])
     eq, eqt = _eq2(m * p, m * q, y0, v0, 0, m=m)
     steps = [{"kind": "eqY", "expr": eq, "tex": eqt},
-             {"kind": "Y", "expr": Ys, "tex": rf"Y = \frac{{{tex(num)}}}{{{tex(den)}}}"},
+             {"kind": "Y", "expr": Ys, "tex": ("Y = -" if sp.Poly(num, s).LC() < 0 else "Y = ")
+              + rf"\frac{{{tex(sp.expand(-num) if sp.Poly(num, s).LC() < 0 else num)}}}{{{tex(den)}}}"},
              {"kind": "Y", "expr": csq, "tex": csq_tex},
              {"kind": "y", "expr": y, "tex": y_tex}]
     decoys = _ic_decoys(m * p, m * q, y0, v0, 0) if m == 1 else []
@@ -270,12 +271,11 @@ def _csq_case(al, be, y0, v0, m=1):
                        "tex": rf"Y = \frac{{{join_terms([(y0, f'({shift(-al)})'), (C, '')])}}}{{{sqb}}}",
                        "error": "sign", "why": WHY["csq_sign"]})
         bad = sp.exp(-al * t) * (y0 * sp.cos(be * t) + Cb * sp.sin(be * t))
-        decoys.append({"pos": 3, "kind": "y", "expr": bad, "tex": rf"y = {tex(sp.exp(-al * t))}\left({inner}\right)",
+        decoys.append({"pos": 3, "kind": "y", "expr": bad, "tex": "y = " + _damped_tex(-al, y0, Cb, be),
                        "error": "sign", "why": WHY["exp_sign"]})
     if be != 1 and C != 0:
         bad = sp.exp(al * t) * (y0 * sp.cos(be * t) + C * sp.sin(be * t))
-        inner2 = join_terms([(y0, rf"\cos {tex(be * t)}"), (C, rf"\sin {tex(be * t)}")])
-        decoys.append({"pos": 3, "kind": "y", "expr": bad, "tex": rf"y = {pre}\left({inner2}\right)" if al else f"y = {inner2}",
+        decoys.append({"pos": 3, "kind": "y", "expr": bad, "tex": "y = " + _damped_tex(al, y0, C, be),
                        "error": "missing_factor", "why": WHY["csq_beta"] if al else WHY["pure_sin"]})
     if not al and y0 and C:
         bad = y0 * sp.sin(be * t) + Cb * sp.cos(be * t)
@@ -303,12 +303,12 @@ def _csq_const(al, be, K):
     csq_tex = csq_tex.replace("+ \\frac{-", "- \\frac{") if False else csq_tex
     Db = D / be
     y = A - A * sp.exp(al * t) * sp.cos(be * t) + Db * sp.exp(al * t) * sp.sin(be * t)
-    inner = join_terms([(-A, rf"\cos {tex(be * t)}"), (Db, rf"\sin {tex(be * t)}")])
-    y_tex = rf"y = {tex(A)} + {tex(sp.exp(al * t))}\left({inner}\right)"
+    plus = lambda d: f"{tex(A)} - {d[1:].lstrip()}" if d.startswith("-") else f"{tex(A)} + {d}"
+    y_tex = "y = " + plus(_damped_tex(al, -A, Db, be))
     R_s = sp.Integer(K) / s
     eq, eqt = _eq2(p, q, 0, 0, R_s)
     steps = [{"kind": "eqY", "expr": eq, "tex": eqt},
-             {"kind": "Y", "expr": Ys, "tex": rf"Y = \frac{{{K}}}{{s\left({tex(den)}\right)}}"},
+             {"kind": "Y", "expr": Ys, "tex": ("Y = -" if K < 0 else "Y = ") + rf"\frac{{{abs(K)}}}{{s\left({tex(den)}\right)}}"},
              {"kind": "Y", "expr": csq, "tex": csq_tex},
              {"kind": "y", "expr": y, "tex": y_tex}]
     e, tx = _eq2(p, q, 0, 0, sp.Integer(K))
@@ -321,7 +321,7 @@ def _csq_const(al, be, K):
                    "tex": "Y = " + join_terms([(A, r"\frac{1}{s}")]) + rf" + \frac{{{join_terms([(-A, f'({shift(-al)})'), (D, '')])}}}{{{sqb}}}",
                    "error": "sign", "why": WHY["csq_sign"]})
     bad = A - A * sp.exp(-al * t) * sp.cos(be * t) + Db * sp.exp(-al * t) * sp.sin(be * t)
-    decoys.append({"pos": 3, "kind": "y", "expr": bad, "tex": rf"y = {tex(A)} + {tex(sp.exp(-al * t))}\left({inner}\right)",
+    decoys.append({"pos": 3, "kind": "y", "expr": bad, "tex": "y = " + plus(_damped_tex(-al, -A, Db, be)),
                    "error": "sign", "why": WHY["exp_sign"]})
     problem = f"{join_terms([(1, P2), (p, P1), (q, 'y')])} = {K},\\quad {_ics_tex(0, 0)}"
     return {"params": {"alpha": al, "beta": be, "K": K, "family": "const"}, "problem": problem, "steps": steps, "decoys": decoys,
@@ -329,36 +329,33 @@ def _csq_const(al, be, K):
 
 
 def ivp2_complex():
-    """복소근. 가족: 감쇠 진동(완전제곱 → s-이동) · 감쇠 없는 진동 · y''의 계수가 1이 아닌 식 · 정지 상태에서 상수 입력(A/s + 완전제곱)."""
+    """복소근. 가족: 감쇠 진동(완전제곱 → s-이동) · y''의 계수가 1이 아닌 식 · 정지 상태에서 상수 입력(A/s + 완전제곱)."""
     out = []
     hom = []
     for al, be in itertools.product([-3, -2, -1, 1], [1, 2, 3]):
         for y0, v0 in itertools.product([-2, -1, 1, 2], [-3, -2, -1, 0, 1, 2, 3]):
             c = _csq_case(al, be, y0, v0)
             Cb = sp.Rational(v0 - al * y0, be)
-            c["tier"] = 2 if (al < 0 and Cb.q == 1) else 3
+            c["tier"] = 1 if (al < 0 and Cb.q == 1) else 2
             hom.append(c)
     out += hom[::14]                                         # 감쇠 진동은 고르게 솎아 다른 가족과 비슷한 수로
-    for be, (y0, v0) in itertools.product([1, 2, 3], [(2, -3), (-1, 3), (1, 1), (2, 1), (1, -2)]):
-        c = _csq_case(0, be, y0, v0)
-        c["tier"] = 1
-        out.append(c)
-    for k, ((al, be), m, (y0, v0)) in enumerate(itertools.product([(-1, 1), (-1, 2), (-2, 1), (-1, 3), (1, 2)], [2, 3], [(1, 0), (0, 1), (2, -1)])):
-        if k % 2:
-            continue
+    # α = 0(감쇠 없는 진동)은 완전제곱 단계가 없어 이 단위의 단계 이름과 맞지 않으므로 넣지 않는다.
+    nm = []
+    for (al, be), m, (y0, v0) in itertools.product([(-1, 1), (-1, 2), (-2, 1), (-1, 3), (1, 2)], [2, 3], [(1, 0), (0, 1), (2, -1)]):
         c = _csq_case(al, be, y0, v0, m=m)
         c["tier"] = 3
-        out.append(c)
-    for (al, be), mult in itertools.product([(-1, 1), (-1, 2), (-2, 1), (-1, 3), (-2, 2), (-3, 1), (1, 1)], [1, 2, -1]):
+        nm.append(c)
+    out += _take(nm, 20)
+    for (al, be), mult in itertools.product([(-1, 1), (-1, 2), (-2, 1), (-1, 3), (-2, 2), (-3, 1), (1, 1)], [1, 2, -1, 3]):
         q = al * al + be * be
         c = _csq_const(al, be, q * mult)
-        c["tier"] = 3
+        c["tier"] = 2
         out.append(c)
     return out
 
 
 # ---------------------------------------------------------------- 충격 (δ 강제항 → t-이동)
-def ivp2_impulse():
+def _ivp2_impulse_base():
     out = []
     for w, c, v0 in itertools.product([1, 2, 3], [1, 2, 3], [0, 1, 2]):
         q = w * w
@@ -388,8 +385,144 @@ def ivp2_impulse():
         decoys.append({"pos": 2, "kind": "y", "expr": bad,
                        "tex": "y = " + join_terms([(a1, rf"\sin {wt}"), (a2, rf"\,u({tshift(c)})\sin {wt}")]),
                        "error": "algebra", "why": WHY["imp_shift"]})
-        out.append({"params": {"omega": w, "c": c, "v0": v0}, "tier": 3,
+        out.append({"params": {"omega": w, "c": c, "v0": v0, "family": "undamped"}, "tier": 1,
                     "problem": f"{join_terms([(1, P2), (q, 'y')])} = \\delta({tshift(c)}),\\quad {_ics_tex(0, v0)}",
                     "steps": steps, "decoys": decoys,
                     "verify": {"coeffs": [0, q], "rhs": 0, "ics": [0, v0], "y": y, "impulse": c}})
+    return out
+
+
+# ---------------------------------------------------------------- 입력·구조 가족 (lapkit 공통 생성기)
+import lapkit as LK
+
+H, D = sp.Heaviside, sp.DiracDelta
+
+
+def _take(lst, n):
+    """고르게 n개 (결정적). None(생성기가 뺀 사례)은 버린다."""
+    lst = [c for c in lst if c is not None]
+    if len(lst) <= n:
+        return lst
+    step = len(lst) / n
+    return [lst[int(i * step)] for i in range(n)]
+
+
+def _retier(lst, tier):
+    for c in lst:
+        c["tier"] = tier
+    return lst
+
+
+def ivp1():
+    """1계. 가족: 동차 · 상수 입력 · 지수 입력 · 공명 입력(te^{-at}) · 사인 입력 · 계수가 1이 아닌 식."""
+    base = _ivp1_base()
+    fam = lambda f: [c for c in base if c["params"]["family"] == f]
+    out = _retier(_take(fam("hom"), 12), 1) + _retier(_take(fam("const"), 14), 1) + _retier(_take(fam("exp"), 14), 2)
+    res = [LK.case(1, [a], k * sp.exp(-a * t), [y0], family="res", tier=2, bad_R=[(k / (s - a), "exp_s")])
+           for a in (1, 2, 3) for k in (1, 2, 3) for y0 in (0, 1, -1, 2)]
+    out += _take(res, 14)
+    sins = []
+    for a, b, y0, fn in [(1, 1, 0, sp.sin), (1, 2, 1, sp.sin), (2, 1, 0, sp.cos), (1, 1, 1, sp.cos), (2, 2, 0, sp.sin), (3, 1, 1, sp.sin),
+                         (1, 3, 0, sp.cos), (2, 1, -1, sp.sin), (3, 3, 0, sp.cos), (1, 2, 2, sp.cos), (4, 2, 0, sp.sin), (2, 3, 1, sp.cos)]:
+        k = a * a + b * b
+        R = k * fn(b * t)
+        bad = k * (s / (s**2 + b**2) if fn is sp.sin else b / (s**2 + b**2))
+        sins.append(LK.case(1, [a], R, [y0], family="trig", tier=3, bad_R=[(bad, "sin_pair")]))
+    out += [c for c in sins if c]
+    lead = [LK.case(m, [m * a], m * a * K, [y0], family="nonmonic", tier=2, bad_R=[(m * a * K, "const_s")])
+            for m in (2, 3) for a in (1, 2) for K in (1, 2) for y0 in (0, 3)]
+    out += _take(lead, 10)
+    return out
+
+
+def ivp2_real():
+    """2계 실근. 가족: 동차 · 상수 입력 · 지수 입력 · 근이 0 (y'' + py' = …) · 계수가 1이 아닌 식."""
+    base = _ivp2_real_base()
+    out = _take([c for c in base if c["tier"] == 1], 14) + _take([c for c in base if c["tier"] == 2], 12)
+    roots = [(-1, -2), (-1, -3), (-2, -3), (1, -2), (-1, 2), (-1, -4), (1, -3), (-2, -4)]
+    const = []
+    for (r1, r2), K, (y0, v0) in itertools.product(roots, (1, 2), [(0, 0), (1, 0), (0, 1)]):
+        p, q = -(r1 + r2), r1 * r2
+        const.append(LK.case(1, [p, q], q * K, [y0, v0], family="const", tier=2, bad_R=[(q * K, "const_s")]))
+    out += _take(const, 16)
+    ex = []
+    for (r1, r2), b, (y0, v0) in itertools.product(roots, (1, -4, 3), [(0, 0), (1, 0)]):
+        if b in (r1, r2):
+            continue
+        p, q = -(r1 + r2), r1 * r2
+        K = (b - r1) * (b - r2)
+        ex.append(LK.case(1, [p, q], K * sp.exp(b * t), [y0, v0], family="exp", tier=3, bad_R=[(K / (s + b), "exp_s")]))
+    out += _take(ex, 14)
+    zero = [LK.case(1, [p, 0], R, ics, family="zero_root", tier=2, bad_R=[(R, "const_s")] if R else None)
+            for p in (1, 2, 3, -2) for R, ics in [(0, [1, p]), (0, [2, -p]), (p, [0, 0]), (0, [0, p])]]
+    out += _take(zero, 12)
+    lead = []
+    for m, (r1, r2), (y0, v0) in itertools.product((2, 3), [(-1, -2), (-1, -3), (1, -2), (-2, -3)], [(1, 0), (0, 1), (2, -1)]):
+        p, q = -(r1 + r2), r1 * r2
+        lead.append(LK.case(m, [m * p, m * q], 0, [y0, v0], family="nonmonic", tier=3))
+    out += _take(lead, 12)
+    return out
+
+
+def ivp2_repeated():
+    """2계 중근. 가족: 동차 · 상수 입력 · 공명 입력(3중 극점) · 계수가 1이 아닌 식."""
+    base = _ivp2_repeated_base()
+    out = _retier(_take([c for c in base if c["tier"] == 2], 12), 1) + _retier(_take([c for c in base if c["tier"] == 3], 10), 1)
+    const = []
+    for r, K, (y0, v0) in itertools.product((-1, -2, -3, 1), (1, 2), [(0, 0), (1, 0), (0, 1)]):
+        p, q = -2 * r, r * r
+        const.append(LK.case(1, [p, q], q * K, [y0, v0], family="const", tier=2, bad_R=[(q * K, "const_s")]))
+    out += _take(const, 16)
+    res = []
+    for r, K, (y0, v0) in itertools.product((-1, -2, -3, 1, 2), (1, 2), [(0, 0), (1, 0), (0, 1)]):
+        p, q = -2 * r, r * r
+        res.append(LK.case(1, [p, q], K * sp.exp(r * t), [y0, v0], family="res", tier=3, bad_R=[(K / (s + r), "exp_s")]))
+    out += _take(res, 14)
+    lead = []
+    for m, r, (y0, v0) in itertools.product((2, 3), (-1, -2, 1), [(1, 0), (0, 1), (1, 1)]):
+        lead.append(LK.case(m, [-2 * r * m, r * r * m], 0, [y0, v0], family="nonmonic", tier=2))
+    out += _take(lead, 16)
+    return out
+
+
+def ivp2_impulse():
+    """충격 입력. 가족: 감쇠 없는 진동 · 서로 다른 실근 · 감쇠 진동(복소근) · 정지 상태 / 초기값 있음."""
+    base = _ivp2_impulse_base()
+    out = _take(base, 20)
+    real = []
+    for (r1, r2), c, (y0, v0) in itertools.product([(-1, -2), (-1, -3), (-2, -3), (1, -1), (-1, -4)], (1, 2), [(0, 0), (1, 0), (0, 1)]):
+        p, q = -(r1 + r2), r1 * r2
+        real.append(LK.case(1, [p, q], D(t - c), [y0, v0], family="real", tier=2, bad_R=[(sp.Integer(1), "delta_s")]))
+    out += _take(real, 22)
+    damp = []
+    for (al, be), c, (y0, v0) in itertools.product([(-1, 1), (-1, 2), (-2, 1), (-1, 3)], (1, 2, 3), [(0, 0), (1, 0)]):
+        p, q = -2 * al, al * al + be * be
+        damp.append(LK.case(1, [p, q], D(t - c), [y0, v0], family="damped", tier=3, bad_R=[(sp.Integer(1), "delta_s")]))
+    out += _take(damp, 20)
+    return out
+
+
+def step_ivp():
+    """계단 입력 u(t − c). 가족: 1계 계단 · 2계 실근 계단 · 2계 복소근 계단 · 사각 펄스 u(t − a) − u(t − b)."""
+    out = []
+    one = [LK.case(1, [a], K * a * H(t - c), [y0], family="step1", tier=1, bad_R=[(K * a * sp.exp(-c * s), "step_s")])
+           for a in (1, 2, 3) for K in (1, 2) for c in (1, 2, 3) for y0 in (0, 1)]
+    out += _take(one, 20)
+    real = []
+    for (r1, r2), c, K in itertools.product([(-1, -2), (-1, -3), (-2, -3), (-1, -4)], (1, 2), (1, 2)):
+        p, q = -(r1 + r2), r1 * r2
+        real.append(LK.case(1, [p, q], K * q * H(t - c), [0, 0], family="step2_real", tier=2, bad_R=[(K * q * sp.exp(-c * s), "step_s")]))
+    out += _take(real, 16)
+    cplx = []
+    for (al, be), c in itertools.product([(-1, 1), (-1, 2), (-2, 1), (0, 1), (0, 2)], (1, 2)):
+        p, q = -2 * al, al * al + be * be
+        cplx.append(LK.case(1, [p, q], q * H(t - c), [0, 0], family="step2_cplx", tier=3, bad_R=[(q * sp.exp(-c * s), "step_s")]))
+    out += [c for c in cplx if c]
+    pulse = []
+    for a, (c1, c2), K in itertools.product((1, 2), [(1, 2), (1, 3), (2, 4)], (1, 2)):
+        pulse.append(LK.case(1, [a], K * a * (H(t - c1) - H(t - c2)), [0], family="pulse1", tier=2))
+    out += _take(pulse, 10)
+    pulse2 = [LK.case(1, [-(r1 + r2), r1 * r2], r1 * r2 * (H(t - c1) - H(t - c2)), [0, 0], family="pulse2", tier=3)
+              for (r1, r2) in [(-1, -2), (-1, -3)] for (c1, c2) in [(1, 2), (1, 3)]]
+    out += [c for c in pulse2 if c]
     return out

@@ -935,17 +935,19 @@ async function bindSettings() {
   $('#set-min').value = String(s.minutes);
   $('#set-new').value = String(s.newPerDay);
   $('#set-time').value = String(s.timeScale || 1);
+  $('#set-boost').value = s.schemaBoost ? '1' : '0';
   $('#set-test').checked = !!s.testMode;
   const save = async () => {
     s.minutes = +$('#set-min').value;
     s.capMinutes = Math.max(15, s.minutes + 5);
     s.newPerDay = +$('#set-new').value;
     s.timeScale = +$('#set-time').value || 1;
+    s.schemaBoost = $('#set-boost').value === '1';
     s.testMode = $('#set-test').checked;
     await store.kvSet('settings', s);
     renderHome();
   };
-  ['#set-min', '#set-new', '#set-time', '#set-test'].forEach((id) => $(id).addEventListener('change', save));
+  ['#set-min', '#set-new', '#set-time', '#set-boost', '#set-test'].forEach((id) => $(id).addEventListener('change', save));
 }
 
 async function main() {

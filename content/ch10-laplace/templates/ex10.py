@@ -89,9 +89,12 @@ def csqinv(P, it):
     sq = f"({sh})^{{2}} + {tex(be**2)}" if al else f"s^{{2}} + {tex(be**2)}"
     lines.append(f"완전제곱: {m(tex(den) + ' = ' + sq)}")
     if al and A and B:
-        lines.append(f"분자를 {m(sh)}와 상수로 다시 쓴다: {m(tex(num) + ' = ' + join_terms([(A, '(' + sh + ')'), (B * be, '')]))}")
+        lines.append(f"분자를 {m(sh)} 꼴로 다시 쓴다: {m(tex(num) + ' = ' + join_terms([(A, '(' + sh + ')'), (B * be, '')]))}")
     f = sp.exp(al * t) * (As * sp.cos(be * t) + Bs * sp.sin(be * t))
-    lines.append(f"사인 항은 {m(tex(be))}로 나눠 맞춘다 → {m('f(t) = ' + tex(f))}")
+    if B and be != 1:
+        lines.append(f"사인 항은 분자에 {m(tex(be))}가 있어야 하므로 {m(tex(be))}로 나눠 맞춘다.")
+    from fx10 import _damped_tex
+    lines.append(f"따라서 {m('f(t) = ' + _damped_tex(al, As, Bs, be))}")
     return lines, [(LT(f), num / (mm * den))]
 
 

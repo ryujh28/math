@@ -14,3 +14,18 @@
   generator: ode1:exact
   steps: [완전 확인, x로 적분, h(y) 결정, 초기조건]
   hint: '$M_y = N_x$를 확인한 뒤, $F = \int M\,dx + h(y)$로 놓고 $F_y = N$에서 $h(y)$를 정한다. 해는 $F(x, y) = F(x_0, y_0)$이다.'
+- id: ode.homog
+  title: 동차형 치환 y = vx
+  generator: ode1:homogeneous_sub
+  steps: [치환, v의 식, 적분, 초기조건, 해]
+  hint: '$y^{\prime} = f(y/x)$ 꼴이면 $y = vx$로 놓는다. $y^{\prime} = v + xv^{\prime}$이므로 $xv^{\prime} = f(v) - v$가 되어 변수분리할 수 있다. 끝에 $x$를 곱해 $y$로 되돌린다.'
+- id: ode.bernoulli.solve
+  title: Bernoulli 방정식 풀이
+  generator: ode1:bernoulli_solve
+  steps: [치환, v의 선형식, v의 일반해, 초기조건, 해]
+  hint: '$y^{\prime} + Py = Qy^n$은 $v = y^{1-n}$으로 바꾸면 $v^{\prime} + (1 - n)Pv = (1 - n)Q$라는 1계 선형식이 된다. $v$를 풀고 $y = v^{1/(1-n)}$으로 되돌린다.'
+- id: ode.intfactor
+  title: 적분인자로 완전미분 만들기
+  generator: ode1:integrating_factor_solve
+  steps: [완전 검사, 적분인자, F 구하기, h 결정, 해]
+  hint: '$M_y \neq N_x$일 때 $\dfrac{M_y - N_x}{N}$이 $x$만의 함수 $g(x)$이면 $\mu = e^{\int g\,dx}$를 곱해 완전미분방정식으로 만든다. $\dfrac{N_x - M_y}{M}$이 $y$만의 함수이면 $\mu(y)$를 쓴다.'

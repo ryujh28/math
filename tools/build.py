@@ -208,7 +208,7 @@ def build_atoms(atoms, report, tdir=None, seed="v0"):
             keys = list(a["params"])
             gsym = {k: sp.Symbol(k) for k in keys}
             f_gen = _gtex(sp.sympify(a["f"], locals=dict(NS, **gsym)))
-            F_gen = _gtex(sp.sympify(a["F"], locals=dict(NS, **gsym)))
+            F_gen = a.get("F_tex") or _gtex(sp.sympify(a["F"], locals=dict(NS, **gsym)))   # F_tex: 교과서 표기를 손으로
             table = [f_gen, F_gen]
             for combo in itertools.product(*[a["params"][k] for k in keys]):
                 sub = ",\\ ".join(f"{k} = {v}" for k, v in zip(keys, combo))
@@ -488,6 +488,8 @@ def main():
             explain.apply(cid)
             import graphs  # 초기값 문제의 그래프 예측 데이터
             graphs.apply(cid)
+            import tidy  # 마지막 표기 다듬기 (y^{1} → y 등)
+            tidy.apply(cid)
     built = {int(p.stem[2:]): json.loads(p.read_text()) for p in (ROOT / "packs").glob("ch*.json")}
     index = {"format": FORMAT, "game": "Isn't she lovely", "errors": errors, "chapters": []}
     for c in catalog:

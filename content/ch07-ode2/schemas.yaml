@@ -14,3 +14,21 @@
   generator: ode2:euler_cauchy
   steps: [특성방정식, 근, 일반해, 상수, 해]
   hint: '$y = x^r$을 넣어 $r(r-1) + ar + b = 0$을 풀고 $y = C_1x^{r_1} + C_2x^{r_2}$로 쓴 뒤, $x = 1$에서의 초기조건으로 $C_1, C_2$를 정한다.'
+
+- id: ode2.varparam.solve
+  title: 매개변수 변환법 풀이
+  generator: ode2:varparam_solve
+  steps: [기저와 W, u′ 구하기, 적분, 특수해]
+  hint: '동차해 $y_1, y_2$와 Wronskian $W$를 구한 뒤 $u_1^{\prime} = -\dfrac{y_2g}{W}$, $u_2^{\prime} = \dfrac{y_1g}{W}$를 적분한다. 특수해는 $y_p = u_1y_1 + u_2y_2$이다.'
+
+- id: ode2.reduction.solve
+  title: 계수 낮추기 풀이
+  generator: ode2:reduction_solve
+  steps: [표준형, 지수 인자, v′, v, 두 번째 해]
+  hint: '해 $y_1$을 알면 $y_2 = vy_1$로 놓는다. 표준형의 $p(x)$로 $v^{\prime} = \dfrac{e^{-\int p\,dx}}{y_1^2}$를 구해 적분하고, $y_1$을 곱해 $y_2$를 얻는다.'
+
+- id: ode2.forced
+  title: 강제 진동 (용수철 · RLC)
+  generator: ode2:forced_oscillation
+  steps: [방정식, 특성근과 감쇠, 특수해, 일반해]
+  hint: '$my^{\prime\prime} + cy^{\prime} + ky = F_0\cos\omega t$의 특성근으로 감쇠 종류를 판정하고, $y_p = A\cos\omega t + B\sin\omega t$의 계수를 맞춘다. $\omega$가 고유진동수와 같으면 공명이라 $t$를 곱한다. RLC 회로는 $L, R, \tfrac{1}{C}$가 $m, c, k$ 자리에 온다.'

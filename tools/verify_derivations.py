@@ -183,6 +183,25 @@ CHECKS = {
     "lap.delta": [("ℒ{δ(t − c)} = e^{−cs}", lambda: Z(L(sp.DiracDelta(t - cc)) - sp.exp(-cc * s)))],
     "lap.deriv1": [("ℒ{y′} = sY − y(0) (예: y = e^{2t}cos t)", lambda: (lambda Y: Z(L(sp.diff(Y, t)) - (s * L(Y) - Y.subs(t, 0))))(sp.exp(2 * t) * sp.cos(t)))],
     "lap.deriv2": [("ℒ{y″} = s²Y − sy(0) − y′(0) (예)", lambda: (lambda Y: Z(L(sp.diff(Y, t, 2)) - (s**2 * L(Y) - s * Y.subs(t, 0) - sp.diff(Y, t).subs(t, 0))))(sp.exp(-t) * sp.sin(3 * t) + t**2))],
+    # ---------------- M3.6 새 풀이 뼈대 (유도의 예를 그대로 확인)
+    "ode.homog": [("y' = y/x + y²/x², y(1) = 1 → y = −x/(ln x − 1)", lambda: (lambda Y_: Z(sp.diff(Y_, x) - Y_ / x - Y_**2 / x**2) and Z(Y_.subs(x, 1) - 1))(-x / (sp.log(x) - 1)))],
+    "ode.bernoulli.solve": [("y' + y = y², y(0) = 2 → y = −2/(eˣ − 2)", lambda: (lambda Y_: Z(sp.diff(Y_, x) + Y_ - Y_**2) and Z(Y_.subs(x, 0) - 2))(-2 / (sp.exp(x) - 2))),
+                            ("v = y^{1−n}이면 v' + (1 − n)Pv = (1 − n)Q (일반 n)", lambda: (lambda Yf: Z(sp.diff(Yf**(1 - n_), x) + (1 - n_) * p * Yf**(1 - n_)
+                                                                                           - (1 - n_) * Yf**(-n_) * (sp.diff(Yf, x) + p * Yf)))(f(x)))],
+    "ode.intfactor": [("(2y + 3x)dx + x dy: μ = x로 완전, F = x²y + x³", lambda: (lambda M_, N_, mu: Z(sp.diff(mu * M_, y) - sp.diff(mu * N_, x)) and Z(sp.diff(x**2 * y + x**3, x) - mu * M_)
+                                                                                                and Z(sp.diff(x**2 * y + x**3, y) - mu * N_) and Z((sp.diff(M_, y) - sp.diff(N_, x)) / N_ - 1 / x))(2 * y + 3 * x, x, x))],
+    "ode2.varparam.solve": [("y'' + y = sec x → y_p = cos x ln|cos x| + x sin x", lambda: (lambda Yp: Z(sp.diff(Yp, x, 2) + Yp - 1 / sp.cos(x)))(sp.cos(x) * sp.log(sp.cos(x)) + x * sp.sin(x)))],
+    "ode2.reduction.solve": [("x²y'' − xy' + y = 0, y₁ = x → y₂ = x ln x", lambda: (lambda Y_: Z(x**2 * sp.diff(Y_, x, 2) - x * sp.diff(Y_, x) + Y_))(x * sp.log(x))),
+                             ("p = −1/x면 e^{−∫p} = x, v' = x/x² = 1/x", lambda: Z(sp.exp(-sp.integrate(-1 / x, x)) - x) and Z(x / x**2 - 1 / x))],
+    "ode2.forced": [("y'' + 2y' + 5y = 10 cos t → y_p = 2 cos t + sin t", lambda: (lambda Yp: Z(sp.diff(Yp, t, 2) + 2 * sp.diff(Yp, t) + 5 * Yp - 10 * sp.cos(t)))(2 * sp.cos(t) + sp.sin(t))),
+                    ("공명: y'' + ω²y = F cos ωt → y_p = F t sin ωt/(2ω)", lambda: (lambda Yp: Z(sp.diff(Yp, t, 2) + w**2 * Yp - a * sp.cos(w * t)))(a * t * sp.sin(w * t) / (2 * w)))],
+    "lap.ivp.step": [("ℒ{u(t − c)} = e^{−cs}/s", lambda: Z(L(sp.Heaviside(t - cc)) - sp.exp(-cc * s) / s)),
+                     ("y' + ay = Ku(t − c) → y = (K/a)u(t − c)(1 − e^{−a(t−c)})", lambda: (lambda A_, K_, c_: Z(L(sp.Heaviside(t - c_) * K_ / A_ * (1 - sp.exp(-A_ * (t - c_)))) - K_ * sp.exp(-c_ * s) / (s * (s + A_))))(2, 3, 1))],
+    "lap.convsolve": [("∫₀ᵗ sin(t − τ)dτ = 1 − cos t, 그리고 y'' + y = 1 만족", lambda: (lambda T_: Z(sp.integrate(sp.sin(t - T_), (T_, 0, t)) - (1 - sp.cos(t)))
+                                                                                    and Z(sp.diff(1 - sp.cos(t), t, 2) + 1 - sp.cos(t) - 1))(sp.Symbol("tau")))],
+    "lap.system": [("x' = x + 2y, y' = 2x + y, x(0) = 1, y(0) = 0 → x = (e^{3t} + e^{−t})/2", lambda: (lambda X_, Y_: Z(sp.diff(X_, t) - X_ - 2 * Y_) and Z(sp.diff(Y_, t) - 2 * X_ - Y_)
+                                                                                                      and Z(X_.subs(t, 0) - 1) and Z(Y_.subs(t, 0)))((sp.exp(3 * t) + sp.exp(-t)) / 2, (sp.exp(3 * t) - sp.exp(-t)) / 2))],
+    "lap.volterra": [("y = 1 + ∫₀ᵗ (t − τ)y(τ)dτ → y = cosh t", lambda: (lambda T_: Z(sp.cosh(t) - 1 - sp.integrate((t - T_) * sp.cosh(T_), (T_, 0, t))))(sp.Symbol("tau")))],
     "lap.csqinv": [("(as + b)/((s − α)² + β²) = ℒ{e^{αt}(a cos βt + (b + aα)/β sin βt)}",
                     lambda: (lambda A_, B_, al_, b_: Z(L(sp.exp(al_ * t) * (A_ * sp.cos(b_ * t) + (B_ + A_ * al_) / b_ * sp.sin(b_ * t)))
                                                      - (A_ * s + B_) / ((s - al_) ** 2 + b_**2)))(2, 3, -1, 2))],

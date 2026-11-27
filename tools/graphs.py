@@ -44,17 +44,15 @@ def solution(item):
     if u == "ode.linear":
         a, q, y0 = num(P["a"]), sp.sympify(P["q"], locals={"x": x}), num(P["y0"])
         return _dsolve(lambda g: g.diff(x) + a * g - q, x, 1, 0, [y0]).subs(x, t), t, 0.0
+    if "y0" not in P and u in ("ode2.const", "ode2.euler"):
+        return None                       # 일반해만 묻는 문제: 정해진 곡선이 없다
     if u == "ode2.const":
         p, q, y0, v0 = (num(P[k]) for k in ("p", "q", "y0", "v0"))
         return _dsolve(lambda g: g.diff(x, 2) + p * g.diff(x) + q * g, x, 2, 0, [y0, v0]).subs(x, t), t, 0.0
     if u == "ode2.euler":
-        r1, r2 = (num(v) for v in P["r"])
-        a, b = 1 - (r1 + r2), r1 * r2
+        a, b = num(P["a"]), num(P["b"])
         y0, v0 = num(P["y0"]), num(P["v0"])
-        C1, C2 = sp.symbols("C1 C2")
-        fam = C1 * x**r1 + C2 * x**r2
-        cs = sp.solve([fam.subs(x, 1) - y0, sp.diff(fam, x).subs(x, 1) - v0], [C1, C2])
-        return sp.expand(fam.subs(cs)), x, 1.0
+        return _dsolve(lambda g: x**2 * g.diff(x, 2) + a * x * g.diff(x) + b * g, x, 2, 1, [y0, v0]), x, 1.0
     return None
 
 
@@ -228,7 +226,7 @@ def make_graph(item):
             "sol": sp.latex(e).replace(r"\theta\left(", "u\\left(")}
 
 
-GRAPH_UNITS = {"lap.ivp1", "lap.ivp2.real", "lap.ivp2.repeated", "lap.ivp2.complex", "lap.ivp2.impulse",
+GRAPH_UNITS = {"lap.ivp1", "lap.ivp2.real", "lap.ivp2.repeated", "lap.ivp2.complex", "lap.ivp2.impulse", "lap.ivp.step",
                "ode.linear", "ode2.const", "ode2.euler"}
 
 

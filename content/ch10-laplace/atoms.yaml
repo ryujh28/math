@@ -30,6 +30,7 @@
   inverse_tier: 2
   f: t**n
   F: factorial(n)/s**(n + 1)
+  F_tex: '\frac{n!}{s^{n + 1}}'
   params: {n: [1, 2, 3, 4, 5, 6, 7]}
   wrong_F:
     - {F: factorial(n)/s**n, error: algebra}
@@ -144,6 +145,7 @@
   inverse_tier: 3
   f: exp(a*t)*sin(b*t)
   F: b/((s - a)**2 + b**2)
+  F_tex: '\frac{b}{\left(s - a\right)^{2} + b^{2}}'
   params: {a: [-3, -2, -1, 1, 2], b: [1, 2, 3]}
   wrong_F:
     - {F: b/((s + a)**2 + b**2), error: sign}
@@ -164,6 +166,7 @@
   inverse_tier: 3
   f: exp(a*t)*cos(b*t)
   F: (s - a)/((s - a)**2 + b**2)
+  F_tex: '\frac{s - a}{\left(s - a\right)^{2} + b^{2}}'
   params: {a: [-3, -2, -1, 1, 2], b: [1, 2, 3]}
   wrong_F:
     - {F: (s + a)/((s + a)**2 + b**2), error: sign}

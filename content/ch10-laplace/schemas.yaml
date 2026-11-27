@@ -26,8 +26,32 @@
   steps: [변환, Y 정리, 완전제곱, 역변환]
   hint: '분모가 실수로 인수분해되지 않으면 완전제곱 $(s - \alpha)^2 + \beta^2$로 바꾼다. 그러면 $s$-이동으로 $e^{\alpha t}\cos\beta t$, $e^{\alpha t}\sin\beta t$로 되돌릴 수 있다.'
 
+- id: lap.ivp.step
+  title: 계단 입력 초기값 문제
+  generator: ivp:step_ivp
+  steps: [변환, Y 정리, 부분분수, 역변환(t-이동)]
+  hint: '$u(t - c)$는 $\dfrac{e^{-cs}}{s}$로 변환된다. $e^{-cs}$가 붙은 항은 따로 부분분수로 나눈 뒤 $t$-이동 정리로 $u(t - c)f(t - c)$로 되돌린다. 사각 펄스 $u(t - a) - u(t - b)$는 두 번 옮긴 것을 더한다.'
+
 - id: lap.ivp2.impulse
   title: 2계 · 충격 입력
   generator: ivp:ivp2_impulse
   steps: [변환, Y 정리, 역변환(t-이동)]
   hint: '$\delta(t - c)$는 $e^{-cs}$로 변환된다. $e^{-cs}$가 붙은 항은 $t$-이동 정리로 되돌리므로 $u(t - c)f(t - c)$ 꼴이 되어 $t = c$부터 반응이 시작된다.'
+
+- id: lap.convsolve
+  title: 합성곱으로 풀기
+  generator: lap3:conv_solve
+  steps: [전달함수, 충격응답, 합성곱 적분, 해]
+  hint: '정지 상태에서 시작하면 $Y = H(s)F(s)$이다. $H$를 되돌린 충격응답 $h(t)$와 입력의 합성곱 $y = \int_0^t h(t - \tau)f(\tau)\,d\tau$가 해이다.'
+
+- id: lap.system
+  title: 연립 ODE
+  generator: lap3:system_solve
+  steps: [변환, X·Y 풀기, 부분분수, 역변환]
+  hint: '두 식을 각각 변환하면 $X$, $Y$에 대한 연립 일차방정식이 된다. 소거나 Cramer 공식으로 $X$, $Y$를 구하고 부분분수로 나눠 되돌린다.'
+
+- id: lap.volterra
+  title: 적분방정식
+  generator: lap3:volterra_solve
+  steps: [변환, Y 정리, 부분분수, 역변환]
+  hint: '$\int_0^t k(t - \tau)y(\tau)\,d\tau$는 합성곱이라 $K(s)Y(s)$로 변환된다. $Y = F + \lambda KY$를 $Y$로 정리한 뒤 되돌린다.'

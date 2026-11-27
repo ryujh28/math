@@ -100,3 +100,17 @@ plan = planSession({ index, packs, states: replay(log), log, now: t0 + 60 * day 
 assert.ok(est(plan) <= 14, `est ${est(plan)} min, queue ${plan.queue.length}`);
 
 console.log('session: all tests passed', { learned14d: learned, day60queue: plan.queue.length, day60est: plan.estMin });
+
+// ---- 풀이 비중 '높게': 뼈대가 더 많이, 남는 시간은 뼈대 연습(practice)으로
+{
+  const later = t0 + 3 * day;
+  const stt = replay(log);
+  const base = planSession({ index, packs, states: stt, log, now: later, settings: { ...DEFAULTS, newPerDay: 0 } });
+  const hi = planSession({ index, packs, states: stt, log, now: later, settings: { ...DEFAULTS, newPerDay: 0, schemaBoost: true } });
+  const sch = (p) => p.queue.filter((q) => meta.get(q.unit).unit.kind !== 'atom').length;
+  assert.ok(sch(hi) >= sch(base), `풀이 비중 높게: 뼈대 ${sch(hi)} < 기본 ${sch(base)}`);
+  assert.ok(!base.queue.some((q) => q.practice), '기본에서 연습 항목이 생김');
+  const learnedSchemas = [...stt.keys()].filter((u) => meta.get(u)?.unit.kind !== 'atom').length;
+  if (learnedSchemas > sch(base)) assert.ok(hi.queue.some((q) => q.practice) || sch(hi) > sch(base), '남는 시간을 뼈대로 채우지 않음');
+  console.log(`풀이 비중: 기본 뼈대 ${sch(base)}개, 높게 ${sch(hi)}개 (배운 뼈대 ${learnedSchemas}개)`);
+}

@@ -18,7 +18,7 @@ def inv2(P, it):
     adj = sp.Matrix([[d, -b], [-c, a]])
     inv = adj / D
     return [f"{m(r'\det A = ' + tex(D))}", f"{m('a')}와 {m('d')}는 자리를 바꾸고 {m('b')}, {m('c')}는 부호만 바꾼다:",
-            dm(r"A^{-1} = \frac{1}{" + tex(D) + "}" + mat(adj) + " = " + mat(inv))], [(inv, A.inv())]
+            dm(r"A^{-1} = " + (mat(adj) if D == 1 else "-" + mat(adj) + " = " + mat(inv) if D == -1 else r"\frac{1}{" + tex(D) + "}" + mat(adj) + " = " + mat(inv)))], [(inv, A.inv())]
 
 
 def matmul(P, it):

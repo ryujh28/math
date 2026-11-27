@@ -3,6 +3,8 @@
 원칙: 화면에 보이는 TeX는 교과서처럼 읽히도록 손으로 조립하고,
 검증용 SymPy 식은 따로 들고 다닌다. 둘이 같은지는 build.py가 확인한다.
 """
+import re
+
 import sympy as sp
 
 t, s, Y = sp.symbols("t s Y")
@@ -12,7 +14,10 @@ def tex(e) -> str:
     """SymPy 식 → TeX. sin{(2t)} 대신 sin 2t처럼 괄호를 줄인다."""
     out = sp.latex(sp.sympify(e), fold_func_brackets=True)
     out = out.replace(r"\theta\left(", "u\\left(")  # Heaviside → u(t − c)
-    return out.replace(r"\log", r"\ln")
+    out = out.replace(r"\log", r"\ln").replace(r"\operatorname{atan}", r"\arctan ")
+    out = re.sub(r"\\ln\{\\left\((\w) \\right\)\}", r"\\ln \1", out)          # \ln{\left(x \right)} → \ln x
+    out = re.sub(r"\\(cos|sin)\{\\left\((\\ln [a-z]|\d*\s?\\ln [a-z]) \\right\)\}", r"\\\1(\2)", out)   # \cos{\left(\ln x \right)} → \cos(\ln x)
+    return re.sub(r"\\ln\{(\\left\(.*?\\right\))\}", r"\\ln\1", out)         # 중괄호만 걷기
 
 
 def join_terms(parts) -> str:
@@ -40,7 +45,18 @@ def join_terms(parts) -> str:
 def sum_tex(expr) -> str:
     """합을 양의 항부터 보여준다: '\\frac{2}{s+1} - \\frac{1}{s+2}'."""
     terms = list(sp.Add.make_args(sp.sympify(expr)))
-    terms.sort(key=lambda x: x.could_extract_minus_sign())
+
+    def rank(x):
+        # 양의 항 먼저, 그 안에서 다항식 차수가 높은 것 먼저, 상수는 맨 뒤 (2 + x → x + 2)
+        if x.is_number:
+            return (x.could_extract_minus_sign(), 1, 0)
+        syms = sorted(x.free_symbols, key=str)
+        try:
+            deg = sp.Poly(x, *syms).total_degree()
+        except sp.PolynomialError:
+            deg = 0
+        return (x.could_extract_minus_sign(), 0, -deg)
+    terms.sort(key=rank)
     out = ""
     for x in terms:
         neg = x.could_extract_minus_sign()

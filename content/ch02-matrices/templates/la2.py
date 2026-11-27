@@ -41,7 +41,7 @@ def det2():
 
 def inv2():
     out = []
-    for A in _mats(2, 30, -3, 4, seed=2, cond=lambda M: M.det() in (1, -1, 2, -2, 3)):
+    for A in _mats(2, 30, -3, 4, seed=2, cond=lambda M: M.det() in (1, -1, 2, -2, 3) and M * M != sp.eye(2)):  # A² = I면 답이 문제와 같다
         a, b, c, d = A
         D = A.det()
         inv = sp.Matrix([[d, -b], [-c, a]]) / D
@@ -188,7 +188,8 @@ def cofactor3():
         expansion = join_terms([(a[0], vmat(Ms[0])), (-a[1], vmat(Ms[1])), (a[2], vmat(Ms[2]))])
         expansion_plus = join_terms([(a[0], vmat(Ms[0])), (a[1], vmat(Ms[1])), (a[2], vmat(Ms[2]))])
         ok_exp = lambda signs, A=A, a=a, Ms=Ms: same(sum(sg * a[j] * Ms[j].det() for j, sg in enumerate(signs)), A.det())
-        prod = join_terms([(a[0], rf"\cdot({tex(m[0])})"), (-a[1], rf"\cdot({tex(m[1])})"), (a[2], rf"\cdot({tex(m[2])})")])
+        pv = lambda v: f"\\left({tex(v)}\\right)" if v < 0 else tex(v)
+        prod = f"{pv(a[0])}\\cdot {pv(m[0])} - {pv(a[1])}\\cdot {pv(m[1])} + {pv(a[2])}\\cdot {pv(m[2])}"
         steps = [
             step(rf"\det A = {expansion}", lambda f=ok_exp: f((1, -1, 1))),
             vstep(rf"M_{{11}} = {tex(m[0])},\ M_{{12}} = {tex(m[1])},\ M_{{13}} = {tex(m[2])}", m, [A.minor(0, j) for j in range(3)]),
