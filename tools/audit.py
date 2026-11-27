@@ -33,16 +33,26 @@ UGLY = [
     (r"\^\{1\}", "^{1}"),
     (r"e\^\{0\}", "e^{0}"),
     (r"\\frac\{(\w+)\}\{1\}", "\\frac{a}{1}"),
-    (r"(?<![\d.])0\s*[a-z](?![a-z])", "0x"),
+    (r"(?<![\d._])0\s*[a-z](?![a-z])", "0x"),
     (r"[+-]\s*0(?![\d.])(?!\s*[<>≤≥])(?!\s*\\cdot)(?!\^)(?!\s*=)", "± 0"),
     (r"e\^\{-1 ?t\}|e\^\{-1 ?x\}", "e^{-1t}"),
     (r"\\left\(\s*\\right\)", "빈 괄호"),
-    (r"(?:^|[=+-]\s*)\\cdot", "계수 없는 ·"),
+    (r"(?:^|[=+-]\s*)\\cdot(?!s)", "계수 없는 ·"),
     (r"\\ln\{\\left", "ln{(x)} 꼴"),
     (r"\}\\left\((?:\\(?:sin|cos)[^+-]*?)\\right\)\s*$", "한 항만 괄호"),
     (r"s\^\{- n - 1\}", "s^{-n-1} n!"),
 ]
 CONST_FIRST = re.compile(r"(?:^|[{(=,]\s*)-?\d+\s*[-+]\s*\d*\s*[stxy](?![a-z{^])")
+
+
+def _const_first(tx):
+    """상수 먼저 쓴 다항식. 교과서 꼴은 뺀다: 개체군 모델의 x(a − by), (1 − x²)y'' 같은 계수."""
+    for m in CONST_FIRST.finditer(tx):
+        before = tx[max(0, m.start() - 8):m.start() + 1]
+        if re.search(r"[xy]\\left\($", before) or re.match(r"[{(=,]?\s*1\s*-\s*x", m.group(0)):
+            continue
+        return True
+    return False
 
 
 def norm(tx):
@@ -76,7 +86,7 @@ def audit(packs):
                 for pat, name in UGLY:
                     if re.search(pat, tx):
                         found[f"표기 {name}"].append((iid, f"{where}: {tx}"))
-                if CONST_FIRST.search(tx) and where in ("prompt", "answer", "problem", "wrong"):
+                if _const_first(tx) and where in ("prompt", "answer", "problem", "wrong"):
                     found["상수 먼저 쓴 다항식"].append((iid, f"{where}: {tx}"))
             if it["type"] == "mcq":
                 n = 1 + len(it.get("wrong", []))

@@ -1,0 +1,9 @@
+id: 9
+slug: series
+title: 급수해와 Frobenius
+summary: '계수가 상수가 아닌 2계 방정식을 $y = \sum a_nx^n$으로 놓고 재귀식으로 푼다. 정칙특이점에서는 $x^r$을 곱한 Frobenius 급수를 쓰고, 결정방정식의 근으로 둘째 해의 꼴이 정해진다.'
+connections:
+  - 'Legendre·Hermite·Chebyshev·Laguerre 다항식은 재귀식이 끊겨서 생긴 다항식 해입니다. 28장의 Sturm–Liouville 문제에서 직교함수계로 다시 나옵니다.'
+  - 'Bessel 방정식의 Frobenius 해가 19장 원통 좌표 변수분리의 반지름 방향 해입니다.'
+  - '거듭제곱급수 해의 수렴 반경은 복소평면에서 가장 가까운 특이점까지의 거리입니다. 24장의 Taylor 급수 수렴 반경과 같은 원리입니다.'
+  - '7장의 Euler–Cauchy 방정식은 Frobenius 급수의 첫 항만 있는 경우입니다. 결정방정식이 곧 그 특성방정식입니다.'

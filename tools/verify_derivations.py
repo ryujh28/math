@@ -256,6 +256,55 @@ CHECKS["la.planeproj"] += [("n·x = d 평면: v − ((n·v − d)/n·n)n 은 평
 CHECKS["la.gauss"] += [("행 교환은 해를 바꾸지 않는다 (예)", lambda: (lambda M, bb: M.solve(bb) == M.permute_rows([1, 0, 2]).solve(bb.permute_rows([1, 0, 2])))(sp.Matrix([[0, 1, 2], [1, 1, 0], [2, 0, 1]]), sp.Matrix([1, 2, 3])))]
 
 
+# ---------------------------------------------------------------- 8장 · 9장 (M3.8)
+def _dam(f, a, m):
+    for _ in range(m):
+        f = sp.diff(f, x) - a * f
+    return sp.simplify(f)
+
+
+_gx = sp.Function("g")(x)
+_f1, _f2, _f3 = [sp.Function(nm)(x) for nm in ("f1", "f2", "f3")]
+_Ac = sp.Matrix([[0, 1, 0], [0, 0, 1], [-c, -b, -a]])
+_Xs, _Ys = sp.symbols("X Y")
+CHECKS.update({
+    "ode8.highgen": [("p(D)e^{rx} = p(r)e^{rx} (3계 기호)", lambda: Z(sp.diff(sp.exp(r * x), x, 3) + a * sp.diff(sp.exp(r * x), x, 2) + b * sp.diff(sp.exp(r * x), x) + c * sp.exp(r * x) - (r**3 + a * r**2 + b * r + c) * sp.exp(r * x))),
+                     ("(D − a)^m (x^k e^{ax}) = 0 (k < m, 예 m = 3)", lambda: all(Z(_dam(x**kk * sp.exp(a * x), a, 3)) for kk in range(3)))],
+    "ode8.repsol": [("(D − a)(e^{ax}g) = e^{ax}g′", lambda: Z(sp.diff(sp.exp(a * x) * _gx, x) - a * sp.exp(a * x) * _gx - sp.exp(a * x) * sp.diff(_gx, x))),
+                    ("(D − a)^m(e^{ax}g) = e^{ax}g^{(m)} (m = 3)", lambda: Z(_dam(sp.exp(a * x) * _gx, a, 3) - sp.exp(a * x) * sp.diff(_gx, x, 3)))],
+    "ode8.wronsk3": [("W(e^{ax}, e^{bx}, e^{cx}) = (b−a)(c−a)(c−b)e^{(a+b+c)x}", lambda: Z(sp.Matrix([[sp.diff(sp.exp(v * x), x, k_) for v in (a, b, c)] for k_ in range(3)]).det() - (b - a) * (c - a) * (c - b) * sp.exp((a + b + c) * x)))],
+    "ode8.companion": [("det(rI − A) = r³ + ar² + br + c", lambda: Z((r * sp.eye(3) - _Ac).det() - (r**3 + a * r**2 + b * r + c)))],
+    "ode8.phase": [("고유벡터 방향 성분: x = e^{λt}v ⇒ x′ = Ax (예)", lambda: MZ(sp.diff(sp.exp(2 * t) * P0[:, 0], t) - A0 * sp.exp(2 * t) * P0[:, 0])),
+                   ("복소: A = αI + βJ 이면 e^{At} = e^{αt}(cos βt I + sin βt J)", lambda: MZ(sp.simplify(((-1 * sp.eye(2) + 2 * sp.Matrix([[0, -1], [1, 0]])) * t).exp().applyfunc(lambda e: e.rewrite(sp.cos)) - sp.exp(-t) * (sp.cos(2 * t) * sp.eye(2) + sp.sin(2 * t) * sp.Matrix([[0, -1], [1, 0]])))))],
+    "ode8.stabk": [("λ₁ + λ₂ = tr A, λ₁λ₂ = det A", lambda: (lambda ev: Z(sum(ev) - A2.trace()) and Z(sp.prod(ev) - A2.det()))(list(sp.roots(sp.Poly(lam**2 - A2.trace() * lam + A2.det(), lam)).keys())))],
+    "ode8.equil": [("x(a − by) = 0, y(−c + dx) = 0 의 해 = {(0,0), (c/d, a/b)}", lambda: set(tuple(v) for v in sp.solve([_Xs * (a - b * _Ys), _Ys * (-c + d * _Xs)], [_Xs, _Ys])) == {(0, 0), (c / d, a / b)})],
+    "ode8.jac": [("f(x₀+u, y₀+v) ≈ f_x u + f_y v (f(x₀, y₀) = 0)", lambda: (lambda F, u_, v_: Z(sp.series(F.subs({_Xs: 1 + k * u_, _Ys: 2 + k * v_}), k, 0, 2).removeO().coeff(k, 1) - (sp.diff(F, _Xs).subs({_Xs: 1, _Ys: 2}) * u_ + sp.diff(F, _Ys).subs({_Xs: 1, _Ys: 2}) * v_)))(
+        _Xs * (2 - _Ys), sp.Symbol("u"), sp.Symbol("v")))],
+    "ode8.highivp": [("초기조건의 계수행렬 = x = 0의 Wronskian 행렬 (예: e^{x}, e^{2x}, e^{3x})", lambda: (lambda fs: sp.Matrix([[sp.diff(f, x, k_).subs(x, 0) for f in fs] for k_ in range(3)]).det() != 0)([sp.exp(x), sp.exp(2 * x), sp.exp(3 * x)]))],
+    "ode8.elim": [("y = (x′ − ax)/b 를 넣으면 x″ − (a + d)x′ + (ad − bc)x = 0", lambda: (lambda X: (lambda Yv: Z(sp.expand(sp.diff(Yv, t) - (c * X + d * Yv)) * b - (sp.diff(X, t, 2) - (a + d) * sp.diff(X, t) + (a * d - b * c) * X)))((sp.diff(X, t) - a * X) / b))(sp.Function("X")(t)))],
+    "ode8.phasecls": [("λ = (tr ± √Δ)/2 는 λ² − tr λ + det = 0 의 근", lambda: Z(sp.expand(((A2.trace() + sp.sqrt(A2.trace() ** 2 - 4 * A2.det())) / 2) ** 2 - A2.trace() * (A2.trace() + sp.sqrt(A2.trace() ** 2 - 4 * A2.det())) / 2 + A2.det())))],
+    "ode8.linz": [("진자 θ″ = −k sin θ 의 (0,0) Jacobian 고유값 ±i√k", lambda: (lambda kp: (lambda J: set(J.eigenvals().keys()) == {sp.I * sp.sqrt(kp), -sp.I * sp.sqrt(kp)})(sp.Matrix([[0, 1], [-kp * sp.cos(0), 0]])))(sp.Symbol("kp", positive=True))),
+                  ("감쇠 없는 진자의 에너지 E = ω²/2 − k cos θ 는 보존된다", lambda: Z(sp.diff(sp.Function("w")(t) ** 2 / 2 - k * sp.cos(sp.Function("th")(t)), t).subs({sp.Derivative(sp.Function("th")(t), t): sp.Function("w")(t), sp.Derivative(sp.Function("w")(t), t): -k * sp.sin(sp.Function("th")(t))})))],
+    "ode8.forced": [("x = x* + e^{At}(x₀ − x*) 는 x′ = Ax + b, x(0) = x₀ (예)", lambda: (lambda bb, x0: (lambda xs: (lambda X: MZ(sp.simplify(sp.diff(X, t) - A0 * X - bb)) and MZ(X.subs(t, 0) - x0))(xs + (A0 * t).exp() * (x0 - xs)))(-A0.inv() * bb))(sp.Matrix([1, 2]), sp.Matrix([0, 1])))],
+    "ser.shift": [("Σ_{n=2} n(n−1)a_n x^{n−2} = Σ_{n=0} (n+2)(n+1)a_{n+2} xⁿ (8항까지)", lambda: (lambda A: Z(sum(n * (n - 1) * A[n] * x**(n - 2) for n in range(2, 10)) - sum((m + 2) * (m + 1) * A[m + 2] * x**m for m in range(0, 8))))(sp.symbols("A0:10")))],
+    "ser.recur": [("y″ + y = 0: a_{n+2} = −a_n/((n+2)(n+1)) 로 만든 급수의 잔차가 x⁶까지 0", lambda: (lambda A: all(Z(sp.expand(sp.diff(sum(A[k_] * x**k_ for k_ in range(10)), x, 2) + sum(A[k_] * x**k_ for k_ in range(10))).coeff(x, j)) for j in range(7)))(
+        (lambda a_: [a_.append(-a_[m] / ((m + 2) * (m + 1))) or a_ for m in range(8)][-1])([sp.Symbol("u0"), sp.Symbol("u1")])))],
+    "ser.sing": [("x(x − 1)y″ + y′ + y: x = 0 에서 xp, x²q 유한 (정칙)", lambda: sp.limit(x * 1 / (x * (x - 1)), x, 0).is_finite and sp.limit(x**2 * 1 / (x * (x - 1)), x, 0).is_finite)],
+    "ser.indicial": [("x^r 대입의 최저차 계수 = r(r − 1) + p₀r + q₀", lambda: Z(sp.expand(sp.powsimp((x**2 * sp.diff(x**r, x, 2) + p * x * sp.diff(x**r, x) + q * x**r) / x**r)) - (r * (r - 1) + p * r + q)))],
+    "ser.radius": [("(1 + x²)Σ_{k<N}(−x²)^k = 1 − (−x²)^N: |x| < 1 (가장 가까운 특이점 ±i 까지)일 때만 수렴", lambda: Z((1 + x**2) * sum((-x**2) ** kk for kk in range(7)) - (1 - (-x**2) ** 7)) and set(sp.solve(x**2 + 1, x)) == {sp.I, -sp.I})],
+    "ser.second": [("Frobenius 분모 F(n + r₂) 는 n = r₁ − r₂ 에서 0", lambda: Z((r * (r - 1) + p * r + q).subs(r, sp.Symbol("r2") + (sp.Symbol("r1") - sp.Symbol("r2"))).subs({p: 1 - sp.Symbol("r1") - sp.Symbol("r2"), q: sp.Symbol("r1") * sp.Symbol("r2")})))],
+    "ser.taylor": [("y″ = −y, y(0) = 1, y′(0) = 0 ⇒ 해 cos x 의 x² 계수 = y″(0)/2!", lambda: Z(sp.series(sp.cos(x), x, 0, 4).removeO().coeff(x, 2) - sp.Integer(-1) / 2))],
+    "ser.named": [("P₂ 는 Legendre (n = 2), H₂ 는 Hermite (2n = 4) 방정식의 해", lambda: Z((1 - x**2) * sp.diff(sp.legendre(2, x), x, 2) - 2 * x * sp.diff(sp.legendre(2, x), x) + 6 * sp.legendre(2, x)) and Z(sp.diff(sp.hermite(2, x), x, 2) - 2 * x * sp.diff(sp.hermite(2, x), x) + 4 * sp.hermite(2, x)))],
+    "ser.powsolve": [("y = Σ aₙxⁿ ⇒ y″ = Σ n(n−1)aₙx^{n−2}", lambda: (lambda A: Z(sp.diff(sum(A[k_] * x**k_ for k_ in range(8)), x, 2) - sum(k_ * (k_ - 1) * A[k_] * x**(k_ - 2) for k_ in range(2, 8))))(sp.symbols("A0:8")))],
+    "ser.taylorivp": [("d/dx F(x, y, y′) = F_x + F_y y′ + F_{y′} y″ (F = xyy′ + y², 기호 y)", lambda: (lambda Yf, Ys, Ps: (lambda F: Z(sp.diff(F.subs({Ys: Yf, Ps: sp.diff(Yf, x)}), x)
+        - (sp.diff(F, x) + sp.diff(F, Ys) * Ps + sp.diff(F, Ps) * sp.Symbol("Qs")).subs({Ys: Yf, Ps: sp.diff(Yf, x), sp.Symbol("Qs"): sp.diff(Yf, x, 2)})))(x * Ys * Ps + Ys**2))(sp.Function("Y")(x), *sp.symbols("Ys Ps")))],
+    "ser.frob": [("x^{n+r} 계수: F(n + r)aₙ + [p₁(n − 1 + r) + q₁]a_{n−1} (n = 1 확인)", lambda: (lambda P0_, P1_, Q0_, Q1_, a0, a1: Z(sp.expand(sp.powsimp(sp.expand((lambda g: x**2 * sp.diff(g, x, 2) + x * (P0_ + P1_ * x) * sp.diff(g, x) + (Q0_ + Q1_ * x) * g)(x**r * (a0 + a1 * x)) / x**r))).coeff(x, 1)
+        - (((1 + r) * r + P0_ * (1 + r) + Q0_) * a1 + (P1_ * r + Q1_) * a0)))(*sp.symbols("P0 P1 Q0 Q1 a0 a1")))],
+    "ser.poly": [("Legendre 재귀식의 분자 k(k + 1) − n(n + 1) 는 k = n 에서 0", lambda: Z((k * (k + 1) - n_ * (n_ + 1)).subs(k, n_))),
+                 ("P₃(x) 는 Legendre n = 3 의 해이고 P₃(1) = 1", lambda: Z((1 - x**2) * sp.diff(sp.legendre(3, x), x, 2) - 2 * x * sp.diff(sp.legendre(3, x), x) + 12 * sp.legendre(3, x)) and sp.legendre(3, 1) == 1)],
+})
+
+
 CONCEPT = {
     "la.rank": "수식 주장 없음 (행 연산과 계수의 관계를 말로 설명)",
 }

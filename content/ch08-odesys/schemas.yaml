@@ -1,0 +1,26 @@
+# 8장 고계 및 연립 ODE · 풀이 뼈대
+- id: ode8.highivp
+  title: 고계 상수계수 초기값 문제
+  generator: ode8:high_ivp
+  steps: [특성방정식, 근, 일반해, 상수, 해]
+  hint: '특성방정식을 인수분해해 근마다 해를 쓰고 일반해를 만든다. $y(0), y^{\prime}(0), y^{\prime\prime}(0), \dots$을 넣어 상수에 대한 연립방정식을 푼다.'
+- id: ode8.elim
+  title: 소거법으로 연립 ODE
+  generator: ode8:elimination
+  steps: [y를 x로, 2계 방정식, x의 일반해, y의 일반해, 초기조건]
+  hint: '첫 식에서 $y = \dfrac{x^{\prime} - ax}{b}$로 놓고 둘째 식에 넣으면 $x^{\prime\prime} - (\operatorname{tr}A)x^{\prime} + (\det A)x = 0$이 된다. $x$를 푼 뒤 같은 식으로 $y$를 구하고 초기조건으로 두 상수를 정한다.'
+- id: ode8.phasecls
+  title: 평형점 분류 (tr과 det)
+  generator: ode8:phase_classify
+  steps: [tr과 det, 판별식, 고유값, 분류]
+  hint: '$\operatorname{tr}A$와 $\det A$를 구하고 판별식 $\Delta = (\operatorname{tr}A)^2 - 4\det A$로 고유값이 실수인지 복소수인지 정한다. 고유값의 부호로 안장점·마디·나선·중심과 안정성을 판정한다.'
+- id: ode8.linz
+  title: 비선형계의 선형화
+  generator: ode8:linearize
+  steps: [평형점, Jacobian, 평형점에서 값, 고유값, 분류]
+  hint: '평형점에서 Jacobian을 계산하면 그 근처의 선형 근사 $\mathbf{u}^{\prime} = J\mathbf{u}$가 된다. $J$의 고유값으로 평형점을 분류한다. 선형화가 중심이면 비선형 항이 결론을 바꿀 수 있다.'
+- id: ode8.forced
+  title: '상수 강제항 연립계 $\mathbf{x}^{\prime} = A\mathbf{x} + \mathbf{b}$'
+  generator: ode8:forced_system
+  steps: [평형점, 편차와 초기값, 고유값, 편차의 해, 해]
+  hint: '평형점 $\mathbf{x}^* = -A^{-1}\mathbf{b}$를 구하고 편차 $\mathbf{u} = \mathbf{x} - \mathbf{x}^*$로 바꾸면 동차계 $\mathbf{u}^{\prime} = A\mathbf{u}$가 된다. $\mathbf{u}$를 푼 뒤 $\mathbf{x} = \mathbf{x}^* + \mathbf{u}$로 돌아간다.'

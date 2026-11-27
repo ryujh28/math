@@ -1,0 +1,9 @@
+# 8장 고계 및 연립 ODE · 사실 원자
+- {id: ode8.highgen, pace: compute, kind: gen, title: 고계 상수계수 일반해, generator: "ode8:high_general", hint: '$y = e^{rx}$를 넣으면 특성방정식이 나온다. 인수분해한 근마다 해를 하나씩 쓰되, $m$중근에는 $x^k e^{rx}\ (k < m)$를, 복소근 $\alpha \pm \beta i$에는 $e^{\alpha x}\cos\beta x$와 $e^{\alpha x}\sin\beta x$를 쓴다.'}
+- {id: ode8.repsol, pace: light, kind: gen, title: 중근에 대응하는 해, generator: "ode8:repeated_root", hint: '특성근 $a$가 $m$중근이면 $e^{ax}, xe^{ax}, \dots, x^{m-1}e^{ax}$가 서로 독립인 해다. $(D - a)^m$이 $x^k e^{ax}$를 $k < m$일 때 $0$으로 보내기 때문이다.'}
+- {id: ode8.wronsk3, pace: compute, kind: gen, title: '$3\times 3$ Wronskian', generator: "ode8:wronskian3", hint: '$W(f_1, f_2, f_3)$는 첫 행에 함수, 둘째 행에 1계 도함수, 셋째 행에 2계 도함수를 놓은 행렬식이다. $0$이 아니면 세 함수는 독립이다.'}
+- {id: ode8.companion, pace: light, kind: gen, title: 고계 방정식을 1계 연립으로, generator: "ode8:companion", hint: '$\mathbf{u} = (y, y^{\prime}, y^{\prime\prime})$로 놓으면 처음 두 줄은 $u_1^{\prime} = u_2$, $u_2^{\prime} = u_3$이다. 마지막 줄은 방정식을 $y^{\prime\prime\prime}$에 대해 푼 것이라 계수의 부호가 바뀐다.'}
+- {id: ode8.phase, pace: light, kind: gen, title: 평형점 분류, generator: "ode8:phase_type", hint: '두 고유값이 실수이고 부호가 다르면 안장점, 같은 부호면 마디다. 복소수면 나선이고 실수부가 $0$이면 중심이다. 실수부가 모두 음수이면 안정하다.'}
+- {id: ode8.stabk, pace: compute, kind: gen, tier: 2, title: 점근 안정이 되는 범위, generator: "ode8:stability_range", hint: '$2\times 2$ 계에서 원점이 점근 안정일 조건은 $\operatorname{tr}A < 0$이고 $\det A > 0$이다. 두 부등식을 함께 만족하는 범위를 구한다.'}
+- {id: ode8.equil, pace: light, kind: gen, title: 비선형계의 평형점, generator: "ode8:equilibria", hint: '평형점은 $x^{\prime} = 0$, $y^{\prime} = 0$을 동시에 만족하는 점이다. 곱의 꼴이면 각 인수가 $0$인 경우를 나눠 모두 찾는다.'}
+- {id: ode8.jac, pace: compute, kind: gen, tier: 2, title: 평형점에서의 Jacobian, generator: "ode8:jacobian_at", hint: 'Jacobian의 $(i, j)$ 성분은 $i$번째 식을 $j$번째 변수로 편미분한 것이다. 평형점의 좌표를 대입하면 선형화 행렬이 된다.'}

@@ -1,0 +1,81 @@
+# 단위별 짧은 유도. goal: 문제 상황, steps: 한 줄 = 문장 또는 $$수식$$.
+ode8.highgen:
+  goal: '$n$계 상수계수 동차방정식의 일반해를 특성방정식의 근으로 쓰는 이유를 정리한다.'
+  steps:
+  - '$D = d/dx$로 쓰면 방정식은 $p(D)y = 0$이고 $p(D)e^{rx} = p(r)e^{rx}$이다.'
+  - '$p(r)$을 인수분해하면 $p(D)$도 같은 인수의 곱이라 각 인수의 해가 전체의 해다.'
+  - $$(D - a)^m\left(x^k e^{ax}\right) = 0 \quad (k < m)$$
+  - 해 $n$개가 독립이면 일반해이고, 독립인지는 Wronskian으로 확인한다.
+ode8.repsol:
+  goal: '특성근 $a$가 $m$중근일 때 왜 $e^{ax}, xe^{ax}, \dots, x^{m-1}e^{ax}$가 해인지 보인다.'
+  steps:
+  - '$(D - a)\left(e^{ax}g\right) = e^{ax}g^{\prime}$이다.'
+  - $$(D - a)^m\left(e^{ax}g\right) = e^{ax}g^{(m)}$$
+  - '$g = x^k$이고 $k < m$이면 $g^{(m)} = 0$이다.'
+ode8.wronsk3:
+  goal: '세 함수의 독립성을 Wronskian 행렬식으로 판정하는 이유를 보인다.'
+  steps:
+  - '$c_1f_1 + c_2f_2 + c_3f_3 = 0$을 두 번 미분하면 같은 계수로 된 식이 세 개 생긴다.'
+  - $$\begin{pmatrix}f_1 & f_2 & f_3 \\ f_1^{\prime} & f_2^{\prime} & f_3^{\prime} \\ f_1^{\prime\prime} & f_2^{\prime\prime} & f_3^{\prime\prime}\end{pmatrix}\begin{pmatrix}c_1 \\ c_2 \\ c_3\end{pmatrix} = \mathbf{0}$$
+  - '행렬식 $W$가 어느 점에서 $0$이 아니면 $c_1 = c_2 = c_3 = 0$뿐이라 독립이다.'
+ode8.companion:
+  goal: '$y^{\prime\prime\prime} + ay^{\prime\prime} + by^{\prime} + cy = 0$을 1계 연립 $\mathbf{u}^{\prime} = A\mathbf{u}$로 바꾼다.'
+  steps:
+  - '$u_1 = y$, $u_2 = y^{\prime}$, $u_3 = y^{\prime\prime}$로 놓으면 $u_1^{\prime} = u_2$, $u_2^{\prime} = u_3$이다.'
+  - '방정식에서 $u_3^{\prime} = y^{\prime\prime\prime} = -cu_1 - bu_2 - au_3$이다.'
+  - $$A = \begin{pmatrix}0 & 1 & 0 \\ 0 & 0 & 1 \\ -c & -b & -a\end{pmatrix},\quad \det(rI - A) = r^3 + ar^2 + br + c$$
+ode8.phase:
+  goal: '$\mathbf{x}^{\prime} = A\mathbf{x}$의 원점 근처 궤적 모양을 고유값으로 분류한다.'
+  steps:
+  - '고유벡터 방향의 성분은 $e^{\lambda t}$로 변한다. 실수 $\lambda < 0$이면 줄고 $\lambda > 0$이면 커진다.'
+  - 두 실근의 부호가 다르면 한 방향으로는 들어오고 다른 방향으로는 나가서 안장점이다.
+  - '복소근 $\alpha \pm \beta i$이면 $e^{\alpha t}(\cos\beta t, \sin\beta t)$ 꼴이라 회전하면서 $\alpha$의 부호대로 줄거나 커진다. $\alpha = 0$이면 닫힌 궤도(중심)다.'
+ode8.stabk:
+  goal: '$2\times 2$ 계의 원점이 점근 안정일 조건을 $\operatorname{tr}A$, $\det A$로 쓴다.'
+  steps:
+  - $$\lambda^2 - (\operatorname{tr}A)\lambda + \det A = 0,\quad \lambda_1 + \lambda_2 = \operatorname{tr}A,\ \lambda_1\lambda_2 = \det A$$
+  - '두 실근이 모두 음수 $\iff$ 합 $< 0$, 곱 $> 0$이다.'
+  - '복소근이면 실수부가 $\operatorname{tr}A/2$이고 $\det A = |\lambda|^2 > 0$이라 같은 조건이 된다.'
+ode8.equil:
+  goal: '비선형계 $x^{\prime} = f(x, y)$, $y^{\prime} = g(x, y)$의 평형점을 모두 찾는다.'
+  steps:
+  - '평형점은 $f = 0$과 $g = 0$을 동시에 만족하는 점이다. 그 점에서 출발하면 계속 머문다.'
+  - '$f = x(a - by)$처럼 곱이면 $x = 0$ 또는 $a - by = 0$으로 나눠 $g = 0$과 짝을 맞춘다.'
+ode8.jac:
+  goal: '평형점 근처에서 비선형계를 선형계로 근사하는 행렬을 구한다.'
+  steps:
+  - '평형점 $(x_0, y_0)$에서 $f(x_0 + u, y_0 + v) \approx f_xu + f_yv$ (상수항은 $0$)이다.'
+  - $$\begin{pmatrix}u \\ v\end{pmatrix}^{\prime} \approx J\begin{pmatrix}u \\ v\end{pmatrix},\quad J = \begin{pmatrix}f_x & f_y \\ g_x & g_y\end{pmatrix}_{(x_0, y_0)}$$
+ode8.highivp:
+  goal: '$n$계 상수계수 동차방정식과 초기조건 $y(0), \dots, y^{(n-1)}(0)$이 주어질 때 해를 구한다.'
+  steps:
+  - 특성방정식을 인수분해해 근의 종류에 맞는 해 $n$개로 일반해를 만든다.
+  - '초기조건은 상수 $C_1, \dots, C_n$에 대한 $n$원 연립일차방정식이고, 계수행렬은 $x = 0$에서의 Wronskian 행렬이다.'
+  - 해들이 독립이면 이 행렬이 가역이라 상수가 하나로 정해진다.
+ode8.elim:
+  goal: '$x^{\prime} = ax + by$, $y^{\prime} = cx + dy$와 초기조건이 주어질 때 $y$를 소거해 $x$의 2계 방정식으로 푼다.'
+  steps:
+  - '$b \ne 0$이면 첫 식에서 $y = (x^{\prime} - ax)/b$이다.'
+  - '둘째 식에 넣고 정리한다:'
+  - $$x^{\prime\prime} - (a + d)x^{\prime} + (ad - bc)x = 0$$
+  - '특성방정식은 $\det(A - rI) = 0$과 같다. $x$를 구하면 $y$는 첫 식에서 바로 나오므로 상수는 둘뿐이다.'
+ode8.phasecls:
+  goal: '$2\times 2$ 행렬 $A$가 주어질 때 원점의 종류와 안정성을 $\operatorname{tr}A$, $\det A$로 판정한다.'
+  steps:
+  - $$\lambda = \frac{\operatorname{tr}A \pm \sqrt{\Delta}}{2},\quad \Delta = (\operatorname{tr}A)^2 - 4\det A$$
+  - '$\det A < 0$이면 두 실근의 곱이 음수라 안장점이다.'
+  - '$\Delta < 0$이면 복소근이라 나선(또는 $\operatorname{tr}A = 0$이면 중심), $\Delta \ge 0$이고 $\det A > 0$이면 마디다.'
+  - '안정성은 $\operatorname{tr}A$의 부호로 정해진다.'
+ode8.linz:
+  goal: '비선형계의 평형점이 안장점·마디·나선·중심 중 무엇인지 선형화로 판정한다.'
+  steps:
+  - 평형점에서 Jacobian $J$를 계산하면 근처의 운동은 $\mathbf{u}^{\prime} = J\mathbf{u}$로 근사된다.
+  - '$J$의 고유값의 실수부가 모두 $0$이 아니면 (쌍곡형) 비선형계도 같은 종류다 (Hartman–Grobman).'
+  - 선형화가 중심이면 비선형 항이 나선으로 바꿀 수 있어 선형화만으로는 결론이 나지 않는다. 보존량이 있는 계(감쇠 없는 진자 등)에서는 실제로 중심이다.
+ode8.forced:
+  goal: '$\mathbf{x}^{\prime} = A\mathbf{x} + \mathbf{b}$ ($\mathbf{b}$ 상수, $A$ 가역)와 초기값이 주어질 때 해를 구한다.'
+  steps:
+  - '$\mathbf{x}^* = -A^{-1}\mathbf{b}$이면 $A\mathbf{x}^* + \mathbf{b} = \mathbf{0}$이라 상수 해다.'
+  - '$\mathbf{u} = \mathbf{x} - \mathbf{x}^*$로 놓으면 $\mathbf{u}^{\prime} = A\mathbf{u}$, $\mathbf{u}(0) = \mathbf{x}_0 - \mathbf{x}^*$이다.'
+  - $$\mathbf{x}(t) = \mathbf{x}^* + e^{At}\left(\mathbf{x}_0 - \mathbf{x}^*\right)$$
+  - 고유값의 실수부가 모두 음수이면 $\mathbf{x}(t) \to \mathbf{x}^*$이다.

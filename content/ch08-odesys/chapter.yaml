@@ -1,0 +1,9 @@
+id: 8
+slug: odesys
+title: 고계 및 연립 ODE
+summary: '3계 이상 상수계수 방정식은 특성방정식의 근으로, 연립 선형계는 고유값으로 푼다. 평형점은 고유값의 부호와 종류로 분류하고, 비선형계는 Jacobian으로 선형화해 평형점 근처를 본다.'
+connections:
+  - '고계 방정식 $y^{(n)} + \cdots = 0$은 $\mathbf{u} = (y, y^{\prime}, \dots)$로 놓으면 1계 연립 $\mathbf{u}^{\prime} = A\mathbf{u}$가 됩니다. 특성다항식이 곧 동반행렬 $A$의 특성다항식입니다.'
+  - '5장의 $e^{At}$가 연립계 $\mathbf{x}^{\prime} = A\mathbf{x}$의 해 $\mathbf{x} = e^{At}\mathbf{x}_0$입니다. 이 장은 그 해의 모양(안장점·마디·나선·중심)을 고유값으로 읽습니다.'
+  - '10장의 Laplace 변환으로 연립계를 풀면 $(sI - A)\mathbf{X} = \mathbf{x}_0$입니다. $\det(sI - A) = 0$의 근이 곧 고유값입니다.'
+  - '평형점의 선형화는 Taylor 전개의 1차 항입니다. 진자·포식자–피식자·경쟁 모델이 대표적인 예입니다.'
